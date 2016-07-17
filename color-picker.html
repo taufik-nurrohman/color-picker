@@ -24,6 +24,7 @@ input[type=text] {
   height:30px;
   padding:0 8px;
   text-align:left;
+  text-transform:uppercase;
 }
 
 
@@ -148,7 +149,7 @@ input[type=text] {
   function RGB2HEX(a) {
     var s = +a[2] | (+a[1] << 8) | (+a[0] << 16);
     s = '000000' + s.toString(16);
-    return '#' + s.slice(-6).toUpperCase();
+    return '#' + s.slice(-6);
   }
 
   // #rrggbb or #rgb
