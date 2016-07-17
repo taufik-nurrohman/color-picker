@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Color Picker</title>
+  </head>
+  <body>
+
+<input type="text">
+
+<style>
+* {
+  margin:0;
+  padding:0;
+}
+body {padding:50px}
+input[type=text] {
+  font:normal bold 13px/30px Helmet,FreeSans,Sans-Serif;
+  background-color:white;
+  color:black;
+  border:1px solid;
+  width:6em;
+  height:30px;
+  padding:0 8px;
+  text-align:left;
+}
+
+
+
+
+.color-picker {
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:9999;
+  border:1px solid #000;
+  width:171px;
+  height:150px;
+  margin:-1px 0 0;
+  box-shadow:1px 5px 10px rgba(0,0,0,.5);
+}
+.color-picker i {font:inherit}
+.color-picker-h {
+  position:relative;
+  width:20px;
+  height:150px;
+  float:right;
+  cursor:ns-resize;
+  background:linear-gradient(to bottom,#f00 0%,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,#f00 100%);
+  overflow:hidden;
+}
+.color-picker-h i {
+  position:absolute;
+  top:-3px;
+  right:0;
+  left:0;
+  z-index:3;
+  display:block;
+  height:6px;
+}
+.color-picker-h i:before {
+  content:"";
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  display:block;
+  border:3px solid;
+  border-color:inherit;
+  border-top-color:transparent;
+  border-bottom-color:transparent;
+}
+.color-picker-h i:after {
+  top:-1px;
+  right:-1px;
+  bottom:-1px;
+  left:-1px;
+  border-color:#000;
+}
+.color-picker-sv {
+  position:relative;
+  width:150px;
+  height:150px;
+  float:left;
+  border-right:1px solid;
+  border-color:inherit;
+  cursor:crosshair;
+}
+.color-picker-sv:before,
+.color-picker-sv:after {
+  content:"";
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  display:block;
+}
+.color-picker-sv:before {
+  background-image:linear-gradient(to right,#fff,rgba(255,255,255,0));
+}
+.color-picker-sv:after {
+  background-image:linear-gradient(to top,#000,rgba(0,0,0,0));
+}
+.color-picker-sv i {
+  position:absolute;
+  top:-4px;
+  right:-4px;
+  z-index:3;
+  display:block;
+  width:8px;
+  height:8px;
+}
+.color-picker-sv i:before,
+.color-picker-sv i:after {
+  content:"";
+  position:absolute;
+  top:-1px;
+  right:-1px;
+  bottom:-1px;
+  left:-1px;
+  display:block;
+  border:1px solid #fff;
+  border-radius:100%;
+}
+.color-picker-sv i:after {
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  border-color:#000;
+}
+</style>
+
+<script>
+(function(w, d) {
+
+  var target = d.querySelector('input[type=text]');
+
+  // set `data-color` attribute on target element if it has value
+  if (target.value.length) {
+    set_data(target, _2HSV(target.value));
+  }
+
+  // [r, g, b]
+  function RGB2HEX(a) {
+    var s = +a[2] | (+a[1] << 8) | (+a[0] << 16);
+    s = '000000' + s.toString(16);
+    return '#' + s.slice(-6).toUpperCase();
+  }
+
+  // #rrggbb or #rgb
+  function HEX2RGB(s) {
+    s = s.replace('#', "");
+    if (s.length === 3) {
+      s = s.replace(/./g, '$&$&');
+    }
+    return [parseInt(s[0] + s[1], 16), parseInt(s[2] + s[3], 16), parseInt(s[4] + s[5], 16)];
+  }
+
+  // [r, g, b] ... 0 <= r, g, b <= 255
+  function RGB2HSV(a) {
+    var r = +a[0],
+      g = +a[1],
+      b = +a[2],
+      max = Math.max(r, g, b),
+      min = Math.min(r, g, b),
+      d = max - min,
+      h, s = (max === 0 ? 0 : d / max),
+      v = max / 255;
+    switch (max) {
+      case min:
+        h = 0;
+        break;
+      case r:
+        h = (g - b) + d * (g < b ? 6 : 0);
+        h /= 6 * d;
+        break;
+      case g:
+        h = (b - r) + d * 2;
+        h /= 6 * d;
+        break;
+      case b:
+        h = (r - g) + d * 4;
+        h /= 6 * d;
+        break;
+    }
+    return [h, s, v];
+  }
+
+  // [h, s, v] ... 0 <= h, s, v <= 1
+  function HSV2RGB(a) {
+    var h = +a[0],
+      s = +a[1],
+      v = +a[2],
+      r, g, b, i, f, p, q, t;
+    i = Math.floor(h * 6);
+    f = h * 6 - i;
+    p = v * (1 - s);
+    q = v * (1 - f * s);
+    t = v * (1 - (1 - f) * s);
+    switch (i % 6) {
+      case 0:
+        r = v, g = t, b = p;
+        break;
+      case 1:
+        r = q, g = v, b = p;
+        break;
+      case 2:
+        r = p, g = v, b = t;
+        break;
+      case 3:
+        r = p, g = q, b = v;
+        break;
+      case 4:
+        r = t, g = p, b = v;
+        break;
+      case 5:
+        r = v, g = p, b = q;
+        break;
+    }
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+  }
+
+  // [h, s, v]
+  function HSV2HEX(a) {
+    return RGB2HEX(HSV2RGB(a));
+  }
+
+  // #rrggbb or #rgb
+  function HEX2HSV(s) {
+    return RGB2HSV(HEX2RGB(s));
+  }
+
+  // *
+  function _2HSV(x) {
+    var rgb = /\s*rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)\s*$/i.exec(x),
+        hex = x[0] === '#' || x.match(/^#?([\da-f]{3}|[\da-f]{6})$/);
+    if (hex) {
+      return HEX2HSV(x);
+    } else if (rgb) {
+      return RGB2HSV([+rgb[1], +rgb[2], +rgb[3]]);
+    }
+    return [0, 1, 1];
+  }
+
+  // get mouse/finger coordinate
+  function point(el, e) {
+    var x = !!e.touches ? e.touches[0].pageX : e.pageX,
+      y = !!e.touches ? e.touches[0].pageY : e.pageY,
+      left = el.offsetLeft,
+      top = el.offsetTop;
+    while (el = el.offsetParent) {
+      left += el.offsetLeft;
+      top += el.offsetTop;
+      el = el.offsetParent;
+    }
+    return {
+      x: x - left,
+      y: y - top
+    };
+  }
+
+  // get position
+  function offset(el) {
+    return {
+      l: el.offsetLeft,
+      t: el.offsetTop
+    };
+  }
+
+  // get dimension
+  function size(el) {
+    return {
+      w: el.offsetWidth,
+      h: el.offsetHeight
+    };
+  }
+
+  // get color data
+  function get_data(el, a) {
+    var s = el.getAttribute('data-color');
+    s = s ? s.split(',') : [];
+    if (typeof a === "undefined") a = false;
+    return s.length ? [+s[0], +s[1], +s[2]] : a;
+  }
+
+  // set color data
+  function set_data(el, a) {
+    return el.setAttribute('data-color', a.join(','));
+  }
+
+  // has color data?
+  function has_data(el) {
+    return get_data(el) !== false;
+  }
+
+  // add event
+  function on(el, ev, fn) {
+    el.addEventListener(ev, fn, false);
+  }
+
+  // remove event
+  function off(el, ev, fn) {
+    el.removeEventListener(ev, fn);
+  }
+
+  var picker = d.createElement('div');
+  picker.className = 'color-picker';
+  picker.innerHTML = '<div class="color-picker-h"><i></i></div><div class="color-picker-sv"><i></i></div>';
+  var c = picker.children,
+    HSV = get_data(target, [0, 1, 1]), // default is red
+    H = c[0],
+    SV = c[1],
+    H_point = H.firstChild,
+    SV_point = SV.firstChild,
+    drag_H = false,
+    drag_SV = false;
+
+  // create
+  function create(first) {
+    if (!first) d.body.appendChild(picker);
+    var P_W = size(picker).w,
+      P_H = size(picker).h,
+      H_H = size(H).h,
+      SV_W = size(SV).w,
+      SV_H = size(SV).h,
+      H_point_H = size(H_point).h,
+      SV_point_W = size(SV_point).w,
+      SV_point_H = size(SV_point).h,
+      left = 0,
+      top = 0;
+    function fit() {
+      left = offset(target).l;
+      top = offset(target).t + size(target).h;
+      if (left + P_W > w.innerWidth) {
+        left = w.innerWidth - P_W;
+      }
+      if (top + P_H > w.innerHeight) {
+        top = w.innerHeight - P_H;
+      }
+      picker.style.left = left + 'px';
+      picker.style.top = top + 'px';
+    }
+    if (first) {
+      picker.style.left = '-9999px';
+      picker.style.top = '-9999px';
+    } else {
+      on(w, "resize", fit);
+      fit();
+    }
+    H_point.style.top = ((H_H * +HSV[0]) - (H_point_H / 2)) + 'px';
+    SV_point.style.right = (SV_W - (SV_point_W / 2) - (SV_W * +HSV[1])) + 'px';
+    SV_point.style.top = (SV_H - (SV_point_H / 2) - (SV_H * +HSV[2])) + 'px';
+    function color(e) {
+      var a = HSV2RGB(HSV),
+        b = HSV2RGB([HSV[0], 1, 1]);
+      SV.style.backgroundColor = 'rgb(' + b.join(',') + ')';
+      set_data(target, HSV);
+      target.value = RGB2HEX(a); // test
+      d.body.style.backgroundColor = target.value; // test
+      if (e) e.preventDefault();
+    } color();
+    function do_H(e) {
+      var o = point(H, e),
+        y = o.y;
+      if (y < 0) {
+        y = 0;
+      } else if (y > H_H) {
+        y = H_H;
+      }
+      HSV[0] = 1 - ((H_H - y) / H_H);
+      H_point.style.top = (y - (H_point_H / 2)) + 'px';
+      color(e);
+    }
+    function do_SV(e) {
+      var o = point(SV, e),
+        x = o.x,
+        y = o.y;
+      if (x < 0) {
+        x = 0;
+      } else if (x > SV_W) {
+        x = SV_W;
+      }
+      if (y < 0) {
+        y = 0;
+      } else if (y > SV_H) {
+        y = SV_H;
+      }
+      HSV[1] = 1 - ((SV_W - x) / SV_W);
+      HSV[2] = (SV_H - y) / SV_H;
+      SV_point.style.right = (SV_W - x - (SV_point_W / 2)) + 'px';
+      SV_point.style.top = (y - (SV_point_H / 2)) + 'px';
+      color(e);
+    }
+    function move(e) {
+      if (drag_H) do_H(e);
+      if (drag_SV) do_SV(e);
+    }
+    function stop() {
+      drag_H = false;
+      drag_SV = false;
+      off(d, "touchmove", move);
+      off(d, "mousemove", move);
+    }
+    function exit() {
+      if (picker.parentNode) d.body.removeChild(picker);
+      off(d, "touchend", stop);
+      off(d, "mouseup", stop);
+      off(d, "touchdown", exit);
+      off(d, "click", exit);
+    }
+    function down_H(e) {
+      drag_H = true;
+      on(d, "touchmove", move);
+      on(d, "mousemove", move);
+      do_H(e);
+    }
+    function down_SV(e) {
+      drag_SV = true;
+      on(d, "touchmove", move);
+      on(d, "mousemove", move);
+      do_SV(e);
+    }
+    on(H, "touchstart", down_H);
+    on(H, "mousedown", down_H);
+    on(SV, "touchstart", down_SV);
+    on(SV, "mousedown", down_SV);
+    on(d, "touchend", stop);
+    on(d, "mouseup", stop);
+    on(d, "touchdown", exit);
+    on(d, "click", exit);
+  } create(1);
+  // test
+  on(target, "touchdown", function(e) {
+    create();
+    e.stopPropagation();
+  });
+  on(target, "click", function(e) {
+    create();
+    e.stopPropagation();
+  });
+})(window, document);
+</script>
+
+  </body>
+</html>
