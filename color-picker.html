@@ -18,8 +18,8 @@ body {padding:50px}
 input[type=text] {
   font:normal bold 13px/30px Helmet,FreeSans,Sans-Serif;
   background-color:white;
+  border:0;
   color:black;
-  border:1px solid;
   width:6em;
   height:30px;
   padding:0 8px;
@@ -38,7 +38,6 @@ input[type=text] {
   border:1px solid #000;
   width:171px;
   height:150px;
-  margin:-1px 0 0;
   box-shadow:1px 5px 10px rgba(0,0,0,.5);
 }
 .color-picker i {font:inherit}
@@ -48,7 +47,9 @@ input[type=text] {
   height:150px;
   float:right;
   cursor:ns-resize;
-  background:linear-gradient(to bottom,#f00 0%,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,#f00 100%);
+  background:transparent url('color-picker-h.png') no-repeat 50% 50%;
+  background-image:linear-gradient(to bottom,#f00 0%,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,#f00 100%);
+  background-size:100% 100%;
   overflow:hidden;
 }
 .color-picker-h i {
@@ -85,25 +86,12 @@ input[type=text] {
   width:150px;
   height:150px;
   float:left;
+  background:transparent url('color-picker-sv.png') no-repeat 50% 50%;
+  background-image:linear-gradient(to top,#000,rgba(0,0,0,0)),linear-gradient(to right,#fff,rgba(255,255,255,0));
+  background-size:100% 100%;
   border-right:1px solid;
   border-color:inherit;
   cursor:crosshair;
-}
-.color-picker-sv:before,
-.color-picker-sv:after {
-  content:"";
-  position:absolute;
-  top:0;
-  right:0;
-  bottom:0;
-  left:0;
-  display:block;
-}
-.color-picker-sv:before {
-  background-image:linear-gradient(to right,#fff,rgba(255,255,255,0));
-}
-.color-picker-sv:after {
-  background-image:linear-gradient(to top,#000,rgba(0,0,0,0));
 }
 .color-picker-sv i {
   position:absolute;
@@ -202,6 +190,9 @@ input[type=text] {
     p = v * (1 - s);
     q = v * (1 - f * s);
     t = v * (1 - (1 - f) * s);
+    if (isNaN(i)) i = 0;
+    if (isNaN(q)) q = 0;
+    if (isNaN(t)) t = 0;
     switch (i % 6) {
       case 0:
         r = v, g = t, b = p;
