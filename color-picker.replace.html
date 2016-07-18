@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+    <style>
+    .color-box {
+      display:inline-block;
+      width:20px;
+      height:20px;
+      border:1px solid black;
+      cursor:pointer;
+    }
+    </style>
+  </head>
+  <body>
+    <p>Replace text input with hidden input.</p>
+    <p><input type="text" value="#f00"></p>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var input = document.querySelector('input'),
+        box = document.createElement('div');
+
+    box.className = 'color-box';
+    box.style.backgroundColor = input.value;
+    box.setAttribute('data-color', input.value);
+    input.parentNode.insertBefore(box, input);
+    input.type = 'hidden';
+
+    var picker = new CP(box);
+
+    picker.on("drag", function(color) {
+        input.value = '#' + color;
+        picker.target.style.backgroundColor = '#' + color;
+    });
+
+    </script>
+  </body>
+</html>

@@ -44,7 +44,7 @@
         box.style.backgroundColor = '#' + colors[i];
         box.addEventListener("click", function(e) {
             picker.set(this.title);
-            picker.trigger("drag", this.title.slice(1), 'main-drag');
+            picker.trigger("drag", [this.title.slice(1)], 'main-drag');
             e.stopPropagation();
         }, false);
         picker.picker.firstChild.appendChild(box);

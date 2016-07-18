@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+    <style>
+    input {
+      display:block;
+      float:left;
+      margin:0;
+      padding:0;
+      border:0;
+      outline:0;
+      width:5%;
+      font:normal normal 30px/normal Helmet,FreeSans,Sans-Serif;
+      color:black;
+      text-align:center;
+    }
+    p {overflow:hidden}
+    </style>
+  </head>
+  <body>
+    <p>Always positioned itself in any reachable area on the screen. Try resizing your window!</p>
+    <p></p>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var container = document.createDocumentFragment(),
+        input, color;
+
+    for (var i = 0; i < 800; ++i) {
+        color = ('00000'+(Math.random() * (1 << 24) | 0).toString(16)).slice(-6); // random HEX color
+        input = document.createElement('input');
+        input.type = 'text';
+        input.value = '#' + color;
+        input.style.backgroundColor = '#' + color;
+        new CP(input);
+        container.appendChild(input);
+    }
+
+    document.querySelectorAll('p')[1].appendChild(container);
+
+    </script>
+  </body>
+</html>

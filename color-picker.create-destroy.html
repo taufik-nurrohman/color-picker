@@ -22,11 +22,14 @@
 
     buttons[0].addEventListener("click", function(e) {
         picker.create();
+        this.disabled = true;
+        this.nextElementSibling.disabled = false;
         e.stopPropagation();
     });
 
     buttons[1].addEventListener("click", function(e) {
         picker.destroy();
+        this.disabled = true;
         this.previousElementSibling.disabled = false;
         e.stopPropagation();
     });

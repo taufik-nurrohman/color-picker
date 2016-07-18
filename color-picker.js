@@ -213,11 +213,11 @@ var CP = function(target) {
         if (!isset(hooks[ev])) return;
         if (!isset(id)) {
             for (var i in hooks[ev]) {
-                hooks[ev][i](v);
+                hooks[ev][i].apply({}, v);
             }
         } else {
             if (isset(hooks[ev][id])) {
-                hooks[ev][id](v);
+                hooks[ev][id].apply({}, v);
             }
         }
     }
@@ -233,7 +233,9 @@ var CP = function(target) {
     // generate color picker pane ...
     picker.className = 'color-picker';
     picker.innerHTML = '<div class="color-picker-control"><span class="color-picker-h"><i></i></span><span class="color-picker-sv"><i></i></span></div>';
-    var c = picker.firstChild.children,
+    var b = d.body,
+        h = d.documentElement,
+        c = picker.firstChild.children,
         HSV = get_data(target, [0, 1, 1]), // default is red
         H = c[0],
         SV = c[1],
@@ -249,22 +251,24 @@ var CP = function(target) {
 
     // fit to window
     function fit() {
+        var width = Math.max(size(b).w, size(h).w, w.innerWidth),
+            height = Math.max(size(b).h, size(h).h, w.innerHeight);
         left = offset(target).l;
         top = offset(target).t + size(target).h;
-        if (left + P_W > w.innerWidth) {
-            left = w.innerWidth - P_W;
+        if (left + P_W > width) {
+            left = width - P_W;
         }
-        if (top + P_H > w.innerHeight) {
-            top = w.innerHeight - P_H;
+        if (top + P_H > height) {
+            top = height - P_H;
         }
         picker.style.left = left + 'px';
         picker.style.top = top + 'px';
-        trigger("fit", r);
+        trigger("fit", [r]);
     };
 
     // create
     function create(first) {
-        if (!first) d.body.appendChild(picker);
+        if (!first) b.appendChild(picker);
         P_W = size(picker).w;
         P_H = size(picker).h;
         var H_H = size(H).h,
@@ -279,22 +283,23 @@ var CP = function(target) {
             on("resize", w, fit);
             function click(e) {
                 create();
-                trigger("click", r);
+                trigger("click", [r]);
                 e.stopPropagation();
+                e.preventDefault();
             } on("click", target, click);
             r.create = function() {
                 create(1);
-                trigger("create", r);
+                trigger("create", [r]);
             };
             r.destroy = function() {
                 off("click", target, click);
                 set_data(target, false);
                 exit();
-                trigger("destroy", r);
+                trigger("destroy", [r]);
             };
         } else {
             fit();
-            trigger("enter", r);
+            trigger("enter", [r]);
         }
         set = function() {
             HSV = get_data(target, HSV);
@@ -304,14 +309,14 @@ var CP = function(target) {
             SV_point.style.top = (SV_H - (SV_point_H / 2) - (SV_H * +HSV[2])) + 'px';
         };
         exit = function() {
-            if (picker.parentNode) d.body.removeChild(picker);
+            if (picker.parentNode) b.removeChild(picker);
             off("touchmove", d, move);
             off("mousemove", d, move);
             off("touchend", d, stop);
             off("mouseup", d, stop);
             off("touchdown", d, exit);
             off("click", d, exit);
-            trigger("exit", r);
+            trigger("exit", [r]);
         };
         function color(e) {
             var a = HSV2RGB(HSV),
@@ -355,32 +360,32 @@ var CP = function(target) {
             if (drag_H) {
                 do_H(e);
                 v = HSV2HEX(HSV);
-                trigger("drag:h", v);
-                trigger("drag", v);
+                trigger("drag:h", [v, r]);
+                trigger("drag", [v, r]);
             }
             if (drag_SV) {
                 do_SV(e);
                 v = HSV2HEX(HSV);
-                trigger("drag:sv", v);
-                trigger("drag", v);
+                trigger("drag:sv", [v, r]);
+                trigger("drag", [v, r]);
             }
         }
         function stop() {
             drag_H = false;
             drag_SV = false;
-            if (!first) trigger("stop", HSV2HEX(HSV)); // TODO: add `stop:h` and `stop:sv` hook
+            if (!first) trigger("stop", [HSV2HEX(HSV), r]); // TODO: add `stop:h` and `stop:sv` hook
         }
         function down_H(e) {
             drag_H = true;
             do_H(e);
-            trigger("start:h", r);
-            trigger("start", r);
+            trigger("start:h", [r]);
+            trigger("start", [r]);
         }
         function down_SV(e) {
             drag_SV = true;
             do_SV(e);
-            trigger("start:sv", r);
-            trigger("start", r);
+            trigger("start:sv", [r]);
+            trigger("start", [r]);
         }
         on("touchstart", H, down_H);
         on("mousedown", H, down_H);
@@ -395,7 +400,7 @@ var CP = function(target) {
     } create(1);
 
     w.setTimeout(function() {
-        trigger("create", HSV2HEX(HSV));
+        trigger("create", [HSV2HEX(HSV), r]);
     }, .1);
 
     // register to global ...

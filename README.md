@@ -87,13 +87,13 @@ picker.off("drag", 'test-id');
 Trigger all `drag` hooks with pre–defined color value as `ffa500`.
 
 ~~~ .javascript
-picker.trigger("drag", 'ffa500');
+picker.trigger("drag", ['ffa500']);
 ~~~
 
 Trigger a `drag` hook with ID of `test-id` and with pre–defined color value as `ffa500`.
 
 ~~~ .javascript
-picker.trigger("drag", 'ffa500', 'test-id');
+picker.trigger("drag", ['ffa500'], 'test-id');
 ~~~
 
 Data
@@ -188,11 +188,15 @@ My purpose in making this plugin is to provide a JavaScript color picker solutio
 
 If you want to add new features, you can use the available hooks to make your own improvements without having to touch the plugin core. Here are some examples:
 
+ - [No Idea?](https://rawgit.com/tovic/color-picker/master/color-picker.noob.html)
  - [Multiple Instances](https://rawgit.com/tovic/color-picker/master/color-picker.picker.html)
  - [Pre–Defined Value](https://rawgit.com/tovic/color-picker/master/color-picker.value-set.html)
  - [Pre–Defined Color](https://rawgit.com/tovic/color-picker/master/color-picker.picker-set.html)
  - [Convert HEX Color Value](https://rawgit.com/tovic/color-picker/master/color-picker.value-convert.html)
  - [Show and Hide with Buttons](https://rawgit.com/tovic/color-picker/master/color-picker.state.html)
  - [Add Close Button](https://rawgit.com/tovic/color-picker/master/color-picker.close.html)
+ - [Replace Text Input with Hidden Input](https://rawgit.com/tovic/color-picker/master/color-picker.replace.html)
+ - [HTML5 Color Input](https://rawgit.com/tovic/color-picker/master/color-picker.input-color.html)
  - [Create and Destroy Method](https://rawgit.com/tovic/color-picker/master/color-picker.create-destroy.html)
+ - [Auto–Positioned to the Reachable Area in the Document](https://rawgit.com/tovic/color-picker/master/color-picker.fit.html)
  - etc… (coming soon!)
