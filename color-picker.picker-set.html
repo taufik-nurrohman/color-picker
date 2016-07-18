@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+    <style>
+    .color-picker-box {
+      display:block;
+      border-top:1px solid;
+      border-color:inherit;
+      float:left;
+      width:20px;
+      height:20px;
+      cursor:pointer;
+    }
+    .color-picker-control {
+      width:160px;
+      height:171px;
+    }
+    .color-picker-sv {width:140px}
+    </style>
+  </head>
+  <body>
+    <p>Set pre–defined color value in the color picker panel.</p>
+    <p><input type="text"></p>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var picker = new CP(document.querySelector('input'));
+
+    picker.on("drag", function(color) {
+        picker.target.value = '#' + color;
+        document.body.style.backgroundColor = '#' + color;
+    }, 'main-drag');
+
+    var colors = ['012', '123', '234', '345', '456', '567', '678', '789'], box;
+
+    for (var i = 0, len = colors.length; i < len; ++i) {
+        box = document.createElement('span');
+        box.className = 'color-picker-box';
+        box.title = '#' + colors[i];
+        box.style.backgroundColor = '#' + colors[i];
+        box.addEventListener("click", function(e) {
+            picker.set(this.title);
+            picker.trigger("drag", this.title.slice(1), 'main-drag');
+            e.stopPropagation();
+        }, false);
+        picker.picker.firstChild.appendChild(box);
+    }
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <input type="text">
+    <input type="text">
+    <input type="text">
+    <input type="text">
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    // TODO: Make cleaner code for this demo!
+
+    var target = document.querySelectorAll('input'),
+        target_0 = new CP(target[0]),
+        target_1 = new CP(target[1]),
+        target_2 = new CP(target[2]),
+        target_3 = new CP(target[3]);
+
+    // hide all color picker on exit except the clicked target’s color picker
+    function hide_but_target(current) {
+        target_0.exit();
+        target_1.exit();
+        target_2.exit();
+        target_3.exit();
+        current.enter();
+    }
+
+    // set hooks for each target element
+    target_0.on("drag", function(color) {
+        target_0.target.value = '#' + color;
+    });
+    target_0.on("click", hide_but_target);
+    target_1.on("drag", function(color) {
+        target_1.target.value = '#' + color;
+    });
+    target_2.on("drag", function(color) {
+        target_2.target.value = '#' + color;
+    });
+    target_3.on("drag", function(color) {
+        target_3.target.value = '#' + color;
+    });
+    target_0.on("click", hide_but_target);
+    target_1.on("click", hide_but_target);
+    target_2.on("click", hide_but_target);
+    target_3.on("click", hide_but_target);
+
+    </script>
+  </body>
+</html>

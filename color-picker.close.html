@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <p>Add a close button in the color picker panel.</p>
+    <p><input type="text"></p>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var picker = new CP(document.querySelector('input'));
+
+    picker.on("drag", function(color) {
+        picker.target.value = '#' + color;
+    });
+
+    var x = document.createElement('a');
+        x.href = 'javascript:;';
+        x.innerHTML = 'Close Me!';
+        x.addEventListener("click", function() {
+            picker.exit();
+        }, false);
+
+    picker.picker.appendChild(x);
+
+    </script>
+  </body>
+</html>

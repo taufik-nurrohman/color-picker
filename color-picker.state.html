@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <p>Show and hide color picker with a button.</p>
+    <p><input type="text"> <button>Show</button> <button>Hide</button></p>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var picker = new CP(document.querySelector('input')),
+        buttons = document.querySelectorAll('button');
+
+    picker.on("drag", function(color) {
+        picker.target.value = '#' + color;
+    });
+
+    buttons[0].addEventListener("click", function(e) {
+        picker.enter();
+        e.stopPropagation();
+    }, false);
+
+    buttons[1].addEventListener("click", function(e) {
+        picker.exit();
+        e.stopPropagation();
+    }, false);
+
+    </script>
+  </body>
+</html>
