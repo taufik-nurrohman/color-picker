@@ -12,7 +12,6 @@ var CP = function(target) {
     var w = window,
         d = document,
         r = this,
-        noop = function() {},
         hooks = {},
         picker = d.createElement('div');
 
