@@ -143,19 +143,19 @@ var CP = function(target) {
 
     // get mouse/finger coordinate
     function point(el, e) {
-      var x = !!e.touches ? e.touches[0].pageX : e.pageX,
-          y = !!e.touches ? e.touches[0].pageY : e.pageY,
-          left = el.offsetLeft,
-          top = el.offsetTop;
-      while (el = el.offsetParent) {
-          left += el.offsetLeft;
-          top += el.offsetTop;
-          el = el.offsetParent;
-      }
-      return {
-          x: x - left,
-          y: y - top
-      };
+        var x = !!e.touches ? e.touches[0].pageX : e.pageX,
+            y = !!e.touches ? e.touches[0].pageY : e.pageY,
+            left = el.offsetLeft,
+            top = el.offsetTop;
+        while (el = el.offsetParent) {
+            left += el.offsetLeft;
+            top += el.offsetTop;
+            el = el.offsetParent;
+        }
+        return {
+            x: x - left,
+            y: y - top
+        };
     }
 
     // get position
