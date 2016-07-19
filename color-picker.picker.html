@@ -11,41 +11,24 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    // TODO: Make cleaner code for this demo!
-
-    var target = document.querySelectorAll('input'),
-        target_0 = new CP(target[0]),
-        target_1 = new CP(target[1]),
-        target_2 = new CP(target[2]),
-        target_3 = new CP(target[3]);
+    var target = document.querySelectorAll('input'), instances = [];
 
     // hide all color picker on exit except the clicked target’s color picker
-    function hide_but_target(current) {
-        target_0.exit();
-        target_1.exit();
-        target_2.exit();
-        target_3.exit();
-        current.enter();
+    function hide_all_but_this(instance) {
+        for (var i = 0, len = instances.length; i < len; ++i) {
+            instances[i].exit();
+        }
+        instance.enter();
     }
 
     // set hooks for each target element
-    target_0.on("drag", function(color) {
-        target_0.target.value = '#' + color;
-    });
-    target_0.on("click", hide_but_target);
-    target_1.on("drag", function(color) {
-        target_1.target.value = '#' + color;
-    });
-    target_2.on("drag", function(color) {
-        target_2.target.value = '#' + color;
-    });
-    target_3.on("drag", function(color) {
-        target_3.target.value = '#' + color;
-    });
-    target_0.on("click", hide_but_target);
-    target_1.on("click", hide_but_target);
-    target_2.on("click", hide_but_target);
-    target_3.on("click", hide_but_target);
+    for (var i = 0, len = target.length; i < len; ++i) {
+        instances[i] = new CP(target[i]);
+        instances[i].on("drag", function(color) {
+            this.target.value = '#' + color;
+        });
+        instances[i].on("click", hide_all_but_this);
+    }
 
     </script>
   </body>

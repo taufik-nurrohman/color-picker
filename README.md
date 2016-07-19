@@ -19,7 +19,7 @@ Color Picker
     <script>
     var picker = new CP(document.querySelector('input[type="text"]'));
     picker.on("drag", function(color) {
-        picker.target.value = '#' + color;
+        this.target.value = '#' + color;
     });
     </script>
   </body>

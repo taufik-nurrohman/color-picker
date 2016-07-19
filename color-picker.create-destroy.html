@@ -16,7 +16,7 @@
         buttons = document.querySelectorAll('button');
 
     picker.on("drag", function(color) {
-        picker.target.value = '#' + color;
+        this.target.value = '#' + color;
         document.body.style.backgroundColor = '#' + color;
     });
 

@@ -195,31 +195,32 @@ var CP = function(target) {
     // add hook
     function add(ev, fn, id) {
         if (!isset(hooks[ev])) hooks[ev] = {};
-        if (!isset(ev)) return hooks;
-        if (!isset(fn)) return hooks[ev];
-        if (!isset(id)) return hooks[ev][Object.keys(hooks[ev]).length] = fn;
-        hooks[ev][id] = fn;
+        if (!isset(ev)) return hooks, r;
+        if (!isset(fn)) return hooks[ev], r;
+        if (!isset(id)) return hooks[ev][Object.keys(hooks[ev]).length] = fn, r;
+        return hooks[ev][id] = fn, r;
     }
 
     // remove hook
     function remove(ev, id) {
-        if (!isset(ev)) return hooks = {};
-        if (!isset(id)) return hooks[ev] = {};
-        delete hooks[ev][id];
+        if (!isset(ev)) return hooks = {}, r;
+        if (!isset(id)) return hooks[ev] = {}, r;
+        return delete hooks[ev][id], r;
     }
 
     // trigger hook
-    function trigger(ev, v, id) {
-        if (!isset(hooks[ev])) return;
+    function trigger(ev, a, id) {
+        if (!isset(hooks[ev])) return r;
         if (!isset(id)) {
             for (var i in hooks[ev]) {
-                hooks[ev][i].apply({}, v);
+                hooks[ev][i].apply(r, a);
             }
         } else {
             if (isset(hooks[ev][id])) {
-                hooks[ev][id].apply({}, v);
+                hooks[ev][id].apply(r, a);
             }
         }
+        return r;
     }
 
     // initialize data ...
@@ -251,8 +252,12 @@ var CP = function(target) {
 
     // fit to window
     function fit() {
-        var width = Math.max(size(b).w, size(h).w, w.innerWidth),
-            height = Math.max(size(b).h, size(h).h, w.innerHeight);
+        var b_W = size(b).w,
+            b_H = size(h).h,
+            h_W = size(h).w,
+            h_H = size(h).h,
+            width = Math.max(b_W, h_W, (w.innerWidth - b_W)),
+            height = Math.max(b_H, h_H, (w.innerHeight - b_H));
         left = offset(target).l;
         top = offset(target).t + size(target).h;
         if (left + P_W > width) {
@@ -263,7 +268,7 @@ var CP = function(target) {
         }
         picker.style.left = left + 'px';
         picker.style.top = top + 'px';
-        trigger("fit", [r]);
+        return trigger("fit", [r]), r;
     };
 
     // create
@@ -289,17 +294,16 @@ var CP = function(target) {
             } on("click", target, click);
             r.create = function() {
                 create(1);
-                trigger("create", [r]);
+                return trigger("create", [r]), r;
             };
             r.destroy = function() {
                 off("click", target, click);
                 set_data(target, false);
                 exit();
-                trigger("destroy", [r]);
+                return trigger("destroy", [r]), r;
             };
         } else {
-            fit();
-            trigger("enter", [r]);
+            fit(), trigger("enter", [r]);
         }
         set = function() {
             HSV = get_data(target, HSV);
@@ -316,7 +320,7 @@ var CP = function(target) {
             off("mouseup", d, stop);
             off("touchdown", d, exit);
             off("click", d, exit);
-            trigger("exit", [r]);
+            return trigger("exit", [r]), r;
         };
         function color(e) {
             var a = HSV2RGB(HSV),
@@ -415,7 +419,7 @@ var CP = function(target) {
             a = _2HSV(a);
         }
         if (!isset(a)) return get_data(target);
-        set_data(target, a), set();
+        return set_data(target, a), set(), r;
     };
     r.HSV2RGB = function(a) {
         return HSV2RGB(_2HSV_pri(a));

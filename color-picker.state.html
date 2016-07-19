@@ -16,7 +16,7 @@
         buttons = document.querySelectorAll('button');
 
     picker.on("drag", function(color) {
-        picker.target.value = '#' + color;
+        this.target.value = '#' + color;
     });
 
     buttons[0].addEventListener("click", function(e) {

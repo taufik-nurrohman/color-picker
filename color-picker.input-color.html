@@ -15,7 +15,7 @@
     var picker = new CP(document.querySelector('input'));
 
     picker.on("drag", function(color) {
-        picker.target.value = '#' + color;
+        this.target.value = '#' + color;
     });
 
     </script>

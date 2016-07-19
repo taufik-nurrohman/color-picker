@@ -24,11 +24,11 @@
         outputs[0].value = '#' + color;
 
         // convert to RGB
-        var rgb = picker.HEX2RGB(color);
+        var rgb = this.HEX2RGB(color);
         outputs[1].value = 'rgb(' + rgb.join(', ') + ')';
 
         // convert to HSV
-        var hsv = picker.HEX2HSV(color);
+        var hsv = this.HEX2HSV(color);
         outputs[2].value = 'hsv(' + hsv[0] + ', ' + hsv[1] + '%, ' + hsv[2] + '%)';
 
     });
