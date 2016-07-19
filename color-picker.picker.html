@@ -14,11 +14,11 @@
     var target = document.querySelectorAll('input'), instances = [];
 
     // hide all color picker on exit except the clicked target’s color picker
-    function hide_all_but_this(instance) {
+    function hide_all_but_this() {
         for (var i = 0, len = instances.length; i < len; ++i) {
             instances[i].exit();
         }
-        instance.enter();
+        this.enter();
     }
 
     // set hooks for each target element

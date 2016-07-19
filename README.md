@@ -166,6 +166,17 @@ console.log(picker.HEX2HSV('ffffff'));
 console.log(picker.HEX2RGB('ffffff'));
 ~~~
 
+### Parse to Raw HSV Color Data
+
+All valid color string input will be converted into array of hue, saturation and value, with a range from `0` to `1`.
+
+~~~ .javascript
+console.log(picker.parse('#ffffff'));
+console.log(picker.parse('rgb(255, 255, 255)'));
+console.log(picker.parse('hsv(140, 20%, 60%)'));
+console.log(picker.parse([0, 1, 1])); // no changes
+~~~
+
 Events
 ------
 
@@ -193,10 +204,12 @@ If you want to add new features, you can use the available hooks to make your ow
  - [Pre–Defined Value](https://rawgit.com/tovic/color-picker/master/color-picker.value-set.html)
  - [Pre–Defined Color](https://rawgit.com/tovic/color-picker/master/color-picker.picker-set.html)
  - [Convert HEX Color Value](https://rawgit.com/tovic/color-picker/master/color-picker.value-convert.html)
+ - [Add Support for HSL Color Value](https://rawgit.com/tovic/color-picker/master/color-picker.color-hsl.html)
  - [Show and Hide with Buttons](https://rawgit.com/tovic/color-picker/master/color-picker.state.html)
  - [Add Close Button](https://rawgit.com/tovic/color-picker/master/color-picker.close.html)
  - [Replace Text Input with Hidden Input](https://rawgit.com/tovic/color-picker/master/color-picker.replace.html)
  - [HTML5 Color Input](https://rawgit.com/tovic/color-picker/master/color-picker.input-color.html)
  - [Create and Destroy Method](https://rawgit.com/tovic/color-picker/master/color-picker.create-destroy.html)
  - [Auto–Positioned to the Reachable Area in the Document](https://rawgit.com/tovic/color-picker/master/color-picker.fit.html)
+ - [Color Preview in Color Picker](https://rawgit.com/tovic/color-picker/master/color-picker.picker-preview.html)
  - etc… (coming soon!)

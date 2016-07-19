@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+    <style>
+    .color-picker-control {height:200px}
+    .color-preview-1,
+    .color-preview-2 {
+      display:block;
+      width:50%;
+      height:49px;
+      float:left;
+      border-top:1px solid;
+      border-color:inherit;
+      cursor:pointer;
+    }
+    </style>
+  </head>
+  <body>
+    <p>Add color preview in the color picker panel. Click on the first preview box to reset color to the previous state, click on the second preview box to set color value on the target element.</p>
+    <p><input type="text"></p>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var picker = new CP(document.querySelector('input')),
+        box_1 = document.createElement('span'),
+        box_2 = document.createElement('span');
+
+    picker.on("enter", function() {
+        var color = '#' + this._HSV2HEX(this.set());
+        box_1.title = color;
+        box_2.title = color;
+        box_1.style.backgroundColor = color;
+        box_2.style.backgroundColor = color;
+    });
+
+    picker.on("drag", function(color) {
+        box_2.title = '#' + color;
+        box_2.style.backgroundColor = '#' + color;
+    }, 'main-drag');
+
+    box_1.className = 'color-preview-1';
+    box_2.className = 'color-preview-2';
+
+    picker.picker.firstChild.appendChild(box_1);
+    picker.picker.firstChild.appendChild(box_2);
+
+    // click to reset
+    box_1.addEventListener("click", function(e) {
+        var color = this.title;
+        picker.set(color);
+        box_2.title = color;
+        box_2.style.backgroundColor = color;
+        e.stopPropagation();
+    }, false);
+
+    // click to set
+    box_2.addEventListener("click", function(e) {
+        var color = this.title;
+        picker.target.value = this.title;
+        picker.exit();
+    }, false);
+
+    // set color value on exit
+    picker.on("exit", function() {
+        this.target.value = box_2.title;
+    });
+
+    </script>
+  </body>
+</html>

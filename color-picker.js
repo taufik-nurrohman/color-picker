@@ -107,7 +107,7 @@ var CP = function(target) {
 
     // convert range from `0` to `360` and `0` to `100` in color into range from `0` to `1`
     function _2HSV_pri(a) {
-        return [1 * (+a[0] / 360), 1 - (+a[1] / 100), 1 - (+a[2] / 100)];
+        return [+a[0] / 360, +a[1] / 100, +a[2] / 100];
     }
 
     // convert range from `0` to `1` in color into `0` to `360` and `0` to `100`
@@ -116,22 +116,20 @@ var CP = function(target) {
     }
 
     // *
-    function _2HSV(x) {
+    r.parse = function(x) {
+        if (typeof x === "object") return x;
         var rgb = /\s*rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)\s*$/i.exec(x),
             hsv = /\s*hsv\s*\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*\)\s*$/i.exec(x),
-            // hsl = /\s*hsl\s*\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*\)\s*$/i.exec(x), TODO: add support for HSL color!
             hex = x[0] === '#' && x.match(/^#([\da-f]{3}|[\da-f]{6})$/);
         if (hex) {
             return HEX2HSV(x.slice(1));
-        // } else if (hsl) {
-        //     return ...
         } else if (hsv) {
             return _2HSV_pri([+hsv[1], +hsv[2], +hsv[3]]);
         } else if (rgb) {
             return RGB2HSV([+rgb[1], +rgb[2], +rgb[3]]);
         }
         return [0, 1, 1]; // default is red
-    }
+    };
 
     // add event
     function on(ev, el, fn) {
@@ -225,10 +223,10 @@ var CP = function(target) {
 
     // initialize data ...
     if (target.value && target.value.length) {
-        set_data(target, _2HSV(target.value));
+        set_data(target, r.parse(target.value));
     } else if (!target.value) {
         var data = get_data(target, target.getAttribute('data-color'));
-        if (data) set_data(target, _2HSV(data));
+        if (data) set_data(target, r.parse(data));
     }
 
     // generate color picker pane ...
@@ -252,12 +250,12 @@ var CP = function(target) {
 
     // fit to window
     function fit() {
-        var b_W = size(b).w,
-            b_H = size(h).h,
-            h_W = size(h).w,
-            h_H = size(h).h,
-            width = Math.max(b_W, h_W, (w.innerWidth - b_W)),
-            height = Math.max(b_H, h_H, (w.innerHeight - b_H));
+        var w_W = /* w.innerWidth */ size(h).w,
+            w_H = w.innerHeight,
+            w_L = Math.max(b.scrollLeft, h.scrollLeft),
+            w_T = Math.max(b.scrollTop, h.scrollTop),
+            width = w_W + w_L,
+            height = w_H + w_T;
         left = offset(target).l;
         top = offset(target).t + size(target).h;
         if (left + P_W > width) {
@@ -416,7 +414,7 @@ var CP = function(target) {
     r.fit = fit;
     r.set = function(a) {
         if (typeof a === "string") {
-            a = _2HSV(a);
+            a = r.parse(a);
         }
         if (!isset(a)) return get_data(target);
         return set_data(target, a), set(), r;
@@ -439,12 +437,11 @@ var CP = function(target) {
     };
     r._HEX2HSV = HEX2HSV;
     r.HEX2RGB = HEX2RGB;
-    r._2HSV = _2HSV;
     r.hooks = hooks;
     r.enter = create;
     r.exit = exit;
 
-    // return the global data
+    // return the global object
     return r;
 
 };
