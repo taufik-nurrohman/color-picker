@@ -45,6 +45,8 @@ The available hooks:
  - `drag:h`
  - `drag:sv`
  - `stop`
+ - `stop:h`
+ - `stop:sv`
 
 ### Add a Hook
 

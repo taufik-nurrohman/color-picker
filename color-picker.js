@@ -372,10 +372,14 @@ var CP = function(target) {
                 trigger("drag", [v, r]);
             }
         }
-        function stop() {
+        function stop(e) {
+            if (!first) {
+                v = HSV2HEX(HSV);
+                trigger("stop:" + (drag_H ? "h" : "sv"), [v, r]);
+                trigger("stop", [v, r]);
+            }
             drag_H = false;
             drag_SV = false;
-            if (!first) trigger("stop", [HSV2HEX(HSV), r]); // TODO: add `stop:h` and `stop:sv` hook
         }
         function down_H(e) {
             drag_H = true;
