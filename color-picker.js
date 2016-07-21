@@ -146,11 +146,11 @@ var CP = function(target) {
     function point(el, e) {
         var x = !!e.touches ? e.touches[0].pageX : e.pageX,
             y = !!e.touches ? e.touches[0].pageY : e.pageY,
-            left = el.offsetLeft,
-            top = el.offsetTop;
+            left = offset(el).l,
+            top = offset(el).t;
         while (el = el.offsetParent) {
-            left += el.offsetLeft;
-            top += el.offsetTop;
+            left += offset(el).l;
+            top += offset(el).t;
             el = el.offsetParent;
         }
         return {
