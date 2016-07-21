@@ -12,6 +12,7 @@ var CP = function(target) {
     var w = window,
         d = document,
         r = this,
+        _ = false,
         hooks = {},
         picker = d.createElement('div');
 
@@ -175,19 +176,13 @@ var CP = function(target) {
     }
 
     // get color data
-    function get_data(el, a) {
-        var s = el.getAttribute('data-color');
-        s = s ? s.split(',') : [];
-        if (!isset(a)) a = false;
-        return s.length === 3 ? [+s[0], +s[1], +s[2]] : a;
+    function get_data(a) {
+        return _ || (isset(a) ? a : false);
     }
 
     // set color data
-    function set_data(el, a) {
-        if (a === false) {
-            return el.removeAttribute('data-color');
-        }
-        return el.setAttribute('data-color', a.join(','));
+    function set_data(a) {
+        _ = a;
     }
 
     // add hook
@@ -222,12 +217,7 @@ var CP = function(target) {
     }
 
     // initialize data ...
-    if (target.value && target.value.length) {
-        set_data(target, r.parse(target.value));
-    } else if (!target.value) {
-        var data = get_data(target, target.getAttribute('data-color'));
-        if (data) set_data(target, r.parse(data));
-    }
+    set_data(r.parse(target.getAttribute('data-color') || target.value || [0, 1, 1]));
 
     // generate color picker pane ...
     picker.className = 'color-picker';
@@ -296,8 +286,7 @@ var CP = function(target) {
             };
             r.destroy = function() {
                 off("click", target, click);
-                set_data(target, false);
-                exit();
+                set_data(false), exit();
                 return trigger("destroy", [r]), r;
             };
         } else {
@@ -324,7 +313,7 @@ var CP = function(target) {
             var a = HSV2RGB(HSV),
                 b = HSV2RGB([HSV[0], 1, 1]);
             SV.style.backgroundColor = 'rgb(' + b.join(',') + ')';
-            set_data(target, HSV);
+            set_data(HSV);
             if (e) e.preventDefault();
         } set();
         function do_H(e) {
@@ -420,8 +409,8 @@ var CP = function(target) {
         if (typeof a === "string") {
             a = r.parse(a);
         }
-        if (!isset(a)) return get_data(target);
-        return set_data(target, a), set(), r;
+        if (!isset(a)) return get_data();
+        return set_data(a), set(), r;
     };
     r.HSV2RGB = function(a) {
         return HSV2RGB(_2HSV_pri(a));
