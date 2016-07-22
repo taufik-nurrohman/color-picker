@@ -3,7 +3,7 @@
  *  COLOR PICKER PLUGIN 1.0.0
  * ==========================================================
  * Author: Taufik Nurrohman <http://latitudu.com>
- * Licensed under the MIT license.
+ * License: MIT
  * ----------------------------------------------------------
  */
 
@@ -18,6 +18,15 @@ var CP = function(target) {
 
     function isset(x) {
         return typeof x !== "undefined";
+    }
+
+    function edge(a, b, c) {
+        if (a < b) {
+            a = b;
+        } else if (a > c) {
+            a = c;
+        }
+        return a;
     }
 
     // [h, s, v] ... 0 <= h, s, v <= 1
@@ -56,6 +65,7 @@ var CP = function(target) {
         }
         return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
     }
+
     function HSV2HEX(a) {
         return RGB2HEX(HSV2RGB(a));
     }
@@ -89,6 +99,7 @@ var CP = function(target) {
         }
         return [h, s, v];
     }
+
     function RGB2HEX(a) {
         var s = +a[2] | (+a[1] << 8) | (+a[0] << 16);
         s = '000000' + s.toString(16);
@@ -99,6 +110,7 @@ var CP = function(target) {
     function HEX2HSV(s) {
         return RGB2HSV(HEX2RGB(s));
     }
+
     function HEX2RGB(s) {
         if (s.length === 3) {
             s = s.replace(/./g, '$&$&');
@@ -111,7 +123,7 @@ var CP = function(target) {
         return [+a[0] / 360, +a[1] / 100, +a[2] / 100];
     }
 
-    // convert range from `0` to `1` in color into `0` to `360` and `0` to `100`
+    // convert range from `0` to `1` into `0` to `360` and `0` to `100` in color
     function _2HSV_pub(a) {
         return [Math.round(+a[0] * 360), Math.round(+a[1] * 100), Math.round(+a[2] * 100)];
     }
@@ -151,7 +163,6 @@ var CP = function(target) {
         while (el = el.offsetParent) {
             left += offset(el).l;
             top += offset(el).t;
-            el = el.offsetParent;
         }
         return {
             x: x - left,
@@ -187,10 +198,10 @@ var CP = function(target) {
 
     // add hook
     function add(ev, fn, id) {
+        if (!isset(ev)) return hooks;
+        if (!isset(fn)) return hooks[ev];
         if (!isset(hooks[ev])) hooks[ev] = {};
-        if (!isset(ev)) return hooks, r;
-        if (!isset(fn)) return hooks[ev], r;
-        if (!isset(id)) return hooks[ev][Object.keys(hooks[ev]).length] = fn, r;
+        if (!isset(id)) id = Object.keys(hooks[ev]).length;
         return hooks[ev][id] = fn, r;
     }
 
@@ -225,7 +236,7 @@ var CP = function(target) {
     var b = d.body,
         h = d.documentElement,
         c = picker.firstChild.children,
-        HSV = get_data(target, [0, 1, 1]), // default is red
+        HSV = get_data([0, 1, 1]), // default is red
         H = c[0],
         SV = c[1],
         H_point = H.firstChild,
@@ -275,14 +286,12 @@ var CP = function(target) {
             picker.style.top = '-9999px';
             on("resize", w, fit);
             function click(e) {
-                create();
-                trigger("click", [r]);
+                create(), trigger("click", [r]);
                 e.stopPropagation();
                 e.preventDefault();
             } on("click", target, click);
             r.create = function() {
-                create(1);
-                return trigger("create", [r]), r;
+                return create(1), trigger("create", [r]), r;
             };
             r.destroy = function() {
                 off("click", target, click);
@@ -293,8 +302,7 @@ var CP = function(target) {
             fit(), trigger("enter", [r]);
         }
         set = function() {
-            HSV = get_data(target, HSV);
-            color();
+            HSV = get_data(HSV), color();
             H_point.style.top = ((H_H * +HSV[0]) - (H_point_H / 2)) + 'px';
             SV_point.style.right = (SV_W - (SV_point_W / 2) - (SV_W * +HSV[1])) + 'px';
             SV_point.style.top = (SV_H - (SV_point_H / 2) - (SV_H * +HSV[2])) + 'px';
@@ -317,30 +325,15 @@ var CP = function(target) {
             if (e) e.preventDefault();
         } set();
         function do_H(e) {
-            var o = point(H, e), y = o.y;
-            if (y < 0) {
-                y = 0;
-            } else if (y > H_H) {
-                y = H_H;
-            }
+            var y = edge(point(H, e).y, 0, H_H);
             HSV[0] = 1 - ((H_H - y) / H_H);
             H_point.style.top = (y - (H_point_H / 2)) + 'px';
             color(e);
         }
         function do_SV(e) {
             var o = point(SV, e),
-                x = o.x,
-                y = o.y;
-            if (x < 0) {
-                x = 0;
-            } else if (x > SV_W) {
-                x = SV_W;
-            }
-            if (y < 0) {
-                y = 0;
-            } else if (y > SV_H) {
-                y = SV_H;
-            }
+                x = edge(o.x, 0, SV_W),
+                y = edge(o.y, 0, SV_H);
             HSV[1] = 1 - ((SV_W - x) / SV_W);
             HSV[2] = (SV_H - y) / SV_H;
             SV_point.style.right = (SV_W - x - (SV_point_W / 2)) + 'px';
@@ -349,14 +342,12 @@ var CP = function(target) {
         }
         function move(e) {
             if (drag_H) {
-                do_H(e);
-                v = HSV2HEX(HSV);
+                do_H(e), v = HSV2HEX(HSV);
                 trigger("drag:h", [v, r]);
                 trigger("drag", [v, r]);
             }
             if (drag_SV) {
-                do_SV(e);
-                v = HSV2HEX(HSV);
+                do_SV(e), v = HSV2HEX(HSV);
                 trigger("drag:sv", [v, r]);
                 trigger("drag", [v, r]);
             }
@@ -371,14 +362,12 @@ var CP = function(target) {
             drag_SV = false;
         }
         function down_H(e) {
-            drag_H = true;
-            do_H(e);
+            drag_H = true, do_H(e);
             trigger("start:h", [r]);
             trigger("start", [r]);
         }
         function down_SV(e) {
-            drag_SV = true;
-            do_SV(e);
+            drag_SV = true, do_SV(e);
             trigger("start:sv", [r]);
             trigger("start", [r]);
         }
@@ -406,10 +395,10 @@ var CP = function(target) {
     r.trigger = trigger;
     r.fit = fit;
     r.set = function(a) {
+        if (!isset(a)) return get_data();
         if (typeof a === "string") {
             a = r.parse(a);
         }
-        if (!isset(a)) return get_data();
         return set_data(a), set(), r;
     };
     r.HSV2RGB = function(a) {
