@@ -18,6 +18,20 @@
         picker_2 = new CP(picker[2]),
         picker_3 = new CP(picker[3]);
 
+    picker_0.on("drag", function(color) {
+        this.target.value = '#' + color;
+    });
+    picker_1.on("drag", function(color) {
+        this.target.value = 'rgb(' + this.HEX2RGB(color).join(', ') + ')';
+    });
+    picker_2.on("drag", function(color) {
+        var hsv = this.HEX2HSV(color);
+        this.target.value = 'hsv(' + hsv[0] + ', ' + hsv[1] + '%, ' + hsv[2] + '%)';
+    });
+    picker_3.on("drag", function(color) {
+        this.target.innerHTML = '#' + color;
+    });
+
     </script>
   </body>
 </html>
