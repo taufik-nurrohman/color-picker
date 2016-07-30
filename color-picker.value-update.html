@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width">
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
+    <style>
+    /* add animation on color pointer(s) */
+    .color-picker:not(.no-transition) .color-picker-h i,
+    .color-picker:not(.no-transition) .color-picker-sv i {
+      -webkit-transition:all .5s ease;
+      -moz-transition:all .5s ease;
+      -ms-transition:all .5s ease;
+      -o-transition:all .5s ease;
+      transition:all .5s ease;
+    }
+    </style>
   </head>
   <body>
     <p>Update color picker state on <code>keyup</code>, <code>cut</code>, <code>paste</code> and <code>input</code> in the target element.</p>
@@ -16,6 +27,16 @@
 
     picker.on("drag", function(color) {
         this.target.value = '#' + color;
+    });
+
+    // @see the CSS code
+    picker.on("start", function() {
+        this.picker.classList.add('no-transition');
+    });
+
+    // @see the CSS code
+    picker.on("stop", function() {
+        this.picker.classList.remove('no-transition');
     });
 
     function update() {
