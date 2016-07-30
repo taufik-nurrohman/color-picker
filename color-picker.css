@@ -1,3 +1,11 @@
+.color-picker,
+.color-picker *,
+.color-picker *::before,
+.color-picker *::after {
+  -webkit-box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  box-sizing:border-box;
+}
 .color-picker {
   position:absolute;
   top:0;
@@ -5,8 +13,6 @@
   z-index:9999;
 }
 .color-picker-control {
-  width:170px;
-  height:150px;
   border:1px solid #000;
   -webkit-box-shadow:1px 5px 10px rgba(0,0,0,.5);
   -moz-box-shadow:1px 5px 10px rgba(0,0,0,.5);

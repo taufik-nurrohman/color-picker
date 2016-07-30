@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.0.0
+ *  COLOR PICKER PLUGIN 1.0.1
  * ==========================================================
  * Author: Taufik Nurrohman <http://latitudu.com>
  * License: MIT
