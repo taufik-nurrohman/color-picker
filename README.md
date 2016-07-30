@@ -205,6 +205,7 @@ If you want to add new features, you can use the available hooks to make your ow
  - [Multiple Instances](https://rawgit.com/tovic/color-picker/master/color-picker.picker.html)
  - [Pre–Defined Value](https://rawgit.com/tovic/color-picker/master/color-picker.value-set.html)
  - [Pre–Defined Color](https://rawgit.com/tovic/color-picker/master/color-picker.picker-set.html)
+ - [Update Color Picker State on Value Changes](https://rawgit.com/tovic/color-picker/master/color-picker.value-update.html)
  - [Convert HEX Color Value](https://rawgit.com/tovic/color-picker/master/color-picker.value-convert.html)
  - [Add Support for HSL Color Value](https://rawgit.com/tovic/color-picker/master/color-picker.color-hsl.html)
  - [Transparency](https://rawgit.com/tovic/color-picker/master/color-picker.color-rgba.html)
