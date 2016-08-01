@@ -211,6 +211,7 @@ If you want to add new features, you can use the available hooks to make your ow
  - [Transparency](https://rawgit.com/tovic/color-picker/master/color-picker.color-rgba.html)
  - [Show and Hide with Buttons](https://rawgit.com/tovic/color-picker/master/color-picker.state.html)
  - [Add Close Button](https://rawgit.com/tovic/color-picker/master/color-picker.close.html)
+ - [Static Color Picker](https://rawgit.com/tovic/color-picker/master/color-picker.static.html)
  - [Replace Text Input with Hidden Input](https://rawgit.com/tovic/color-picker/master/color-picker.replace.html)
  - [HTML5 Color Input](https://rawgit.com/tovic/color-picker/master/color-picker.input-color.html)
  - [Create and Destroy Method](https://rawgit.com/tovic/color-picker/master/color-picker.create-destroy.html)
