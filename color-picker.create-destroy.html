@@ -15,7 +15,7 @@
     var picker = new CP(document.querySelector('input')),
         buttons = document.querySelectorAll('button');
 
-    picker.on("drag", function(color) {
+    picker.on("change", function(color) {
         this.target.value = '#' + color;
         document.body.style.backgroundColor = '#' + color;
     });

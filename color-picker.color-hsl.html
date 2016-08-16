@@ -7,8 +7,8 @@
     <link href="color-picker.min.css" rel="stylesheet">
   </head>
   <body>
-    <p>Add support for HSL color.</p>
-    <p><input type="text" value="hsl(200, 35%, 35%)"></p>
+    <p>Add support for HSL color (still buggy).</p>
+    <p><input type="text" value="hsl(210, 50%, 13%)"></p>
     <script src="color-picker.min.js"></script>
     <script>
 
@@ -131,7 +131,7 @@
     };
 
     picker.set(HSL_parse(picker.target.value)); // reset private color data
-    picker.on("drag", function(color) {
+    picker.on("change", function(color) {
         var hsl = this.HEX2HSL(color);
         this.target.value = 'hsl(' + hsl[0] + ', ' + hsl[1] + '%, ' + hsl[2] + '%)';
     });

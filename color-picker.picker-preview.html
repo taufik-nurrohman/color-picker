@@ -6,12 +6,11 @@
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
-    .color-picker-control {height:200px}
     .color-preview-1,
     .color-preview-2 {
       display:block;
       width:50%;
-      height:49px;
+      height:50px;
       float:left;
       border-top:1px solid;
       border-color:inherit;
@@ -37,10 +36,10 @@
         box_2.style.backgroundColor = color;
     });
 
-    picker.on("drag", function(color) {
+    picker.on("change", function(color) {
         box_2.title = '#' + color;
         box_2.style.backgroundColor = '#' + color;
-    }, 'main-drag');
+    }, 'main-change');
 
     box_1.className = 'color-preview-1';
     box_2.className = 'color-preview-2';

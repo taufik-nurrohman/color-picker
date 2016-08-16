@@ -18,20 +18,23 @@
     </style>
   </head>
   <body>
-    <p>Update color picker state on <code>keyup</code>, <code>cut</code>, <code>paste</code> and <code>input</code> in the target element.</p>
+    <p>Update color picker state on <code>keyup</code>, <code>cut</code>, <code>paste</code> and <code>input</code> event in the target element.</p>
     <p><input type="text" placeholder="#387a40"></p>
     <script src="color-picker.min.js"></script>
     <script>
 
     var picker = new CP(document.querySelector('input'));
 
-    picker.on("drag", function(color) {
+    picker.on("change", function(color) {
         this.target.value = '#' + color;
     });
 
     // @see the CSS code
-    picker.on("start", function() {
+    picker.on("create", function() {
         this.picker.classList.add('no-transition');
+    }, 'disable-transition');
+    picker.on("start", function() {
+        this.trigger("create", [], 'disable-transition');
     });
 
     // @see the CSS code

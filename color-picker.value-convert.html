@@ -17,7 +17,7 @@
     var picker = new CP(document.querySelector('button')),
         outputs = document.querySelectorAll('input');
 
-    picker.on("drag", function(color) {
+    picker.on("change", function(color) {
 
         // default (HEX)
         outputs[0].value = '#' + color;

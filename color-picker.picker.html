@@ -24,7 +24,7 @@
     // set hooks for each target element
     for (var i = 0, len = target.length; i < len; ++i) {
         instances[i] = new CP(target[i]);
-        instances[i].on("drag", function(color) {
+        instances[i].on("change", function(color) {
             this.target.value = '#' + color;
         });
         instances[i].on("click", hide_all_but_this);

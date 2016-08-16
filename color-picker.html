@@ -31,13 +31,17 @@
 
     var picker = new CP(document.querySelector('input'));
 
+    function on_change(v, instance) {
+        instance.target.value = '#' + v;
+        document.body.style.backgroundColor = '#' + v;
+        console.log('change');
+    }
+
     function on_start() {
         console.log('start');
     }
 
-    function on_drag(v, instance) {
-        instance.target.value = '#' + v;
-        document.body.style.backgroundColor = '#' + v;
+    function on_drag() {
         console.log('drag');
     }
 
@@ -59,9 +63,9 @@
 
     function on_create(v, instance) {
         console.log('create');
-        on_drag(v, instance); // trigger drag event on initiation ...
     }
 
+    picker.on("change", on_change);
     picker.on("start", on_start);
     picker.on("drag", on_drag);
     picker.on("stop", on_stop);

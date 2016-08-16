@@ -18,7 +18,7 @@ Color Picker
     <script src="color-picker.min.js"></script>
     <script>
     var picker = new CP(document.querySelector('input[type="text"]'));
-    picker.on("drag", function(color) {
+    picker.on("change", function(color) {
         this.target.value = '#' + color;
     });
     </script>
@@ -38,6 +38,9 @@ The available hooks:
  - `enter`
  - `exit`
  - `fit`
+ - `change`
+ - `change:h`
+ - `change:sv`
  - `start`
  - `start:h`
  - `start:sv`
@@ -50,52 +53,52 @@ The available hooks:
 
 ### Add a Hook
 
-Add a `drag` hook.
+Add a `change` hook.
 
 ~~~ .javascript
-picker.on("drag", function(color) {
+picker.on("change", function(color) {
     console.log(color);
 });
 ~~~
 
 ### Add a Hook with ID
 
-Add a `drag` hook with ID of `test-id`.
+Add a `change` hook with ID of `test-id`.
 
 ~~~ .javascript
-picker.on("drag", function(color) {
+picker.on("change", function(color) {
     console.log(color);
 }, 'test-id');
 ~~~
 
 ### Remove a Hook
 
-Remove all `drag` hooks.
+Remove all `change` hooks.
 
 ~~~ .javascript
-picker.off("drag");
+picker.off("change");
 ~~~
 
 ### Remove a Hook by ID
 
-Remove a `drag` hook with ID of `test-id`.
+Remove a `change` hook with ID of `test-id`.
 
 ~~~ .javascript
-picker.off("drag", 'test-id');
+picker.off("change", 'test-id');
 ~~~
 
 ### Trigger a Hook with Custom Value
 
-Trigger all `drag` hooks with pre–defined color value as `ffa500`.
+Trigger all `change` hooks with pre–defined color value as `ffa500`.
 
 ~~~ .javascript
-picker.trigger("drag", ['ffa500']);
+picker.trigger("change", ['ffa500']);
 ~~~
 
-Trigger a `drag` hook with ID of `test-id` and with pre–defined color value as `ffa500`.
+Trigger a `change` hook with ID of `test-id` and with pre–defined color value as `ffa500`.
 
 ~~~ .javascript
-picker.trigger("drag", ['ffa500'], 'test-id');
+picker.trigger("change", ['ffa500'], 'test-id');
 ~~~
 
 Data

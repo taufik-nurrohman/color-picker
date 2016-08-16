@@ -27,7 +27,7 @@
   </head>
   <body>
     <p>Add alpha channel to color value as RGBA.</p>
-    <p><input type="text" value="rgb(255, 0, 0)"></p>
+    <p><input type="text" value="rgb(255, 255, 255)"></p>
     <script src="color-picker.min.js"></script>
     <script>
 
@@ -57,7 +57,7 @@
 
     picker.picker.appendChild(alpha);
 
-    picker.on("drag", function(color) {
+    picker.on("change", function(color) {
         var v = picker.HEX2RGB(color);
         v = alpha.value == 1 ? 'rgb(' + v.join(', ') + ')' : 'rgba(' + v.join(', ') + ', ' + alpha.value.replace(/^0\./, '.') + ')';
         this.target.value = v;

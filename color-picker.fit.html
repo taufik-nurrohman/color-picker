@@ -36,7 +36,7 @@
         input.type = 'text';
         input.value = '#' + color;
         input.style.backgroundColor = '#' + color;
-        (new CP(input)).on("drag", function(v) {
+        (new CP(input)).on("change", function(v) {
             this.target.value = '#' + v;
             this.target.style.backgroundColor = '#' + v;
         });
