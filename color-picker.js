@@ -375,10 +375,11 @@ var CP = function(target) {
         }
         function stop(e) {
             if (!first) {
-                var k = drag_H ? "h" : "sv";
-                trigger("stop:" + k, [v, r]);
-                trigger("stop", [v, r]);
-                trigger_(k, [v, r]);
+                var k = drag_H ? "h" : "sv",
+                    a = [HSV2HEX(HSV), r];
+                trigger("stop:" + k, a);
+                trigger("stop", a);
+                trigger_(k, a);
             }
             drag_H = false,
             drag_SV = false;
