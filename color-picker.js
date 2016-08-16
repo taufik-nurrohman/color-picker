@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.0.2
+ *  COLOR PICKER PLUGIN 1.0.3
  * ==========================================================
  * Author: Taufik Nurrohman <http://latitudu.com>
  * License: MIT
@@ -249,8 +249,8 @@ var CP = function(target) {
         v = HSV2HEX(HSV),
         set, exit;
 
-    // on change ...
-    function change(k, x) {
+    // on update ...
+    function trigger_(k, x) {
         if (!k || k === "h") {
             trigger("change:h", x);
         }
@@ -360,7 +360,7 @@ var CP = function(target) {
                     trigger("drag:h", [v, r]);
                     trigger("drag", [v, r]);
                 }
-                change("h", [v, r]);
+                trigger_("h", [v, r]);
             }
             if (drag_SV) {
                 do_SV(e), v = HSV2HEX(HSV);
@@ -368,7 +368,7 @@ var CP = function(target) {
                     trigger("drag:sv", [v, r]);
                     trigger("drag", [v, r]);
                 }
-                change("sv", [v, r]);
+                trigger_("sv", [v, r]);
             }
             start_H = false,
             start_SV = false;
@@ -378,7 +378,7 @@ var CP = function(target) {
                 var k = drag_H ? "h" : "sv";
                 trigger("stop:" + k, [v, r]);
                 trigger("stop", [v, r]);
-                change(k, [v, r]);
+                trigger_(k, [v, r]);
             }
             drag_H = false,
             drag_SV = false;
@@ -389,7 +389,7 @@ var CP = function(target) {
             move(e);
             trigger("start:h", [v, r]);
             trigger("start", [v, r]);
-            change("h", [v, r]);
+            trigger_("h", [v, r]);
         }
         function down_SV(e) {
             start_SV = true,
@@ -397,7 +397,7 @@ var CP = function(target) {
             move(e);
             trigger("start:sv", [v, r]);
             trigger("start", [v, r]);
-            change("sv", [v, r]);
+            trigger_("sv", [v, r]);
         }
         on("touchstart", H, down_H);
         on("mousedown", H, down_H);
@@ -414,7 +414,7 @@ var CP = function(target) {
     w.setTimeout(function() {
         v = HSV2HEX(HSV);
         trigger("create", [v, r]);
-        change(0, [v, r]);
+        trigger_(0, [v, r]);
     }, .1);
 
     // register to global ...
@@ -455,7 +455,5 @@ var CP = function(target) {
 
     // return the global object
     return r;
-
-};r;
 
 };
