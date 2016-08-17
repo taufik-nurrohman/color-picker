@@ -33,9 +33,13 @@ Hooks
 
 The available hooks:
 
+ - `before.click`
+ - `click`
+ - `before.create`
  - `create`
  - `destroy`
  - `enter`
+ - `before.exit`
  - `exit`
  - `fit`
  - `change`

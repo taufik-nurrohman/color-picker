@@ -27,9 +27,13 @@
 
     var picker = new CP(document.querySelector('input'));
 
-    picker.on("change", function(color) {
+    // update value ...
+    function update(color) {
         this.target.value = '#' + color;
-    });
+    }
+
+    picker.on("start", update);
+    picker.on("drag", update);
 
     // add a `static` class to the color picker panel
     picker.picker.classList.add('static');
@@ -40,7 +44,7 @@
     });
 
     // force to always visible
-    picker.on("exit", function() {
+    picker.on("before.exit", function() {
         this.enter();
     });
 

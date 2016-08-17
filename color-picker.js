@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.0.3
+ *  COLOR PICKER PLUGIN 1.0.4
  * ==========================================================
  * Author: Taufik Nurrohman <http://latitudu.com>
  * License: MIT
@@ -265,6 +265,11 @@ var CP = function(target) {
         return w.setTimeout(fn, t);
     }
 
+    // is visible?
+    function visible() {
+        return picker.parentNode;
+    }
+
     // fit to window
     function fit() {
         var w_W = /* w.innerWidth */ size(h).w,
@@ -302,6 +307,7 @@ var CP = function(target) {
             picker.style.top = '-9999px';
             on("resize", w, fit);
             function click(e) {
+                trigger("before.click", [r]);
                 delay(function() {
                     create(), trigger("click", [r]);
                 }, .1);
@@ -310,7 +316,10 @@ var CP = function(target) {
             on("touchdown", target, click);
             on("click", target, click);
             r.create = function() {
-                return create(1), trigger("create", [r]), r;
+                trigger("before.create", [r]);
+                return delay(function() {
+                    create(1), trigger("create", [r]);
+                }, .1), r;
             };
             r.destroy = function() {
                 off("touchdown", target, click);
@@ -328,8 +337,8 @@ var CP = function(target) {
             SV_point.style.top = (SV_H - (SV_point_H / 2) - (SV_H * +HSV[2])) + 'px';
         };
         exit = function(e) {
-            if (picker.parentNode) {
-                picker.parentNode.removeChild(picker);
+            if (visible()) {
+                visible().removeChild(picker);
             }
             off("touchmove", d, move);
             off("mousemove", d, move);
@@ -337,7 +346,10 @@ var CP = function(target) {
             off("mouseup", d, stop);
             off("touchdown", d, exit);
             off("click", d, exit);
-            return trigger("exit", [r]), r;
+            trigger("before.exit", [r]);
+            return delay(function() {
+                if (!visible()) trigger("exit", [r]);
+            }, .11), r;
         };
         function color(e) {
             var a = HSV2RGB(HSV),
@@ -421,6 +433,7 @@ var CP = function(target) {
         on("click", d, exit);
     } create(1);
 
+    trigger("before.create", [r]);
     delay(function() {
         v = HSV2HEX(HSV);
         trigger("create", [v, r]);
