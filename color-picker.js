@@ -260,6 +260,11 @@ var CP = function(target) {
         trigger("change", x);
     }
 
+    // delay
+    function delay(fn, t) {
+        return w.setTimeout(fn, t);
+    }
+
     // fit to window
     function fit() {
         var w_W = /* w.innerWidth */ size(h).w,
@@ -297,14 +302,18 @@ var CP = function(target) {
             picker.style.top = '-9999px';
             on("resize", w, fit);
             function click(e) {
-                create(), trigger("click", [r]);
-                e.stopPropagation();
+                delay(function() {
+                    create(), trigger("click", [r]);
+                }, .1);
                 e.preventDefault();
-            } on("click", target, click);
+            }
+            on("touchdown", target, click);
+            on("click", target, click);
             r.create = function() {
                 return create(1), trigger("create", [r]), r;
             };
             r.destroy = function() {
+                off("touchdown", target, click);
                 off("click", target, click);
                 set_data(false), exit();
                 return trigger("destroy", [r]), r;
@@ -318,7 +327,7 @@ var CP = function(target) {
             SV_point.style.right = (SV_W - (SV_point_W / 2) - (SV_W * +HSV[1])) + 'px';
             SV_point.style.top = (SV_H - (SV_point_H / 2) - (SV_H * +HSV[2])) + 'px';
         };
-        exit = function() {
+        exit = function(e) {
             if (picker.parentNode) {
                 picker.parentNode.removeChild(picker);
             }
@@ -412,7 +421,7 @@ var CP = function(target) {
         on("click", d, exit);
     } create(1);
 
-    w.setTimeout(function() {
+    delay(function() {
         v = HSV2HEX(HSV);
         trigger("create", [v, r]);
         trigger_(0, [v, r]);
