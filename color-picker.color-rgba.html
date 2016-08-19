@@ -41,10 +41,6 @@
         document.body.style.backgroundColor = v;
     }
 
-    function keep() {
-        picker.enter(); // do not hide the color picker on `alpha` mouse-up/toch-end event
-    }
-
     alpha.type = 'range';
     alpha.min = 0;
     alpha.max = 1;
@@ -52,8 +48,6 @@
     alpha.value = 1; // opaque
     alpha.onchange = change;
     alpha.oninput = change;
-    alpha.onmouseup = keep;
-    alpha.ontouchend = keep;
 
     picker.picker.appendChild(alpha);
 

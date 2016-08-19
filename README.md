@@ -1,7 +1,7 @@
 Color Picker
 ============
 
-> A simple color picker plugin in pure JavaScript, for modern browsers.
+> A simple color picker plugin written in pure JavaScript, for modern browsers.
 
 [![View Demo](https://cloud.githubusercontent.com/assets/1669261/16919759/246196ec-4d35-11e6-8d12-153aa969384e.png)](https://rawgit.com/tovic/color-picker/master/color-picker.html "View Demo")
 
@@ -28,18 +28,31 @@ Color Picker
 
 Has support for touch events. Touchy… touchy…
 
+Instance
+--------
+
+~~~ .javascript
+var el = document.querySelector('input[type="color"]');
+
+// show color picker on click (default)
+var picker = new CP(el);
+
+// show color picker on hover
+var picker = new CP(el, ["mouseover"]);
+
+// disable color picker by default
+// to enable it, try `picker.enter()`
+var picker = new CP(el, false);
+~~~
+
 Hooks
 -----
 
 The available hooks:
 
- - `before.click`
- - `click`
- - `before.create`
  - `create`
  - `destroy`
  - `enter`
- - `before.exit`
  - `exit`
  - `fit`
  - `change`
@@ -186,8 +199,8 @@ console.log(picker.parse('hsv(140, 20%, 60%)'));
 console.log(picker.parse([0, 1, 1])); // no changes
 ~~~
 
-Events
-------
+State
+-----
 
 ### Show
 
@@ -199,6 +212,12 @@ picker.enter(); // show the color picker
 
 ~~~ .javascript
 picker.exit(); // hide the color picker
+~~~
+
+### Visible
+
+~~~ .javascript
+if (picker.visible) { … } // color picker is visible
 ~~~
 
 Want to Add More Features?
@@ -217,6 +236,7 @@ If you want to add new features, you can use the available hooks to make your ow
  - [Add Support for HSL Color Value](https://rawgit.com/tovic/color-picker/master/color-picker.color-hsl.html)
  - [Transparency](https://rawgit.com/tovic/color-picker/master/color-picker.color-rgba.html)
  - [Show and Hide with Buttons](https://rawgit.com/tovic/color-picker/master/color-picker.state.html)
+ - [Show and Hide with Double Click](https://rawgit.com/tovic/color-picker/master/color-picker.trigger.html)
  - [Add Close Button](https://rawgit.com/tovic/color-picker/master/color-picker.close.html)
  - [Static Color Picker](https://rawgit.com/tovic/color-picker/master/color-picker.static.html)
  - [Replace Text Input with Hidden Input](https://rawgit.com/tovic/color-picker/master/color-picker.replace.html)
@@ -224,4 +244,3 @@ If you want to add new features, you can use the available hooks to make your ow
  - [Create and Destroy Method](https://rawgit.com/tovic/color-picker/master/color-picker.create-destroy.html)
  - [Auto–Positioned to the Reachable Area in the Document](https://rawgit.com/tovic/color-picker/master/color-picker.fit.html)
  - [Color Preview in Color Picker](https://rawgit.com/tovic/color-picker/master/color-picker.picker-preview.html)
- - etc… (coming soon!)

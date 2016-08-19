@@ -8,11 +8,17 @@
   </head>
   <body>
     <p>With HTML5 color input.</p>
-    <p><input type="color" value="#ff0000"></p>
+    <p><input type="color"></p>
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input'));
+    var target = document.querySelector('input'),
+        picker = new CP(target);
+
+    // prevent showing native color picker panel
+    target.onclick = function(e) {
+        e.preventDefault();
+    };
 
     picker.on("change", function(color) {
         this.target.value = '#' + color;
