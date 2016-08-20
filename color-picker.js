@@ -7,7 +7,7 @@
  * ----------------------------------------------------------
  */
 
-var CP = function(target, how) {
+var CP = function(target, events) {
 
     var w = window,
         d = document,
@@ -16,8 +16,12 @@ var CP = function(target, how) {
         hooks = {},
         picker = d.createElement('div');
 
-    function isset(x) {
+    function is_set(x) {
         return typeof x !== "undefined";
+    }
+
+    function is_string(x) {
+        return typeof x === "string";
     }
 
     function edge(a, b, c) {
@@ -27,8 +31,8 @@ var CP = function(target, how) {
     }
 
     // trigger color picker panel on click by default
-    if (!isset(how)) {
-        how = ["mousedown", "touchstart"];
+    if (!is_set(events)) {
+        events = ["mousedown", "touchstart"];
     }
 
     // [h, s, v] ... 0 <= h, s, v <= 1
@@ -201,7 +205,7 @@ var CP = function(target, how) {
 
     // get color data
     function get_data(a) {
-        return _ || (isset(a) ? a : false);
+        return _ || (is_set(a) ? a : false);
     }
 
     // set color data
@@ -211,29 +215,29 @@ var CP = function(target, how) {
 
     // add hook
     function add(ev, fn, id) {
-        if (!isset(ev)) return hooks;
-        if (!isset(fn)) return hooks[ev];
-        if (!isset(hooks[ev])) hooks[ev] = {};
-        if (!isset(id)) id = Object.keys(hooks[ev]).length;
+        if (!is_set(ev)) return hooks;
+        if (!is_set(fn)) return hooks[ev];
+        if (!is_set(hooks[ev])) hooks[ev] = {};
+        if (!is_set(id)) id = Object.keys(hooks[ev]).length;
         return hooks[ev][id] = fn, r;
     }
 
     // remove hook
     function remove(ev, id) {
-        if (!isset(ev)) return hooks = {}, r;
-        if (!isset(id)) return hooks[ev] = {}, r;
+        if (!is_set(ev)) return hooks = {}, r;
+        if (!is_set(id)) return hooks[ev] = {}, r;
         return delete hooks[ev][id], r;
     }
 
     // trigger hook
     function trigger(ev, a, id) {
-        if (!isset(hooks[ev])) return r;
-        if (!isset(id)) {
+        if (!is_set(hooks[ev])) return r;
+        if (!is_set(id)) {
             for (var i in hooks[ev]) {
                 hooks[ev][i].apply(r, a);
             }
         } else {
-            if (isset(hooks[ev][id])) {
+            if (is_set(hooks[ev][id])) {
                 hooks[ev][id].apply(r, a);
             }
         }
@@ -333,17 +337,17 @@ var CP = function(target, how) {
                 }
                 trigger(is_target ? "enter" : "exit", [r]);
             }
-            if (how !== false) {
-                var i = how.length;
-                while (i--) on(how[i], target, click);
+            if (events !== false) {
+                var i = events.length;
+                while (i--) on(events[i], target, click);
             }
             r.create = function() {
                 return create(1), trigger("create", [r]), r;
             };
             r.destroy = function() {
-                if (how !== false) {
-                    var i = how.length;
-                    while (i--) off(how[i], target, click);
+                if (events !== false) {
+                    var i = events.length;
+                    while (i--) off(events[i], target, click);
                 }
                 exit(), set_data(false);
                 return trigger("destroy", [r]), r;
@@ -425,7 +429,7 @@ var CP = function(target, how) {
                 is_picker = t === picker || closest(t, picker) === picker;
             if (!is_target && !is_picker) {
                 // click outside the target or picker element to exit
-                if (visible() && how !== false) exit(), trigger("exit", [r]), trigger_(0, a);
+                if (visible() && events !== false) exit(), trigger("exit", [r]), trigger_(0, a);
             } else {
                 if (is_picker) {
                     trigger("stop:" + k, a);
@@ -480,8 +484,8 @@ var CP = function(target, how) {
     r.trigger = trigger;
     r.fit = fit;
     r.set = function(a) {
-        if (!isset(a)) return get_data();
-        if (typeof a === "string") {
+        if (!is_set(a)) return get_data();
+        if (is_string(a)) {
             a = r.parse(a);
         }
         return set_data(a), set(), r;
