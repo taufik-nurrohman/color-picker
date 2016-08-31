@@ -1,4 +1,6 @@
 .color-picker,
+.color-picker::before,
+.color-picker::after,
 .color-picker *,
 .color-picker *:before,
 .color-picker *:after {
