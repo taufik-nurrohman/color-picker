@@ -2,7 +2,7 @@
  * ==========================================================
  *  COLOR PICKER PLUGIN 1.1.0
  * ==========================================================
- * Author: Taufik Nurrohman <http://latitudu.com>
+ * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
  * ----------------------------------------------------------
  */
