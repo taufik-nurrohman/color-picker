@@ -38,11 +38,31 @@ var el = document.querySelector('input[type="color"]');
 var picker = new CP(el);
 
 // show color picker on hover
-var picker = new CP(el, ["mouseover"]);
+var picker = new CP(el, 'mouseover');
 
 // disable color picker by default
 // to enable it, try `picker.enter()`
 var picker = new CP(el, false);
+~~~
+
+Instances
+---------
+
+All color picker instances are stored in `CP.__instance__`.
+
+Show all instances:
+
+~~~ .javascript
+console.log(CP.__instance__);
+~~~
+
+Do something with instances:
+
+~~~ .javascript
+CP.each(function($) {
+    // `$` refers to the color picker instance
+    $.enter(); // this will show all of the color picker panel
+});
 ~~~
 
 Hooks

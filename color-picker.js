@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.1.0
+ *  COLOR PICKER PLUGIN 1.2.0
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -15,6 +15,9 @@ var CP = function(target, events) {
         _ = false,
         hooks = {},
         picker = d.createElement('div');
+
+    // store color picker instance to `CP.__instance__`
+    CP.__instance__[target.id || target.name || Object.keys(CP.__instance__).length] = r;
 
     function is_set(x) {
         return typeof x !== "undefined";
@@ -32,7 +35,7 @@ var CP = function(target, events) {
 
     // trigger color picker panel on click by default
     if (!is_set(events)) {
-        events = ["mousedown", "touchstart"];
+        events = 'mousedown touchstart';
     }
 
     // [h, s, v] ... 0 <= h, s, v <= 1
@@ -152,12 +155,18 @@ var CP = function(target, events) {
 
     // add event
     function on(ev, el, fn) {
-        return el.addEventListener(ev, fn, false);
+        ev = ev.split(/\s+/);
+        for (var i = 0, ien = ev.length; i < ien; ++i) {
+            el.addEventListener(ev[i], fn, false);
+        }
     }
 
     // remove event
     function off(ev, el, fn) {
-        return el.removeEventListener(ev, fn);
+        ev = ev.split(/\s+/);
+        for (var i = 0, ien = ev.length; i < ien; ++i) {
+            el.removeEventListener(ev[i], fn);
+        }
     }
 
     // get mouse/finger coordinate
@@ -338,16 +347,14 @@ var CP = function(target, events) {
                 trigger(is_target ? "enter" : "exit", [r]);
             }
             if (events !== false) {
-                var i = events.length;
-                while (i--) on(events[i], target, click);
+                on(events, target, click);
             }
             r.create = function() {
                 return create(1), trigger("create", [r]), r;
             };
             r.destroy = function() {
                 if (events !== false) {
-                    var i = events.length;
-                    while (i--) off(events[i], target, click);
+                    off(events, target, click);
                 }
                 exit(), set_data(false);
                 return trigger("destroy", [r]), r;
@@ -366,14 +373,10 @@ var CP = function(target, events) {
                 visible().removeChild(picker);
                 r.visible = false;
             }
-            off("touchstart", H, down_H);
-            off("mousedown", H, down_H);
-            off("touchstart", SV, down_SV);
-            off("mousedown", SV, down_SV);
-            off("touchmove", d, move);
-            off("mousemove", d, move);
-            off("touchend", d, stop);
-            off("mouseup", d, stop);
+            off("touchstart mousedown", H, down_H);
+            off("touchstart mousedown", SV, down_SV);
+            off("touchmove mousemove", d, move);
+            off("touchend mouseup", d, stop);
             off("resize", w, fit);
             return r;
         };
@@ -457,14 +460,10 @@ var CP = function(target, events) {
             trigger_("sv", [v, r]);
         }
         if (!first) {
-            on("touchstart", H, down_H);
-            on("mousedown", H, down_H);
-            on("touchstart", SV, down_SV);
-            on("mousedown", SV, down_SV);
-            on("touchmove", d, move);
-            on("mousemove", d, move);
-            on("touchend", d, stop);
-            on("mouseup", d, stop);
+            on("touchstart mousedown", H, down_H);
+            on("touchstart mousedown", SV, down_SV);
+            on("touchmove mousemove", d, move);
+            on("touchend mouseup", d, stop);
             on("resize", w, fit);
         }
     } create(1);
@@ -518,3 +517,23 @@ var CP = function(target, events) {
     return r;
 
 };
+
+(function(r) {
+
+    // plugin version
+    r.version = '1.2.0';
+
+    // collect all instance(s)
+    r.__instance__ = {};
+
+    // plug to all instance(s)
+    r.each = function(fn, t) {
+        return setTimeout(function() {
+            var ins = r.__instance__, i;
+            for (i in ins) {
+                fn(ins[i], i);
+            }
+        }, t === 0 ? 0 : (t || 1)), r;
+    };
+
+})(CP);
