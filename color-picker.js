@@ -38,6 +38,9 @@
         on_up = 'touchend mouseup',
         on_resize = 'orientationchange resize';
 
+    // access color picker instance from `this` scope with `this.CP`
+    target.CP = $;
+
     // store color picker instance to `CP.__instance__`
     CP.__instance__[target.id || target.name || Object.keys(CP.__instance__).length] = $;
 
