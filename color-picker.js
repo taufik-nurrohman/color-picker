@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.2.1
+ *  COLOR PICKER PLUGIN 1.2.2
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -10,7 +10,7 @@
 (function($) {
 
     // plugin version
-    $.version = '1.2.1';
+    $.version = '1.2.2';
 
     // collect all instance(s)
     $.__instance__ = {};
@@ -30,6 +30,7 @@
     var w = window,
         d = document,
         $ = this,
+        $$ = CP.prototype,
         _ = false,
         hooks = {},
         picker = d.createElement('div'),
@@ -37,6 +38,11 @@
         on_move = 'touchmove mousemove',
         on_up = 'touchend mouseup',
         on_resize = 'orientationchange resize';
+
+    // return a new instance if `CP` was called without the `new` operator
+    if (!($ instanceof CP)) {
+        return new CP(target, events);
+    }
 
     // access color picker instance from `this` scope with `this.CP`
     target.CP = $;
@@ -170,8 +176,13 @@
         return [round(+a[0] * 360), round(+a[1] * 100), round(+a[2] * 100)];
     }
 
+    // convert range from `0` to `255` in color into range from `0` to `1`
+    function _2RGB_pri(a) {
+        return [+a[0] / 255, +a[1] / 255, +a[2] / 255];
+    }
+
     // *
-    CP.prototype.parse = function(x) {
+    $$.parse = function(x) {
         if (typeof x === "object") return x;
         var rgb = /\s*rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)\s*$/i.exec(x),
             hsv = /\s*hsv\s*\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*\)\s*$/i.exec(x),
@@ -521,24 +532,27 @@
         }
         return set_data(a), set(), $;
     };
-    $.HSV2RGB = function(a) {
+    $$._HSV2RGB = HSV2RGB;
+    $$._HSV2HEX = HSV2HEX;
+    $$._RGB2HSV = RGB2HSV;
+    $$._HEX2HSV = HEX2HSV;
+    $$._HEX2RGB = function(a) {
+        return _2RGB_pri(HEX2RGB(a));
+    };
+    $$.HSV2RGB = function(a) {
         return HSV2RGB(_2HSV_pri(a));
     };
-    $._HSV2RGB = HSV2RGB;
-    $.HSV2HEX = function(a) {
+    $$.HSV2HEX = function(a) {
         return HSV2HEX(_2HSV_pri(a));
     };
-    $._HSV2HEX = HSV2HEX;
-    $.RGB2HSV = function(a) {
+    $$.RGB2HSV = function(a) {
         return _2HSV_pub(RGB2HSV(a));
     };
-    $._RGB2HSV = RGB2HSV;
-    $.RGB2HEX = RGB2HEX;
-    $.HEX2HSV = function(s) {
+    $$.RGB2HEX = RGB2HEX;
+    $$.HEX2HSV = function(s) {
         return _2HSV_pub(HEX2HSV(s));
     };
-    $._HEX2HSV = HEX2HSV;
-    $.HEX2RGB = HEX2RGB;
+    $$.HEX2RGB = HEX2RGB;
     $.hooks = hooks;
     $.enter = function(bucket) {
         return create(0, bucket);
