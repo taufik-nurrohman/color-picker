@@ -1,0 +1,23 @@
+{
+  "name": "color-picker",
+  "version": "1.2.2",
+  "description": "A simple color picker plugin written in pure JavaScript, for modern browsers.",
+  "main": "color-picker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tovic/color-picker.git"
+  },
+  "keywords": [
+    "Color",
+    "picker"
+  ],
+  "author": "Taufik Nurrohman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tovic/color-picker/issues"
+  },
+  "homepage": "https://github.com/tovic/color-picker#readme"
+}
