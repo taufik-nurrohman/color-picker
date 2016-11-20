@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.2.2
+ *  COLOR PICKER PLUGIN 1.2.3
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -10,7 +10,7 @@
 (function($) {
 
     // plugin version
-    $.version = '1.2.2';
+    $.version = '1.2.3';
 
     // collect all instance(s)
     $.__instance__ = {};
@@ -43,9 +43,6 @@
     if (!($ instanceof CP)) {
         return new CP(target, events);
     }
-
-    // access color picker instance from `this` scope with `this.CP`
-    target.CP = $;
 
     // store color picker instance to `CP.__instance__`
     CP.__instance__[target.id || target.name || Object.keys(CP.__instance__).length] = $;
