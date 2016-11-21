@@ -29,7 +29,7 @@
     }
 
     // RGB to private HSL
-    CP.prototype._RGB2HSL = function(a) {
+    CP._RGB2HSL = function(a) {
         var r = +a[0],
             g = +a[1],
             b = +a[2];
@@ -53,32 +53,32 @@
     };
 
     // RGB to HSL
-    CP.prototype.RGB2HSL = function(a) {
+    CP.RGB2HSL = function(a) {
         return HSL_pub(this._RGB2HSL(a));
     };
 
     // HEX to private HSL
-    CP.prototype._HEX2HSL = function(s) {
+    CP._HEX2HSL = function(s) {
         return this._RGB2HSL(this.HEX2RGB(s));
     };
 
     // HEX to HSL
-    CP.prototype.HEX2HSL = function(s) {
+    CP.HEX2HSL = function(s) {
         return HSL_pub(this._HEX2HSL(s));
     };
 
     // HSV to private HSL
-    CP.prototype._HSV2HSL = function(a) {
+    CP._HSV2HSL = function(a) {
         return this._RGB2HSL(this.HSV2RGB(a));
     };
 
     // HSV to HSL
-    CP.prototype.HSV2HSL = function(a) {
+    CP.HSV2HSL = function(a) {
         return HSL_pub(this._HSV2HSL(a));
     };
 
     // Private HSL to RGB
-    CP.prototype._HSL2RGB = function(a) {
+    CP._HSL2RGB = function(a) {
         var h = +a[0],
             s = +a[1],
             l = +a[2],
@@ -104,27 +104,27 @@
     };
 
     // HSL to RGB
-    CP.prototype.HSL2RGB = function(a) {
+    CP.HSL2RGB = function(a) {
         return this._HSL2RGB(HSL_pri(a));
     };
 
     // Private HSL to HEX
-    CP.prototype._HSL2HEX = function(a) {
+    CP._HSL2HEX = function(a) {
         return this.RGB2HEX(this.HSL2RGB(a));
     };
 
     // HSL to HEX
-    CP.prototype.HSL2HEX = function(a) {
+    CP.HSL2HEX = function(a) {
         return this._HSL2HEX(HSL_pri(a));
     };
 
     // Private HSL to HSV
-    CP.prototype._HSL2HSV = function(a) {
+    CP._HSL2HSV = function(a) {
         return this.RGB2HSV(this.HSL2RGB(a));
     };
 
     // HSL to HSV
-    CP.prototype.HSL2HSV = function(a) {
+    CP.HSL2HSV = function(a) {
         return this._HSL2HSV(HSL_pri(a));
     };
 
@@ -132,7 +132,7 @@
 
     picker.set(HSL_parse(picker.target.value)); // reset private color data
     picker.on("change", function(color) {
-        var hsl = this.HEX2HSL(color);
+        var hsl = CP.HEX2HSL(color);
         this.target.value = 'hsl(' + hsl[0] + ', ' + hsl[1] + '%, ' + hsl[2] + '%)';
     });
 

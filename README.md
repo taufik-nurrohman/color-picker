@@ -175,37 +175,37 @@ Color Converter
 ### HSV to RGB
 
 ~~~ .javascript
-console.log(picker.HSV2RGB([360, 100, 100]));
+console.log(CP.HSV2RGB([360, 100, 100]));
 ~~~
 
 ### HSV to HEX
 
 ~~~ .javascript
-console.log(picker.HSV2HEX([360, 100, 100]));
+console.log(CP.HSV2HEX([360, 100, 100]));
 ~~~
 
 ### RGB to HSV
 
 ~~~ .javascript
-console.log(picker.RGB2HSV([255, 255, 255]));
+console.log(CP.RGB2HSV([255, 255, 255]));
 ~~~
 
 ### RGB to HEX
 
 ~~~ .javascript
-console.log(picker.RGB2HEX([255, 255, 255]));
+console.log(CP.RGB2HEX([255, 255, 255]));
 ~~~
 
 ### HEX to HSV
 
 ~~~ .javascript
-console.log(picker.HEX2HSV('ffffff'));
+console.log(CP.HEX2HSV('ffffff'));
 ~~~
 
 ### HEX to RGB
 
 ~~~ .javascript
-console.log(picker.HEX2RGB('ffffff'));
+console.log(CP.HEX2RGB('ffffff'));
 ~~~
 
 ### Parse to Raw HSV Color Data
@@ -213,10 +213,10 @@ console.log(picker.HEX2RGB('ffffff'));
 All valid color string input will be converted into array of hue, saturation and value, with a range from `0` to `1`.
 
 ~~~ .javascript
-console.log(picker.parse('#ffffff'));
-console.log(picker.parse('rgb(255, 255, 255)'));
-console.log(picker.parse('hsv(140, 20%, 60%)'));
-console.log(picker.parse([0, 1, 1])); // no changes
+console.log(CP.parse('#ffffff'));
+console.log(CP.parse('rgb(255, 255, 255)'));
+console.log(CP.parse('hsv(140, 20%, 60%)'));
+console.log(CP.parse([0, 1, 1])); // no changes
 ~~~
 
 State

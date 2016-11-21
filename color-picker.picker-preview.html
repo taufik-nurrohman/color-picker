@@ -29,7 +29,7 @@
         box_2 = document.createElement('span');
 
     picker.on("enter", function() {
-        var color = '#' + this._HSV2HEX(this.set());
+        var color = '#' + CP._HSV2HEX(this.set());
         box_1.title = color;
         box_2.title = color;
         box_1.style.backgroundColor = color;

@@ -22,10 +22,10 @@
         this.target.value = '#' + color;
     });
     picker_1.on("change", function(color) {
-        this.target.value = 'rgb(' + this.HEX2RGB(color).join(', ') + ')';
+        this.target.value = 'rgb(' + CP.HEX2RGB(color).join(', ') + ')';
     });
     picker_2.on("change", function(color) {
-        var hsv = this.HEX2HSV(color);
+        var hsv = CP.HEX2HSV(color);
         this.target.value = 'hsv(' + hsv[0] + ', ' + hsv[1] + '%, ' + hsv[2] + '%)';
     });
     picker_3.on("change", function(color) {
