@@ -165,7 +165,7 @@ footer {
 }
 .button:active {
   background:#0f0;
-  color:#fff;
+  color:#000;
 }
 .text-editor-content {
   height:15em;
