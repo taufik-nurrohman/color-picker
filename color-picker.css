@@ -20,6 +20,9 @@
   -moz-box-shadow:1px 5px 10px rgba(0,0,0,.5);
   box-shadow:1px 5px 10px rgba(0,0,0,.5);
 }
+.color-picker-control *,
+.color-picker-control *:before,
+.color-picker-control *:after {border-color:inherit}
 .color-picker-control:after {
   content:" ";
   display:table;
@@ -32,7 +35,7 @@
   height:150px;
   float:right;
   border-left:1px solid;
-  border-color:inherit;
+  border-left-color:inherit;
   cursor:ns-resize;
   background:transparent url('color-picker-h.png') no-repeat 50% 50%;
   background-image:-webkit-linear-gradient(to top,#f00 0%,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,#f00 100%);
@@ -65,13 +68,6 @@
   border-top-color:transparent;
   border-bottom-color:transparent;
 }
-.color-picker-h i:after {
-  top:-1px;
-  right:-1px;
-  bottom:-1px;
-  left:-1px;
-  border-color:#000;
-}
 .color-picker-sv {
   position:relative;
   width:150px;
@@ -99,20 +95,21 @@
 .color-picker-sv i:after {
   content:"";
   position:absolute;
-  top:-1px;
-  right:-1px;
-  bottom:-1px;
-  left:-1px;
-  display:block;
-  border:1px solid #fff;
-  -webkit-border-radius:100%;
-  -moz-border-radius:100%;
-  border-radius:100%;
-}
-.color-picker-sv i:after {
   top:0;
   right:0;
   bottom:0;
   left:0;
-  border-color:#000;
+  display:block;
+  border:1px solid;
+  border-color:inherit;
+  -webkit-border-radius:100%;
+  -moz-border-radius:100%;
+  border-radius:100%;
+}
+.color-picker-sv i:before {
+  top:-1px;
+  right:-1px;
+  bottom:-1px;
+  left:-1px;
+  border-color:#fff;
 }

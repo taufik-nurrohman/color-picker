@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.3.0
+ *  COLOR PICKER PLUGIN 1.3.1
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -146,7 +146,7 @@
         if (typeof x === "object") return x;
         var rgb = /\s*rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)\s*$/i.exec(x),
             hsv = /\s*hsv\s*\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*\)\s*$/i.exec(x),
-            hex = x[0] === '#' && x.match(/^#([\da-f]{3}|[\da-f]{6})$/);
+            hex = x[0] === '#' && x.match(/^#([\da-f]{3}|[\da-f]{6})$/i);
         if (hex) {
             return HEX2HSV(x.slice(1));
         } else if (hsv) {
