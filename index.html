@@ -141,6 +141,9 @@ console.log(CP.parse([0, 1, 1])); // no changes</code></pre>
       <pre><code>picker.enter(); // show the color picker</code></pre>
       <h3 id="section:method-exit">Hide</h3>
       <pre><code>picker.exit(); // hide the color picker</code></pre>
+      <h3 id="section:method-fit">Fit</h3>
+      <pre><code>picker.fit(); // fit to the visible area in window</code></pre>
+      <pre><code>picker.fit([10, 20]); // set `x` offset to `10` and `y` offset to `20`</code></pre>
       <h3 id="section:data-visible">Visible</h3>
       <pre><code>if (picker.visible) { &hellip; } // color picker is visible</code></pre>
       <h2 id="section:extend">Extend</h2>
@@ -194,6 +197,7 @@ console.log(CP.parse([0, 1, 1])); // no changes</code></pre>
         picker = new CP(container, false);
     picker.picker.className += ' static';
     picker.enter(container);
+    picker.fit = function() {}; // do nothing ...
     picker.on("change", function(color) {
         container.parentNode.style.backgroundColor = '#' + color;
     });

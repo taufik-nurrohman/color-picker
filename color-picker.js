@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.3.1
+ *  COLOR PICKER PLUGIN 1.3.2
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -21,6 +21,14 @@
 
     function is_string(x) {
         return typeof x === "string";
+    }
+
+    function is_object(x) {
+        return typeof x === "object";
+    }
+
+    function object_length(x) {
+        return Object.keys(x).length;
     }
 
     function edge(a, b, c) {
@@ -143,7 +151,7 @@
 
     // *
     function parse(x) {
-        if (typeof x === "object") return x;
+        if (is_object(x)) return x;
         var rgb = /\s*rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)\s*$/i.exec(x),
             hsv = /\s*hsv\s*\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*\)\s*$/i.exec(x),
             hex = x[0] === '#' && x.match(/^#([\da-f]{3}|[\da-f]{6})$/i);
@@ -160,7 +168,7 @@
     (function($) {
 
         // plugin version
-        $.version = '1.3.0';
+        $.version = '1.3.2';
 
         // collect all instance(s)
         $[instance] = {};
@@ -174,7 +182,7 @@
                 }
             }, t === 0 ? 0 : (t || 1)), $;
         };
-    
+
         // static method(s)
         $.parse = parse;
         $._HSV2RGB = HSV2RGB;
@@ -216,7 +224,7 @@
         }
 
         // store color picker instance to `CP.__instance__`
-        CP[instance][target.id || target.name || Object.keys(CP[instance]).length] = $;
+        CP[instance][target.id || target.name || object_length(CP[instance])] = $;
 
         // trigger color picker panel on click by default
         if (!is_set(events)) {
@@ -297,7 +305,7 @@
             if (!is_set(ev)) return hooks;
             if (!is_set(fn)) return hooks[ev];
             if (!is_set(hooks[ev])) hooks[ev] = {};
-            if (!is_set(id)) id = Object.keys(hooks[ev]).length;
+            if (!is_set(id)) id = object_length(hooks[ev]);
             return hooks[ev][id] = fn, $;
         }
 
@@ -337,16 +345,16 @@
             SV = c[1],
             H_point = H[first],
             SV_point = SV[first],
-            start_H = false,
-            start_SV = false,
-            drag_H = false,
-            drag_SV = false,
+            start_H = 0,
+            start_SV = 0,
+            drag_H = 0,
+            drag_SV = 0,
             left = 0,
             top = 0,
             P_W = 0,
             P_H = 0,
             v = HSV2HEX(HSV),
-            set, exit;
+            set;
 
         // on update ...
         function trigger_(k, x) {
@@ -364,27 +372,6 @@
             return picker.parentNode;
         }
 
-        // fit to window
-        function fit() {
-            var w_W = /* win.innerWidth */ size(h).w,
-                w_H = win.innerHeight,
-                w_L = Math.max(b[scroll_left], h[scroll_left]),
-                w_T = Math.max(b[scroll_top], h[scroll_top]),
-                width = w_W + w_L,
-                height = w_H + w_T;
-            left = offset(target).l;
-            top = offset(target).t + size(target).h;
-            if (left + P_W > width) {
-                left = width - P_W;
-            }
-            if (top + P_H > height) {
-                top = height - P_H;
-            }
-            picker.style.left = left + 'px';
-            picker.style.top = top + 'px';
-            return trigger("fit", [$]), $;
-        };
-
         // create
         function create(first, bucket) {
             if (!first) {
@@ -392,12 +379,14 @@
             }
             P_W = size(picker).w;
             P_H = size(picker).h;
-            var H_H = size(H).h,
-                SV_W = size(SV).w,
-                SV_H = size(SV).h,
+            var SV_size = size(SV),
+                SV_point_size = size(SV_point),
+                H_H = size(H).h,
+                SV_W = SV_size.w,
+                SV_H = SV_size.h,
                 H_point_H = size(H_point).h,
-                SV_point_W = size(SV_point).w,
-                SV_point_H = size(SV_point).h;
+                SV_point_W = SV_point_size.w,
+                SV_point_H = SV_point_size.h;
             if (first) {
                 picker.style.left = picker.style.top = '-9999px';
                 function click(e) {
@@ -406,7 +395,7 @@
                     if (is_target) {
                         create();
                     } else {
-                        exit();
+                        $.exit();
                     }
                     trigger(is_target ? "enter" : "exit", [$]);
                 }
@@ -420,7 +409,7 @@
                     if (events !== false) {
                         off(events, target, click);
                     }
-                    exit(), set_data(false);
+                    $.exit(), set_data(false);
                     return trigger("destroy", [$]), $;
                 };
             } else {
@@ -432,7 +421,7 @@
                 SV_point.style.right = (SV_W - (SV_point_W / 2) - (SV_W * +HSV[1])) + 'px';
                 SV_point.style.top = (SV_H - (SV_point_H / 2) - (SV_H * +HSV[2])) + 'px';
             };
-            exit = function(e) {
+            $.exit = function(e) {
                 if (visible()) {
                     visible().removeChild(picker);
                     $.visible = false;
@@ -485,8 +474,8 @@
                         trigger_("sv", [v, $]);
                     }
                 }
-                start_H = false,
-                start_SV = false;
+                start_H = 0,
+                start_SV = 0;
             }
             function stop(e) {
                 var t = e.target,
@@ -496,7 +485,7 @@
                     is_picker = t === picker || closest(t, picker) === picker;
                 if (!is_target && !is_picker) {
                     // click outside the target or picker element to exit
-                    if (visible() && events !== false) exit(), trigger("exit", [$]), trigger_(0, a);
+                    if (visible() && events !== false) $.exit(), trigger("exit", [$]), trigger_(0, a);
                 } else {
                     if (is_picker) {
                         trigger("stop:" + k, a);
@@ -504,20 +493,20 @@
                         trigger_(k, a);
                     }
                 }
-                drag_H = false,
-                drag_SV = false;
+                drag_H = 0,
+                drag_SV = 0;
             }
             function down_H(e) {
-                start_H = true,
-                drag_H = true,
+                start_H = 1,
+                drag_H = 1,
                 move(e), prevent(e);
                 trigger("start:h", [v, $]);
                 trigger("start", [v, $]);
                 trigger_("h", [v, $]);
             }
             function down_SV(e) {
-                start_SV = true,
-                drag_SV = true,
+                start_SV = 1,
+                drag_SV = 1,
                 move(e), prevent(e);
                 trigger("start:sv", [v, $]);
                 trigger("start", [v, $]);
@@ -538,14 +527,39 @@
             trigger_(0, a);
         }, 0);
 
-        // register to global ...
-        $.target = target;
-        $.picker = picker;
-        $.visible = false;
-        $.on = add;
-        $.off = remove;
-        $.trigger = trigger;
-        $.fit = fit;
+        // fit to window
+        $.fit = function(o) {
+            var w_W = /* win.innerWidth */ size(h).w,
+                w_H = win.innerHeight,
+                w_L = Math.max(b[scroll_left], h[scroll_left]),
+                w_T = Math.max(b[scroll_top], h[scroll_top]),
+                width = w_W + w_L,
+                height = w_H + w_T,
+                to = offset(target);
+            left = to.l;
+            top = to.t + size(target).h;
+            if (is_object(o)) {
+                is_set(o[0]) && (left = o[0]);
+                is_set(o[1]) && (top = o[1]);
+            } else {
+                if (left + P_W > width) {
+                    left = width - P_W;
+                }
+                if (top + P_H > height) {
+                    top = height - P_H;
+                }
+            }
+            picker.style.left = left + 'px';
+            picker.style.top = top + 'px';
+            return trigger("fit", [$]), $;
+        };
+
+        // for event listener ID
+        function fit() {
+            return $.fit();
+        }
+
+        // set hidden color picker data
         $.set = function(a) {
             if (!is_set(a)) return get_data();
             if (is_string(a)) {
@@ -553,11 +567,18 @@
             }
             return set_data(a), set(), $;
         };
+
+        // register to global ...
+        $.target = target;
+        $.picker = picker;
+        $.visible = false;
+        $.on = add;
+        $.off = remove;
+        $.trigger = trigger;
         $.hooks = hooks;
         $.enter = function(bucket) {
             return create(0, bucket);
         };
-        $.exit = exit;
 
         // return the global object
         return $;
