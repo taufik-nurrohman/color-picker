@@ -7,9 +7,26 @@
  * ----------------------------------------------------------
  */
 
-(function(win, doc) {
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define([], factory);
 
-    var instance = '__instance__',
+    } else if (typeof module === 'object' && module.exports) {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory();
+
+    } else {
+        // Browser globals (root is window)
+        root.CP = factory();
+    }
+}(this, function () {
+
+    var win = window,
+        doc = document,
+        instance = '__instance__',
         first = 'firstChild',
         scroll_left = 'scrollLeft',
         scroll_top = 'scrollTop',
@@ -165,49 +182,20 @@
         return [0, 1, 1]; // default is red
     }
 
-    (function($) {
-
-        // plugin version
-        $.version = '1.3.2';
-
-        // collect all instance(s)
-        $[instance] = {};
-
-        // plug to all instance(s)
-        $.each = function(fn, t) {
-            return delay(function() {
-                var ins = $[instance], i;
-                for (i in ins) {
-                    fn(ins[i], i, ins);
-                }
-            }, t === 0 ? 0 : (t || 1)), $;
-        };
-
-        // static method(s)
-        $.parse = parse;
-        $._HSV2RGB = HSV2RGB;
-        $._HSV2HEX = HSV2HEX;
-        $._RGB2HSV = RGB2HSV;
-        $._HEX2HSV = HEX2HSV;
-        $._HEX2RGB = function(a) {
-            return _2RGB_pri(HEX2RGB(a));
-        };
-        $.HSV2RGB = function(a) {
-            return HSV2RGB(_2HSV_pri(a));
-        };
-        $.HSV2HEX = function(a) {
-            return HSV2HEX(_2HSV_pri(a));
-        };
-        $.RGB2HSV = function(a) {
-            return _2HSV_pub(RGB2HSV(a));
-        };
-        $.RGB2HEX = RGB2HEX;
-        $.HEX2HSV = function(s) {
-            return _2HSV_pub(HEX2HSV(s));
-        };
-        $.HEX2RGB = HEX2RGB;
-
-    })(win.CP = function(target, events) {
+    /**
+     * Color Picker Widget
+     *
+     * @class CP
+     *
+     * @param {HTMLElement} target
+     * @param {Object} events
+     *
+     * @example
+     *
+     * var cp = new CP(document.querySelector("input.date");
+     *
+     */
+    var CP = function(target, events) {
 
         var $ = this,
             _ = false,
@@ -475,7 +463,7 @@
                     }
                 }
                 start_H = 0,
-                start_SV = 0;
+                    start_SV = 0;
             }
             function stop(e) {
                 var t = e.target,
@@ -494,20 +482,20 @@
                     }
                 }
                 drag_H = 0,
-                drag_SV = 0;
+                    drag_SV = 0;
             }
             function down_H(e) {
                 start_H = 1,
-                drag_H = 1,
-                move(e), prevent(e);
+                    drag_H = 1,
+                    move(e), prevent(e);
                 trigger("start:h", [v, $]);
                 trigger("start", [v, $]);
                 trigger_("h", [v, $]);
             }
             function down_SV(e) {
                 start_SV = 1,
-                drag_SV = 1,
-                move(e), prevent(e);
+                    drag_SV = 1,
+                    move(e), prevent(e);
                 trigger("start:sv", [v, $]);
                 trigger("start", [v, $]);
                 trigger_("sv", [v, $]);
@@ -582,7 +570,47 @@
 
         // return the global object
         return $;
+    };
 
-    });
+    // plugin version
+    CP.version = '1.3.2';
 
-})(window, document);
+    // collect all instance(s)
+    CP[instance] = {};
+
+    // plug to all instance(s)
+    CP.each = function(fn, t) {
+        return delay(function() {
+            var ins = CP[instance], i;
+            for (i in ins) {
+                fn(ins[i], i, ins);
+            }
+        }, t === 0 ? 0 : (t || 1));
+    };
+
+    // static method(s)
+    CP.parse = parse;
+    CP._HSV2RGB = HSV2RGB;
+    CP._HSV2HEX = HSV2HEX;
+    CP._RGB2HSV = RGB2HSV;
+    CP._HEX2HSV = HEX2HSV;
+    CP._HEX2RGB = function(a) {
+        return _2RGB_pri(HEX2RGB(a));
+    };
+    CP.HSV2RGB = function(a) {
+        return HSV2RGB(_2HSV_pri(a));
+    };
+    CP.HSV2HEX = function(a) {
+        return HSV2HEX(_2HSV_pri(a));
+    };
+    CP.RGB2HSV = function(a) {
+        return _2HSV_pub(RGB2HSV(a));
+    };
+    CP.RGB2HEX = RGB2HEX;
+    CP.HEX2HSV = function(s) {
+        return _2HSV_pub(HEX2HSV(s));
+    };
+    CP.HEX2RGB = HEX2RGB;
+
+    return CP;
+}));
