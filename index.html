@@ -195,9 +195,11 @@ console.log(CP.parse([0, 1, 1])); // no changes</code></pre>
     <script>
     var container = document.querySelector('#color-picker'),
         picker = new CP(container, false);
-    picker.picker.className += ' static';
+    picker.fit = function() {
+        this.picker.style.left = this.picker.style.top = ""; // do nothing ...
+    };
+    picker.picker.classList.add('static');
     picker.enter(container);
-    picker.fit = function() {}; // do nothing ...
     picker.on("change", function(color) {
         container.parentNode.style.backgroundColor = '#' + color;
     });

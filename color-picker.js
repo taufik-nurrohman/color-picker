@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.3.2
+ *  COLOR PICKER PLUGIN 1.3.3
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -13,6 +13,8 @@
         first = 'firstChild',
         scroll_left = 'scrollLeft',
         scroll_top = 'scrollTop',
+        offset_left = 'offsetLeft',
+        offset_top = 'offsetTop',
         delay = setTimeout;
 
     function is_set(x) {
@@ -168,7 +170,7 @@
     (function($) {
 
         // plugin version
-        $.version = '1.3.2';
+        $.version = '1.3.3';
 
         // collect all instance(s)
         $[instance] = {};
@@ -209,14 +211,16 @@
 
     })(win.CP = function(target, events) {
 
-        var $ = this,
+        var b = doc.body,
+            h = doc.documentElement,
+            $ = this,
             _ = false,
             hooks = {},
             picker = doc.createElement('div'),
-            on_down = 'touchstart mousedown',
-            on_move = 'touchmove mousemove',
-            on_up = 'touchend mouseup',
-            on_resize = 'orientationchange resize';
+            on_down = "touchstart mousedown",
+            on_move = "touchmove mousemove",
+            on_up = "touchend mouseup",
+            on_resize = "orientationchange resize";
 
         // return a new instance if `CP` was called without the `new` operator
         if (!($ instanceof CP)) {
@@ -251,23 +255,29 @@
         function point(el, e) {
             var x = !!e.touches ? e.touches[0].pageX : e.pageX,
                 y = !!e.touches ? e.touches[0].pageY : e.pageY,
-                left = offset(el).l,
-                top = offset(el).t;
-            while (el = el.offsetParent) {
-                left += offset(el).l;
-                top += offset(el).t;
-            }
+                o = offset(el);
             return {
-                x: x - left,
-                y: y - top
+                x: x - o.l,
+                y: y - o.t
             };
         }
 
         // get position
         function offset(el) {
+            if (el === win) {
+                var left = win.pageXOffset || h[scroll_left],
+                    top = win.pageYOffset || h[scroll_top];
+            } else {
+                var left = el[offset_left],
+                    top = el[offset_top];
+                while (el = el.offsetParent) {
+                    left += el[offset_left];
+                    top += el[offset_top];
+                }
+            }
             return {
-                l: el.offsetLeft,
-                t: el.offsetTop
+                l: left,
+                t: top
             };
         }
 
@@ -284,7 +294,10 @@
 
         // get dimension
         function size(el) {
-            return {
+            return el === win ? {
+                w: win.innerWidth,
+                h: win.innerHeight
+            } : {
                 w: el.offsetWidth,
                 h: el.offsetHeight
             };
@@ -337,9 +350,7 @@
         // generate color picker pane ...
         picker.className = 'color-picker';
         picker.innerHTML = '<div class="color-picker-control"><span class="color-picker-h"><i></i></span><span class="color-picker-sv"><i></i></span></div>';
-        var b = doc.body,
-            h = doc.documentElement,
-            c = picker[first].children,
+        var c = picker[first].children,
             HSV = get_data([0, 1, 1]), // default is red
             H = c[0],
             SV = c[1],
@@ -529,24 +540,25 @@
 
         // fit to window
         $.fit = function(o) {
-            var w_W = /* win.innerWidth */ size(h).w,
-                w_H = win.innerHeight,
-                w_L = Math.max(b[scroll_left], h[scroll_left]),
-                w_T = Math.max(b[scroll_top], h[scroll_top]),
-                width = w_W + w_L,
-                height = w_H + w_T,
+            var w = size(win),
+                y = size(h),
+                z = y.h > w.h, // has vertical scroll bar
+                ww = offset(win),
+                yy = offset(h),
+                w_W = z ? /* Math.max(y.w, w.w) */ y.w : w.w + ww.l,
+                w_H = z ? w.h + ww.t : Math.max(y.h, w.h),
                 to = offset(target);
             left = to.l;
-            top = to.t + size(target).h;
+            top = to.t + size(target).h; // drop!
             if (is_object(o)) {
                 is_set(o[0]) && (left = o[0]);
                 is_set(o[1]) && (top = o[1]);
             } else {
-                if (left + P_W > width) {
-                    left = width - P_W;
+                if (left + P_W > w_W) {
+                    left = w_W - P_W;
                 }
-                if (top + P_H > height) {
-                    top = height - P_H;
+                if (top + P_H > w_H) {
+                    top = w_H - P_H;
                 }
             }
             picker.style.left = left + 'px';
