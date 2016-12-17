@@ -167,10 +167,6 @@ footer {
   background:#0f0;
   color:#000;
 }
-.text-editor-content {
-  height:15em;
-  min-height:15em;
-}
 @media (max-width:800px) {
   section {
     max-width:none;
