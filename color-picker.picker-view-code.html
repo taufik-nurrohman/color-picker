@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+    <style>
+    .color-code {
+      display:block;
+      clear:both;
+      width:170px;
+      height:2em;
+      margin:0;
+      padding:0 .5em;
+      background:#ffa;
+      border:0;
+      border-top:1px solid;
+      border-top-color:inherit;
+      font:normal normal 13px/2em Helmet,FreeSans,Sans-Serif;
+      color:#000;
+      -webkit-box-sizing:border-box;
+      -moz-box-sizing:border-box;
+      box-sizing:border-box;
+    }
+    .color-code:invalid {color:#f00}
+    </style>
+  </head>
+  <body>
+    <p><input type="color" value="#bada55"></p>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var picker = new CP(document.querySelector('input')),
+        code = document.createElement('input');
+
+    // prevent showing native color picker panel
+    picker.target.onclick = function(e) {
+        e.preventDefault();
+    };
+
+    code.className = 'color-code';
+    code.pattern = '^#[A-Fa-f0-9]{6}$';
+    code.type = 'text';
+
+    picker.on("enter", function() {
+        code.value = '#' + CP._HSV2HEX(this.get());
+    });
+
+    picker.on("change", function(color) {
+        picker.target.value = '#' + color;
+        code.value = '#' + color;
+    });
+
+    picker.picker.firstChild.appendChild(code);
+
+    function update() {
+        if (this.value.length) {
+            picker.set(this.value);
+            picker.trigger("change", [this.value.slice(1)]);
+        }
+    }
+
+    code.oncut = update;
+    code.onpaste = update;
+    code.onkeyup = update;
+    code.oninput = update;
+
+    </script>
+  </body>
+</html>

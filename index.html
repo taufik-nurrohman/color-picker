@@ -113,7 +113,7 @@ var picker = new CP(el, false);</code></pre>
       <pre><code>var picker = picker.picker;</code></pre>
       <h3 id="section:data-set">Get/Set Color Picker Data</h3>
       <p>Get hidden color data in the target element:</p>
-      <pre><code>console.log(picker.set());</code></pre>
+      <pre><code>console.log(picker.get('&lt;alternate color&gt;'));</code></pre>
       <p>Set hidden color data to the target element:</p>
       <pre><code>picker.set([0, 1, 1]); // HSV color value, range from `0` to `1` for each</code></pre>
       <pre><code>picker.set('rgb(255, 0, 0)'); // as color string</code></pre>
@@ -175,7 +175,8 @@ console.log(CP.parse([0, 1, 1])); // no changes</code></pre>
         <li><a href="color-picker.input-color.html">HTML5 Color Input</a></li>
         <li><a href="color-picker.create-destroy.html">Create and Destroy Method</a></li>
         <li><a href="color-picker.fit.html">Auto–Positioned to the Reachable Area in the Document</a></li>
-        <li><a href="color-picker.picker-preview.html">Color Preview in Color Picker</a></li>
+        <li><a href="color-picker.picker-view.html">Color Preview in Color Picker</a></li>
+        <li><a href="color-picker.picker-view-code.html">Color Code to Copy in Color Picker</a></li>
       </ul>
       <h2 id="section:support">Support</h2>
       <p>Your small donation will keep this project going and allow me to do any further development.</p>

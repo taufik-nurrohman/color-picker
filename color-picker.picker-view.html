@@ -6,8 +6,7 @@
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
-    .color-preview-1,
-    .color-preview-2 {
+    .color-view {
       display:block;
       width:50%;
       height:50px;
@@ -29,7 +28,7 @@
         box_2 = document.createElement('span');
 
     picker.on("enter", function() {
-        var color = '#' + CP._HSV2HEX(this.set());
+        var color = '#' + CP._HSV2HEX(this.get());
         box_1.title = color;
         box_2.title = color;
         box_1.style.backgroundColor = color;
@@ -39,10 +38,10 @@
     picker.on("change", function(color) {
         box_2.title = '#' + color;
         box_2.style.backgroundColor = '#' + color;
-    }, 'main-change');
+    });
 
-    box_1.className = 'color-preview-1';
-    box_2.className = 'color-preview-2';
+    box_1.className = 'color-view';
+    box_2.className = 'color-view';
 
     picker.picker.firstChild.appendChild(box_1);
     picker.picker.firstChild.appendChild(box_2);
@@ -59,14 +58,10 @@
     // click to set
     box_2.addEventListener("click", function(e) {
         var color = this.title;
-        picker.target.value = this.title;
         picker.exit();
+        picker.target.value = color;
+        picker.target.focus();
     }, false);
-
-    // set color value on exit
-    picker.on("exit", function() {
-        this.target.value = box_2.title;
-    });
 
     </script>
   </body>
