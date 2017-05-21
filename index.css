@@ -1,5 +1,10 @@
-
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,400i,700i|Roboto+Mono:400,700,400i,700i');
+body,kbd {font-family:'Roboto Condensed',Helmet,FreeSans,Sans-Serif}
+code {
+  font-family:'Roboto Mono','Courier New',Courier,'Nimbus Mono L',Monospace;
+  font-size:86%;
+}
 * {
   margin:0;
   padding:0;
@@ -26,7 +31,6 @@ sub {top:.5em}
   font-style:normal;
 }
 html {
-  font-family:Helmet,FreeSans,Sans-Serif;
   font-size:14px;
   line-height:1.5em;
   background:#000;
@@ -123,7 +127,6 @@ pre {
   word-wrap:break-word;
 }
 code {
-  font-family:"Courier New",Courier,"Nimbus Mono L",Monospace;
   font-style:normal;
   color:#099;
 }
