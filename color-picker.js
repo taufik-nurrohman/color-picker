@@ -1,13 +1,13 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.3.4
+ *  COLOR PICKER PLUGIN 1.3.5
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
  * ----------------------------------------------------------
  */
 
-(function(win, doc) {
+(function(win, doc, NS) {
 
     var instance = '__instance__',
         first = 'firstChild',
@@ -170,7 +170,7 @@
     (function($) {
 
         // plugin version
-        $.version = '1.3.4';
+        $.version = '1.3.5';
 
         // collect all instance(s)
         $[instance] = {};
@@ -209,11 +209,12 @@
         };
         $.HEX2RGB = HEX2RGB;
 
-    })(win.CP = function(target, events) {
+    })(win[NS] = function(target, events) {
 
         var b = doc.body,
             h = doc.documentElement,
             $ = this,
+            $$ = win[NS],
             _ = false,
             hooks = {},
             picker = doc.createElement('div'),
@@ -223,12 +224,12 @@
             on_resize = "orientationchange resize";
 
         // return a new instance if `CP` was called without the `new` operator
-        if (!($ instanceof CP)) {
-            return new CP(target, events);
+        if (!($ instanceof $$)) {
+            return new $$(target, events);
         }
 
         // store color picker instance to `CP.__instance__`
-        CP[instance][target.id || target.name || object_length(CP[instance])] = $;
+        $$[instance][target.id || target.name || object_length($$[instance])] = $;
 
         // trigger color picker panel on click by default
         if (!is_set(events)) {
@@ -345,7 +346,7 @@
         }
 
         // initialize data ...
-        set_data(CP.parse(target.getAttribute('data-color') || target.value || [0, 1, 1]));
+        set_data($$.parse(target.getAttribute('data-color') || target.value || [0, 1, 1]));
 
         // generate color picker pane ...
         picker.className = 'color-picker';
@@ -575,7 +576,7 @@
         $.set = function(a) {
             if (!is_set(a)) return get_data();
             if (is_string(a)) {
-                a = CP.parse(a);
+                a = $$.parse(a);
             }
             return set_data(a), set(), $;
         };
@@ -602,4 +603,4 @@
 
     });
 
-})(window, document);
+})(window, document, 'CP');
