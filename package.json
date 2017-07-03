@@ -1,6 +1,5 @@
 {
   "name": "color-picker",
-  "version": "1.3.3",
   "description": "A simple color picker plugin written in pure JavaScript, for modern browsers.",
   "main": "color-picker.js",
   "scripts": {
