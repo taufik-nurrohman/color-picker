@@ -5,9 +5,30 @@
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
  * ----------------------------------------------------------
+ *
+ * UMD/AMD integration added by http://github.com/RichTeaTime (MIT)
  */
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define([], factory);
 
-(function(win, doc, NS) {
+    } else if (typeof module === 'object' && module.exports) {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory();
+
+    } else {
+        // Browser globals (root is window)
+        root.CP = factory();
+    }
+}(this, 
+
+function() {
+
+	var win = window;
+	var doc = document;
 
     var instance = '__instance__',
         first = 'firstChild',
@@ -170,7 +191,7 @@
     (function($) {
 
         // plugin version
-        $.version = '1.3.5';
+        $.version = '1.3.5.1';
 
         // collect all instance(s)
         $[instance] = {};
@@ -209,12 +230,12 @@
         };
         $.HEX2RGB = HEX2RGB;
 
-    })(win[NS] = function(target, events) {
+    })(CP = function(target, events) {
 
         var b = doc.body,
             h = doc.documentElement,
             $ = this,
-            $$ = win[NS],
+            $$ = CP,
             _ = false,
             hooks = {},
             picker = doc.createElement('div'),
@@ -603,4 +624,7 @@
 
     });
 
-})(window, document, 'CP');
+	return CP;
+
+})
+);

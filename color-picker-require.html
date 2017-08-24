@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.css" rel="stylesheet">
+
+	<!-- replace with path to require.js instance -->
+	<script src="../requirejs/require.js"></script>
+
+	<script language="javascript">
+	<!--
+		function onLoad() 
+		{
+			var input = document.querySelector('input');
+			input.value = "Loading...";
+
+			require(['color-picker'], function() {
+			
+				input.value = "#ffffff";
+				var picker = new CP(input);
+
+				picker.on("change", function(color) {
+					this.target.value = '#' + color;
+				});
+			});
+		}
+	//-->
+	</script>
+  </head>
+  <body onLoad="onLoad()">
+    <p><input type="text"></p>
+  </body>
+</html>
