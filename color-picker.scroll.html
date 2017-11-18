@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+    <style>
+    * {
+      margin:0;
+      padding:0;
+    }
+    body {
+      padding:5%;
+      overflow:hidden;
+    }
+    section {
+      width:50%;
+      height:500px;
+      float:left;
+      overflow:auto;
+    }
+    section + section {float:right}
+    section p {
+      margin:0;
+      padding:2em;
+      padding-top:250px;
+      height:500px;
+    }
+    </style>
+  </head>
+  <body>
+    <section id="pane-1">
+      <p>
+        <strong>Normal:</strong>
+        <br>
+        <input type="text">
+      </p>
+    </section>
+    <section id="pane-2">
+      <p>
+        <strong>Custom:</strong>
+        <br>
+        <input type="text">
+      </p>
+    </section>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var input = document.querySelectorAll('input'),
+        picker_1 = new CP(input[0]),
+        picker_2 = new CP(input[1]);
+
+    function change(color) {
+        this.target.value = '#' + color;
+    }
+
+    picker_1.on("change", change);
+    picker_2.on("change", change);
+
+    document.querySelector('#pane-2').addEventListener("scroll", function() {
+        picker_2.picker.style.marginTop = '-' + this.scrollTop + 'px';
+    }, false);
+
+    </script>
+  </body>
+</html>
