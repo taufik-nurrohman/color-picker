@@ -35,12 +35,13 @@
         },
         template: '<input v-model="color"></input>',
         mounted: function() {
-            this.picker = new CP(this.$el);
-            this.picker.set(this.c);
-            this.picker.on("change", function(c) {
-                this.target.value = '#' + c;
+            var $ = this;
+            $.picker = new CP($.$el);
+            $.picker.set($.c);
+            $.picker.on("change", function(c) {
+                $.c = '#' + c;
             });
-            this.picker.on("exit", this.colorChange);
+            $.picker.on("exit", $.colorChange);
         }
     });
     </script>
