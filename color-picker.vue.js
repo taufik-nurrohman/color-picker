@@ -17,9 +17,10 @@ Vue.component('color-picker', {
     mounted: function () {
         this.picker = new CP(this.$el)
         this.picker.set(this.color)
+        var vm = this
         this.picker.on("change", function(color) {
-            this.target.value = '#' + color;
+            vm.color = '#' + color
         });
-        this.picker.on("exit", this.release);
+        this.picker.on("exit", this.release)
     }
 })
