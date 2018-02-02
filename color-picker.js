@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.3.5
+ *  COLOR PICKER PLUGIN 1.3.6
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -170,7 +170,7 @@
     (function($) {
 
         // plugin version
-        $.version = '1.3.5';
+        $.version = '1.3.6';
 
         // collect all instance(s)
         $[instance] = {};
@@ -265,16 +265,17 @@
 
         // get position
         function offset(el, relative) {
+            var left, top, rect;
             if (el === win) {
-                var left = win.pageXOffset || h[scroll_left],
-                    top = win.pageYOffset || h[scroll_top];
+                left = win.pageXOffset || h[scroll_left];
+                top = win.pageYOffset || h[scroll_top];
             } else if (relative) {
-                var rect = el.getBoundingClientRect();
-                var left = rect.x,
-                    top = rect.y;
+                rect = el.getBoundingClientRect();
+                left = rect.x;
+                top = rect.y;
             } else {
-                var left = el[offset_left],
-                    top = el[offset_top];
+                left = el[offset_left];
+                top = el[offset_top];
                 while (el = el.offsetParent) {
                     left += el[offset_left];
                     top += el[offset_top];
@@ -354,11 +355,11 @@
 
         // generate color picker pane ...
         picker.className = 'color-picker';
-        picker.innerHTML = '<div class="color-picker-control"><span class="color-picker-sv"><i></i></span><span class="color-picker-h"><i></i></span></div>';
+        picker.innerHTML = '<div class="color-picker-control"><span class="color-picker-h"><i></i></span><span class="color-picker-sv"><i></i></span></div>';
         var c = picker[first].children,
             HSV = get_data([0, 1, 1]), // default is red
-            H = c[1],
-            SV = c[0],
+            H = c[0],
+            SV = c[1],
             H_point = H[first],
             SV_point = SV[first],
             start_H = 0,
@@ -547,10 +548,10 @@
         $.fit = function(o) {
             var w = size(win),
                 y = size(h),
-                scr_w = w.w - y.w, // vertical scroll bar
-                scr_h = w.h - h.clientHeight, // horizontal scroll bar
+                screen_w = w.w - y.w, // vertical scroll bar
+                screen_h = w.h - h.clientHeight, // horizontal scroll bar
                 ww = offset(win),
-                to = offset(target, true);
+                to = offset(target, 1);
             left = to.l + ww.l;
             top = to.t + ww.t + size(target).h; // drop!
             if (is_object(o)) {
@@ -559,8 +560,8 @@
             } else {
                 var min_x = ww.l,
                     min_y = ww.t,
-                    max_x = ww.l + w.w - P_W - scr_w,
-                    max_y = ww.t + w.h - P_H - scr_h;
+                    max_x = ww.l + w.w - P_W - screen_w,
+                    max_y = ww.t + w.h - P_H - screen_h;
                 left = edge(left, min_x, max_x) >> 0;
                 top = edge(top, min_y, max_y) >> 0;
             }

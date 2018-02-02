@@ -19,19 +19,21 @@
   -webkit-box-shadow:1px 5px 10px rgba(0,0,0,.5);
   -moz-box-shadow:1px 5px 10px rgba(0,0,0,.5);
   box-shadow:1px 5px 10px rgba(0,0,0,.5);
-  white-space:nowrap;
-  font-size:0px;
 }
 .color-picker-control *,
 .color-picker-control *:before,
 .color-picker-control *:after {border-color:inherit}
-
+.color-picker-control:after {
+  content:" ";
+  display:table;
+  clear:both;
+}
 .color-picker i {font:inherit}
 .color-picker-h {
   position:relative;
   width:20px;
   height:150px;
-  display:inline-block;
+  float:right;
   border-left:1px solid;
   border-left-color:inherit;
   cursor:ns-resize;
@@ -70,7 +72,7 @@
   position:relative;
   width:150px;
   height:150px;
-  display:inline-block;
+  float:left;
   background:transparent url('color-picker-sv.png') no-repeat 50% 50%;
   background-image:-webkit-linear-gradient(to top,#000,rgba(0,0,0,0)),linear-gradient(to right,#fff,rgba(255,255,255,0));
   background-image:-moz-linear-gradient(to top,#000,rgba(0,0,0,0)),linear-gradient(to right,#fff,rgba(255,255,255,0));
