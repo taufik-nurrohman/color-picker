@@ -23,8 +23,9 @@
     section + section {float:right}
     section p {
       margin:0;
-      padding:2em;
+      padding:4em;
       padding-top:250px;
+      width:150%;
       height:500px;
     }
     </style>
@@ -58,8 +59,20 @@
     picker_1.on("change", change);
     picker_2.on("change", change);
 
+    picker_2._scrollPane = document.querySelector('#pane-2');
+    picker_2.on("enter", function() {
+      this._initScrollPosition = {
+        x: this._scrollPane.scrollTop,
+        y: this._scrollPane.scrollLeft
+      };
+      this.picker.style.marginTop = '0px';
+      this.picker.style.marginLeft = '0px';
+    });
+
     document.querySelector('#pane-2').addEventListener("scroll", function() {
-        picker_2.picker.style.marginTop = '-' + this.scrollTop + 'px';
+        if (!picker_2._initScrollPosition) return;
+        picker_2.picker.style.marginTop = picker_2._initScrollPosition.x - this.scrollTop + 'px';
+        picker_2.picker.style.marginLeft = picker_2._initScrollPosition.y - this.scrollLeft + 'px';
     }, false);
 
     </script>

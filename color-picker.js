@@ -264,10 +264,14 @@
         }
 
         // get position
-        function offset(el) {
+        function offset(el, relative) {
             if (el === win) {
                 var left = win.pageXOffset || h[scroll_left],
                     top = win.pageYOffset || h[scroll_top];
+            } else if (relative) {
+                var rect = el.getBoundingClientRect();
+                var left = rect.x,
+                    top = rect.y;
             } else {
                 var left = el[offset_left],
                     top = el[offset_top];
@@ -350,11 +354,11 @@
 
         // generate color picker pane ...
         picker.className = 'color-picker';
-        picker.innerHTML = '<div class="color-picker-control"><span class="color-picker-h"><i></i></span><span class="color-picker-sv"><i></i></span></div>';
+        picker.innerHTML = '<div class="color-picker-control"><span class="color-picker-sv"><i></i></span><span class="color-picker-h"><i></i></span></div>';
         var c = picker[first].children,
             HSV = get_data([0, 1, 1]), // default is red
-            H = c[0],
-            SV = c[1],
+            H = c[1],
+            SV = c[0],
             H_point = H[first],
             SV_point = SV[first],
             start_H = 0,
@@ -543,24 +547,22 @@
         $.fit = function(o) {
             var w = size(win),
                 y = size(h),
-                z = y.h > w.h, // has vertical scroll bar
+                scr_w = w.w - y.w, // vertical scroll bar
+                scr_h = w.h - h.clientHeight, // horizontal scroll bar
                 ww = offset(win),
-                yy = offset(h),
-                w_W = z ? /* Math.max(y.w, w.w) */ y.w : w.w + ww.l,
-                w_H = z ? w.h + ww.t : Math.max(y.h, w.h),
-                to = offset(target);
-            left = to.l;
-            top = to.t + size(target).h; // drop!
+                to = offset(target, true);
+            left = to.l + ww.l;
+            top = to.t + ww.t + size(target).h; // drop!
             if (is_object(o)) {
                 is_set(o[0]) && (left = o[0]);
                 is_set(o[1]) && (top = o[1]);
             } else {
-                if (left + P_W > w_W) {
-                    left = w_W - P_W;
-                }
-                if (top + P_H > w_H) {
-                    top = w_H - P_H;
-                }
+                var min_x = ww.l,
+                    min_y = ww.t,
+                    max_x = ww.l + w.w - P_W - scr_w,
+                    max_y = ww.t + w.h - P_H - scr_h;
+                left = edge(left, min_x, max_x) >> 0;
+                top = edge(top, min_y, max_y) >> 0;
             }
             picker.style.left = left + 'px';
             picker.style.top = top + 'px';
