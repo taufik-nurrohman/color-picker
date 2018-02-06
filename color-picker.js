@@ -212,6 +212,7 @@
     })(win[NS] = function(target, events) {
 
         var b = doc.body,
+            r = b.parentElement,
             h = doc.documentElement,
             $ = this,
             $$ = win[NS],
@@ -258,8 +259,8 @@
                 y = !!e.touches ? e.touches[0].pageY : e.pageY,
                 o = offset(el);
             return {
-                x: x - o.l,
-                y: y - o.t
+                x: x - o.l - cursor_origin.l,
+                y: y - o.t - cursor_origin.t
             };
         }
 
@@ -285,6 +286,26 @@
                 l: left,
                 t: top
             };
+        }
+
+        function get_position_origin() {
+            var rs = getComputedStyle(r);
+            var o = {t:0, l:0};
+            if (~['absolute', 'fixed', 'relative', 'sticky'].indexOf(rs.position)) {
+                o.l = num(rs.marginLeft) + num(rs.borderLeftWidth);
+                o.t = num(rs.marginTop) + num(rs.borderTopWidth);
+            }
+            return o;
+        }
+
+        function get_cursor_origin() {
+            var rs = getComputedStyle(r);
+            var o = {t:0, l:0};
+            if (~['absolute', 'fixed', 'relative', 'sticky'].indexOf(rs.position)) {
+                o.l = num(rs.borderLeftWidth);
+                o.t = num(rs.borderTopWidth);
+            }
+            return o;
         }
 
         // get closest parent
@@ -371,7 +392,8 @@
             P_W = 0,
             P_H = 0,
             v = HSV2HEX(HSV),
-            set;
+            set,
+            cursor_origin;
 
         // on update ...
         function trigger_(k, x) {
@@ -390,9 +412,9 @@
         }
 
         // create
-        function create(first, bucket) {
+        function create(first) {
             if (!first) {
-                (bucket || b).appendChild(picker), $.visible = true;
+                r.appendChild(picker), $.visible = true;
             }
             P_W = size(picker).w;
             P_H = size(picker).h;
@@ -551,9 +573,11 @@
                 screen_w = w.w - y.w, // vertical scroll bar
                 screen_h = w.h - h.clientHeight, // horizontal scroll bar
                 ww = offset(win),
-                to = offset(target, 1);
+                to = offset(target, 1),
+                po = get_position_origin();
             left = to.l + ww.l;
             top = to.t + ww.t + size(target).h; // drop!
+            cursor_origin = get_cursor_origin();
             if (is_object(o)) {
                 is_set(o[0]) && (left = o[0]);
                 is_set(o[1]) && (top = o[1]);
@@ -565,8 +589,8 @@
                 left = edge(left, min_x, max_x) >> 0;
                 top = edge(top, min_y, max_y) >> 0;
             }
-            picker.style.left = left + 'px';
-            picker.style.top = top + 'px';
+            picker.style.left = left - po.l + 'px';
+            picker.style.top = top - po.t + 'px';
             return trigger("fit", [$]), $;
         };
 
