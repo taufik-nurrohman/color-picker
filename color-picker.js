@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.3.6
+ *  COLOR PICKER PLUGIN 1.3.7
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -170,7 +170,7 @@
     (function($) {
 
         // plugin version
-        $.version = '1.3.6';
+        $.version = '1.3.7';
 
         // collect all instance(s)
         $[instance] = {};
@@ -254,9 +254,12 @@
 
         // get mouse/finger coordinate
         function point(el, e) {
-            var x = !!e.touches ? e.touches[0].pageX : e.pageX,
-                y = !!e.touches ? e.touches[0].pageY : e.pageY,
-                o = offset(el);
+            var T = 'touches',
+                X = 'clientX',
+                Y = 'clientY',
+                x = !!e[T] ? e[T][0][X] : e[X],
+                y = !!e[T] ? e[T][0][Y] : e[Y],
+                o = offset(el, 1);
             return {
                 x: x - o.l,
                 y: y - o.t
@@ -264,12 +267,12 @@
         }
 
         // get position
-        function offset(el, relative) {
+        function offset(el, rect) {
             var left, top, rect;
             if (el === win) {
                 left = win.pageXOffset || h[scroll_left];
                 top = win.pageYOffset || h[scroll_top];
-            } else if (relative) {
+            } else if (rect) {
                 rect = el.getBoundingClientRect();
                 left = rect.x;
                 top = rect.y;

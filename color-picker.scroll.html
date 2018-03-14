@@ -61,12 +61,12 @@
 
     picker_2._scrollPane = document.querySelector('#pane-2');
     picker_2.on("enter", function() {
-      this._initScrollPosition = {
-        x: this._scrollPane.scrollTop,
-        y: this._scrollPane.scrollLeft
-      };
-      this.picker.style.marginTop = '0px';
-      this.picker.style.marginLeft = '0px';
+        this._initScrollPosition = {
+            x: this._scrollPane.scrollTop,
+            y: this._scrollPane.scrollLeft
+        };
+        this.picker.style.marginTop = '0px';
+        this.picker.style.marginLeft = '0px';
     });
 
     document.querySelector('#pane-2').addEventListener("scroll", function() {

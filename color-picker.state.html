@@ -14,7 +14,7 @@
 
     var picker = new CP(document.querySelector('input'), false),
         button = document.querySelector('button'),
-        button_html = button.innerHTML;
+        button_text = button.innerHTML;
 
     picker.on("change", function(color) {
         this.target.value = '#' + color;
@@ -22,7 +22,7 @@
 
     button.addEventListener("click", function(e) {
         picker[picker.visible ? 'exit' : 'enter']();
-        this.innerHTML = picker.visible ? '&#10004;' : button_html;
+        this.innerHTML = picker.visible ? '&#10004;' : button_text;
     }, false);
 
     </script>
