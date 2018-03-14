@@ -24,7 +24,8 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input'), false);
+    var p = document.querySelectorAll('p')[1], // put color picker panel in the second `<p>` element
+        picker = new CP(document.querySelector('input'), false, p);
 
     picker.on("change", function(color) {
         this.target.value = '#' + color;
@@ -38,8 +39,8 @@
     // add a `static` class to the color picker panel
     picker.picker.classList.add('static');
 
-    // show the color picker panel in the second `<p>` element
-    picker.enter(document.querySelectorAll('p')[1]);
+    // force to show the color picker panel
+    picker.enter();
 
     </script>
   </body>

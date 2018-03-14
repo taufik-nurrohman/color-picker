@@ -161,8 +161,8 @@ console.log(CP.parse([0, 1, 1])); // no changes</code></pre>
       <ul>
         <li><a href="color-picker.html">No Idea?</a></li>
         <li><a href="color-picker.picker.html">Multiple Instances</a></li>
-        <li><a href="color-picker.value-set.html">Pre–Defined Value</a></li>
-        <li><a href="color-picker.picker-set.html">Pre–Defined Color</a></li>
+        <li><a href="color-picker.value-set.html">Pre-Defined Value</a></li>
+        <li><a href="color-picker.picker-set.html">Pre-Defined Color</a></li>
         <li><a href="color-picker.value-update.html">Update Color Picker State on Value Changes</a></li>
         <li><a href="color-picker.value-convert.html">Convert HEX Color Value</a></li>
         <li><a href="color-picker.color-hsl.html">Add Support for HSL Color Value</a></li>
@@ -197,12 +197,9 @@ console.log(CP.parse([0, 1, 1])); // no changes</code></pre>
     <script src="color-picker.min.js"></script>
     <script>
     var container = document.querySelector('#color-picker'),
-        picker = new CP(container, false);
-    picker.fit = function() {
-        this.picker.style.left = this.picker.style.top = ""; // do nothing ...
-    };
+        picker = new CP(container, false, container);
     picker.picker.classList.add('static');
-    picker.enter(container);
+    picker.enter();
     picker.on("change", function(color) {
         container.parentNode.style.backgroundColor = '#' + color;
     });

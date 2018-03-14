@@ -11,10 +11,6 @@
 
     var instance = '__instance__',
         first = 'firstChild',
-        scroll_left = 'scrollLeft',
-        scroll_top = 'scrollTop',
-        offset_left = 'offsetLeft',
-        offset_top = 'offsetTop',
         delay = setTimeout;
 
     function is_set(x) {
@@ -209,7 +205,7 @@
         };
         $.HEX2RGB = HEX2RGB;
 
-    })(win[NS] = function(target, events) {
+    })(win[NS] = function(target, events, parent) {
 
         var b = doc.body,
             h = doc.documentElement,
@@ -232,7 +228,7 @@
         $$[instance][target.id || target.name || object_length($$[instance])] = $;
 
         // trigger color picker panel on click by default
-        if (!is_set(events)) {
+        if (!is_set(events) || events === true) {
             events = on_down;
         }
 
@@ -259,7 +255,7 @@
                 Y = 'clientY',
                 x = !!e[T] ? e[T][0][X] : e[X],
                 y = !!e[T] ? e[T][0][Y] : e[Y],
-                o = offset(el, 1);
+                o = offset(el);
             return {
                 x: x - o.l,
                 y: y - o.t
@@ -267,22 +263,15 @@
         }
 
         // get position
-        function offset(el, rect) {
+        function offset(el) {
             var left, top, rect;
             if (el === win) {
-                left = win.pageXOffset || h[scroll_left];
-                top = win.pageYOffset || h[scroll_top];
-            } else if (rect) {
+                left = win.pageXOffset || h.scrollLeft;
+                top = win.pageYOffset || h.scrollTop;
+            } else {
                 rect = el.getBoundingClientRect();
                 left = rect.x;
                 top = rect.y;
-            } else {
-                left = el[offset_left];
-                top = el[offset_top];
-                while (el = el.offsetParent) {
-                    left += el[offset_left];
-                    top += el[offset_top];
-                }
             }
             return {
                 l: left,
@@ -395,7 +384,7 @@
         // create
         function create(first, bucket) {
             if (!first) {
-                (bucket || b).appendChild(picker), $.visible = true;
+                (parent || bucket || b).appendChild(picker), $.visible = true;
             }
             P_W = size(picker).w;
             P_H = size(picker).h;
@@ -554,7 +543,7 @@
                 screen_w = w.w - y.w, // vertical scroll bar
                 screen_h = w.h - h.clientHeight, // horizontal scroll bar
                 ww = offset(win),
-                to = offset(target, 1);
+                to = offset(target);
             left = to.l + ww.l;
             top = to.t + ww.t + size(target).h; // drop!
             if (is_object(o)) {
