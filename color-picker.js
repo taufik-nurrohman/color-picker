@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.3.7
+ *  COLOR PICKER PLUGIN 1.3.8
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -166,7 +166,7 @@
     (function($) {
 
         // plugin version
-        $.version = '1.3.7';
+        $.version = '1.3.8';
 
         // collect all instance(s)
         $[instance] = {};
