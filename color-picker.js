@@ -270,8 +270,8 @@
                 top = win.pageYOffset || h.scrollTop;
             } else {
                 rect = el.getBoundingClientRect();
-                left = rect.x;
-                top = rect.y;
+                left = rect.left;
+                top = rect.top;
             }
             return {
                 l: left,
