@@ -57,7 +57,7 @@
     function update() {
         if (this.value.length) {
             picker.set(this.value);
-            picker.trigger("change", [this.value.slice(1)]);
+            picker.fire("change", [this.value.slice(1)]);
         }
     }
 

@@ -39,7 +39,7 @@
         box.style.backgroundColor = '#' + colors[i];
         box.addEventListener("click", function(e) {
             picker.set(this.title);
-            picker.trigger("change", [this.title.slice(1)], 'main-change');
+            picker.fire("change", [this.title.slice(1)], 'main-change');
             e.stopPropagation();
         }, false);
         picker.picker.firstChild.appendChild(box);

@@ -103,11 +103,11 @@ var picker = new CP(el, false);</code></pre>
       <pre><code>picker.off("change");</code></pre>
       <p>Remove a <code>change</code> hook with ID of <code>test-id</code>:</p>
       <pre><code>picker.off("change", 'test-id');</code></pre>
-      <h3 id="section:method-trigger">Trigger a Hook with Custom Value</h3>
-      <p>Trigger all <code>change</code> hooks with pre&ndash;defined color value as <code>ffa500</code>:</p>
-      <pre><code>picker.trigger("change", ['ffa500']);</code></pre>
-      <p>Trigger a <code>change</code> hook with ID of <code>test-id</code> and with pre&ndash;defined color value as <code>ffa500</code>:</p>
-      <pre><code>picker.trigger("change", ['ffa500'], 'test-id');</code></pre>
+      <h3 id="section:method-fire">Trigger a Hook with Custom Value</h3>
+      <p>Trigger all <code>change</code> hooks with pre-defined color value as <code>ffa500</code>:</p>
+      <pre><code>picker.fire("change", ['ffa500']);</code></pre>
+      <p>Trigger a <code>change</code> hook with ID of <code>test-id</code> and with pre-defined color value as <code>ffa500</code>:</p>
+      <pre><code>picker.fire("change", ['ffa500'], 'test-id');</code></pre>
       <h2 id="section:data">Data</h2>
       <h3 id="section:data-target">Get the Target Element</h3>
       <pre><code>var target = picker.target;</code></pre>
@@ -161,26 +161,26 @@ console.log(CP.parse([0, 1, 1])); // no changes</code></pre>
       <p>My purpose in making this plugin is to provide a JavaScript color picker solution as simple as possible with the most minimal features without requiring any dependency on JavaScript library such as jQuery or Prototype.</p>
       <p>If you want to add new features, you can use the available hooks to make your own improvements without having to touch the plugin core. Here are some examples:</p>
       <ul>
-        <li><a href="color-picker.html">No Idea?</a></li>
-        <li><a href="color-picker.picker.html">Multiple Instances</a></li>
-        <li><a href="color-picker.value-set.html">Pre-Defined Value</a></li>
-        <li><a href="color-picker.picker-set.html">Pre-Defined Color</a></li>
-        <li><a href="color-picker.value-update.html">Update Color Picker State on Value Changes</a></li>
-        <li><a href="color-picker.value-convert.html">Convert HEX Color Value</a></li>
-        <li><a href="color-picker.color-hsl.html">Add Support for HSL Color Value</a></li>
-        <li><a href="color-picker.color-rgba.html">Transparency</a></li>
-        <li><a href="color-picker.state.html">Show and Hide with Buttons</a></li>
-        <li><a href="color-picker.trigger.html">Show and Hide with Double Click</a></li>
-        <li><a href="color-picker.close.html">Add Close Button</a></li>
-        <li><a href="color-picker.static.html">Static Color Picker</a></li>
-        <li><a href="color-picker.replace.html">Replace Text Input with Hidden Input</a></li>
-        <li><a href="color-picker.input-color.html">HTML5 Color Input</a></li>
-        <li><a href="color-picker.create-destroy.html">Create and Destroy Method</a></li>
-        <li><a href="color-picker.fit.html">Auto-Positioned to the Reachable Area in the Document</a></li>
-        <li><a href="color-picker.picker-view.html">Color Preview in Color Picker</a></li>
-        <li><a href="color-picker.picker-view-code.html">Color Code to Copy in Color Picker</a></li>
-        <li><a href="color-picker.scroll.html">Scroll Follow</a></li>
-        <li><a href="color-picker.vue.html">Vue.js Integration (TODO)</a></li>
+        <li><a href="color-picker.html" target="_blank">No Idea?</a></li>
+        <li><a href="color-picker.picker.html" target="_blank">Multiple Instances</a></li>
+        <li><a href="color-picker.value-set.html" target="_blank">Pre-Defined Value</a></li>
+        <li><a href="color-picker.picker-set.html" target="_blank">Pre-Defined Color</a></li>
+        <li><a href="color-picker.value-update.html" target="_blank">Update Color Picker State on Value Changes</a></li>
+        <li><a href="color-picker.value-convert.html" target="_blank">Convert HEX Color Value</a></li>
+        <li><a href="color-picker.color-hsl.html" target="_blank">Add Support for HSL Color Value</a></li>
+        <li><a href="color-picker.color-rgba.html" target="_blank">Transparency</a></li>
+        <li><a href="color-picker.state.html" target="_blank">Show and Hide with Buttons</a></li>
+        <li><a href="color-picker.trigger.html" target="_blank">Show and Hide with Double Click</a></li>
+        <li><a href="color-picker.close.html" target="_blank">Add Close Button</a></li>
+        <li><a href="color-picker.static.html" target="_blank">Static Color Picker</a></li>
+        <li><a href="color-picker.replace.html" target="_blank">Replace Text Input with Hidden Input</a></li>
+        <li><a href="color-picker.input-color.html" target="_blank">HTML5 Color Input</a></li>
+        <li><a href="color-picker.create-destroy.html" target="_blank">Create and Destroy Method</a></li>
+        <li><a href="color-picker.fit.html" target="_blank">Auto-Positioned to the Reachable Area in the Document</a></li>
+        <li><a href="color-picker.picker-view.html" target="_blank">Color Preview in Color Picker</a></li>
+        <li><a href="color-picker.picker-view-code.html" target="_blank">Color Code to Copy in Color Picker</a></li>
+        <li><a href="color-picker.scroll.html" target="_blank">Scroll Follow</a></li>
+        <li><a href="color-picker.vue.html" target="_blank">Vue.js Integration (TODO)</a></li>
       </ul>
       <h2 id="section:support">Support</h2>
       <p>Your small donation will keep this project going and allow me to do any further development.</p>
