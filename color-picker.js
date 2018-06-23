@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.3.9
+ *  COLOR PICKER PLUGIN 1.3.10
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -166,7 +166,7 @@
     (function($) {
 
         // plugin version
-        $.version = '1.3.9';
+        $.version = '1.3.10';
 
         // collect all instance(s)
         $[instance] = {};
@@ -347,7 +347,7 @@
 
         // generate color picker pane ...
         picker.className = 'color-picker';
-        picker.innerHTML = '<div class="color-picker-control"><span class="color-picker-h"><i></i></span><span class="color-picker-sv"><i></i></span></div>';
+        picker.innerHTML = '<div class="color-picker-container"><span class="color-picker-h"><i></i></span><span class="color-picker-sv"><i></i></span></div>';
         var c = picker[first].children,
             HSV = get_data([0, 1, 1]), // default is red
             H = c[0],

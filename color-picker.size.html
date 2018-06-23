@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <h1>Size 1</h1>
+    <h2>Size 2</h2>
+    <h3>Size 3</h3>
+    <h4>Size 4</h4>
+    <h5>Size 5</h5>
+    <h6>Size 6</h6>
+    <p>By default, color picker size will follow the container&rsquo;s text size; the container that bounds to the color picker pane.</p>
+    <pre><code>/* to change the color picker size */
+.color-picker {font-size:20px}
+
+/* to change the color picker control&rsquo;s size */
+.color-picker i {font-size:15px}</code></pre>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var target = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+
+    for (var i = 0, len = target.length; i < len; ++i) {
+        (new CP(target[i], true, target[i])).on("change", function(color) {
+            this.target.style.color = '#' + color;
+        });
+    }
+
+    </script>
+  </body>
+</html>

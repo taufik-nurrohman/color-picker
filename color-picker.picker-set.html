@@ -8,17 +8,18 @@
     <style>
     .color-picker-box {
       display:block;
-      border-top:1px solid;
+      margin-top:1px;
       border-color:inherit;
       float:left;
       width:10%;
-      height:16px;
+      height:1.25em;
       cursor:pointer;
     }
+    .color-picker-box:first-child {clear:both}
     </style>
   </head>
   <body>
-    <p>Set pre–defined color value in the color picker panel.</p>
+    <p>Set pre-defined color value in the color picker panel.</p>
     <p><input type="text"></p>
     <script src="color-picker.min.js"></script>
     <script>
