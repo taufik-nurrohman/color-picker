@@ -28,16 +28,16 @@
         picker = new CP(document.querySelector('input'), false, p);
 
     picker.on("change", function(color) {
-        this.target.value = '#' + color;
+        this.source.value = '#' + color;
     });
 
     // ...
     picker.fit = function() { // do nothing ...
-        this.picker.style.left = this.picker.style.top = "";
+        this.self.style.left = this.self.style.top = "";
     };
 
     // add a `static` class to the color picker panel
-    picker.picker.classList.add('static');
+    picker.self.classList.add('static');
 
     // force to show the color picker panel
     picker.enter();

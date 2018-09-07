@@ -130,10 +130,10 @@
 
     var picker = new CP(document.querySelector('input'));
 
-    picker.set(HSL_parse(picker.target.value)); // reset private color data
+    picker.set(HSL_parse(picker.source.value)); // reset private color data
     picker.on("change", function(color) {
         var hsl = CP.HEX2HSL(color);
-        this.target.value = 'hsl(' + hsl[0] + ', ' + hsl[1] + '%, ' + hsl[2] + '%)';
+        this.source.value = 'hsl(' + hsl[0] + ', ' + hsl[1] + '%, ' + hsl[2] + '%)';
     });
 
     </script>

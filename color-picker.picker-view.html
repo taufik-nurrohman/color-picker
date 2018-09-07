@@ -19,7 +19,7 @@
     </style>
   </head>
   <body>
-    <p>Add color preview in the color picker panel. Click on the first preview box to reset color to the previous state, click on the second preview box to set color value on the target element.</p>
+    <p>Add color preview in the color picker panel. Click on the first preview box to reset color to the previous state, click on the second preview box to set color value on the source element.</p>
     <p><input type="text"></p>
     <script src="color-picker.min.js"></script>
     <script>
@@ -44,8 +44,8 @@
     box_1.className = 'color-view';
     box_2.className = 'color-view';
 
-    picker.picker.firstChild.appendChild(box_1);
-    picker.picker.firstChild.appendChild(box_2);
+    picker.self.firstChild.appendChild(box_1);
+    picker.self.firstChild.appendChild(box_2);
 
     // click to reset
     box_1.addEventListener("click", function(e) {
@@ -60,8 +60,8 @@
     box_2.addEventListener("click", function(e) {
         var color = this.title;
         picker.exit();
-        picker.target.value = color;
-        picker.target.focus();
+        picker.source.value = color;
+        picker.source.focus();
     }, false);
 
     </script>

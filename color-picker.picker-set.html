@@ -27,7 +27,7 @@
     var picker = new CP(document.querySelector('input'));
 
     picker.on("change", function(color) {
-        this.target.value = '#' + color;
+        this.source.value = '#' + color;
         document.body.style.backgroundColor = '#' + color;
     }, 'main-change');
 
@@ -43,7 +43,7 @@
             picker.fire("change", [this.title.slice(1)], 'main-change');
             e.stopPropagation();
         }, false);
-        picker.picker.firstChild.appendChild(box);
+        picker.self.firstChild.appendChild(box);
     }
 
     </script>

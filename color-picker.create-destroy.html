@@ -16,7 +16,7 @@
         buttons = document.querySelectorAll('button');
 
     picker.on("change", function(color) {
-        this.target.value = '#' + color;
+        this.source.value = '#' + color;
         document.body.style.backgroundColor = '#' + color;
     });
 

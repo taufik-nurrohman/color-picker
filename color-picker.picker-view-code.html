@@ -34,7 +34,7 @@
         code = document.createElement('input');
 
     // prevent showing native color picker panel
-    picker.target.onclick = function(e) {
+    picker.source.onclick = function(e) {
         e.preventDefault();
     };
 
@@ -47,11 +47,11 @@
     });
 
     picker.on("change", function(color) {
-        picker.target.value = '#' + color;
+        this.source.value = '#' + color;
         code.value = '#' + color;
     });
 
-    picker.picker.firstChild.appendChild(code);
+    picker.self.firstChild.appendChild(code);
 
     function update() {
         if (this.value.length) {

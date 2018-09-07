@@ -44,29 +44,29 @@
     &lt;script&gt;
     var picker = new CP(document.querySelector('input[type="text"]'));
     picker.on("change", function(color) {
-        this.target.value = '#' + color;
+        this.source.value = '#' + color;
     });
     &lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;</code></pre>
       <h2 id="section:configure">Configure</h2>
       <h3>Instance</h3>
-      <pre><code>new CP(<var>node</var>, <var>events</var>, <var>bounds</var>);</code></pre>
+      <pre><code>new CP(<var>source</var>, <var>events</var>, <var>bounds</var>);</code></pre>
       <ul>
-        <li><var>node</var> &rarr; The target element.</li>
+        <li><var>source</var> &rarr; The source element.</li>
         <li><var>events</var> &rarr; How to show the color picker? By click? By hover?</li>
       </ul>
-      <pre><code>var el = document.querySelector('input[type="color"]');
+      <pre><code>var source = document.querySelector('input[type="color"]');
 
 // show color picker by click (default)
-var picker = new CP(el);
+var picker = new CP(source);
 
 // show color picker by hover
-var picker = new CP(el, "mouseover");
+var picker = new CP(source, "mouseover");
 
 // disable color picker by default
 // to enable it, try `picker.enter()`
-var picker = new CP(el, false);</code></pre>
+var picker = new CP(source, false);</code></pre>
       <h2 id="section:method">Methods</h2>
       <h3 id="section:data-hook">Hooks</h3>
       <p>The available hooks:</p>
@@ -109,14 +109,14 @@ var picker = new CP(el, false);</code></pre>
       <p>Trigger a <code>change</code> hook with ID of <code>test-id</code> and with pre-defined color value as <code>ffa500</code>:</p>
       <pre><code>picker.fire("change", ['ffa500'], 'test-id');</code></pre>
       <h2 id="section:data">Data</h2>
-      <h3 id="section:data-target">Get the Target Element</h3>
-      <pre><code>var target = picker.target;</code></pre>
-      <h3 id="section:data-picker">Get the Picker Element</h3>
-      <pre><code>var picker = picker.picker;</code></pre>
+      <h3 id="section:data-source">Get the Source Element</h3>
+      <pre><code>var source = picker.source;</code></pre>
+      <h3 id="section:data-self">Get the Picker Element</h3>
+      <pre><code>var picker = picker.self;</code></pre>
       <h3 id="section:data-set">Get/Set Color Picker Data</h3>
-      <p>Get hidden color data in the target element:</p>
+      <p>Get hidden color data in the source element:</p>
       <pre><code>console.log(picker.get('&lt;alternate color&gt;'));</code></pre>
-      <p>Set hidden color data to the target element:</p>
+      <p>Set hidden color data to the source element:</p>
       <pre><code>picker.set([0, 1, 1]); // HSV color value, range from `0` to `1` for each</code></pre>
       <pre><code>picker.set('rgb(255, 0, 0)'); // as color string</code></pre>
       <h2 id="section:converter">Color Converter</h2>
@@ -153,9 +153,9 @@ console.log(CP.parse([0, 1, 1])); // no changes</code></pre>
       <p>Show all instances:</p>
       <pre><code>console.log(CP.__instance__);</code></pre>
       <p>Do something with instances:</p>
-      <pre><code>CP.each(function($) {
-    // `$` refers to the color picker instance
-    $.enter(); // this will show all of the color picker panel
+      <pre><code>CP.each(function(key, any) {
+    // `this` refers to the color picker instance
+    this.enter(); // this will show all of the color picker panel
 });</code></pre>
       <h3 id="section:feature">Want to Add More Features?</h3>
       <p>My purpose in making this plugin is to provide a JavaScript color picker solution as simple as possible with the most minimal features without requiring any dependency on JavaScript library such as jQuery or Prototype.</p>
@@ -201,7 +201,7 @@ console.log(CP.parse([0, 1, 1])); // no changes</code></pre>
     <script>
     var container = document.querySelector('#color-picker'),
         picker = new CP(container, false, container);
-    picker.picker.classList.add('static');
+    picker.self.classList.add('static');
     picker.enter();
     picker.on("change", function(color) {
         container.parentNode.style.backgroundColor = '#' + color;

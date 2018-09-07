@@ -40,8 +40,8 @@
         input.value = '#' + color;
         input.style.backgroundColor = '#' + color;
         (new CP(input)).on("change", function(v) {
-            this.target.value = '#' + v;
-            this.target.style.backgroundColor = '#' + v;
+            this.source.value = '#' + v;
+            this.source.style.backgroundColor = '#' + v;
         });
         container.appendChild(input);
     }

@@ -7,7 +7,7 @@
     <link href="color-picker.min.css" rel="stylesheet">
   </head>
   <body>
-    <p>Set pre-defined color value on the target element.</p>
+    <p>Set pre-defined color value on the source element.</p>
     <p><input type="text" value="#387a40"> <input type="text" value="rgb(31, 76, 172)"> <input type="text" value="hsv(286, 88%, 48%)"> <button data-color="#ffa">#FFA</button></p>
     <script src="color-picker.min.js"></script>
     <script>
@@ -19,17 +19,17 @@
         picker_3 = new CP(picker[3]);
 
     picker_0.on("change", function(color) {
-        this.target.value = '#' + color;
+        this.source.value = '#' + color;
     });
     picker_1.on("change", function(color) {
-        this.target.value = 'rgb(' + CP.HEX2RGB(color).join(', ') + ')';
+        this.source.value = 'rgb(' + CP.HEX2RGB(color).join(', ') + ')';
     });
     picker_2.on("change", function(color) {
         var hsv = CP.HEX2HSV(color);
-        this.target.value = 'hsv(' + hsv[0] + ', ' + hsv[1] + '%, ' + hsv[2] + '%)';
+        this.source.value = 'hsv(' + hsv[0] + ', ' + hsv[1] + '%, ' + hsv[2] + '%)';
     });
     picker_3.on("change", function(color) {
-        this.target.innerHTML = '#' + color;
+        this.source.innerHTML = '#' + color;
     });
 
     </script>

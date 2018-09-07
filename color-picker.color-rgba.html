@@ -37,7 +37,7 @@
     function change() {
         var v = CP._HSV2RGB(picker.set());
         v = this.value == 1 ? 'rgb(' + v.join(', ') + ')' : 'rgba(' + v.join(', ') + ', ' + this.value.replace(/^0\./, '.') + ')';
-        picker.target.value = v;
+        picker.source.value = v;
         document.body.style.backgroundColor = v;
     }
 
@@ -49,12 +49,12 @@
     alpha.onchange = change;
     alpha.oninput = change;
 
-    picker.picker.appendChild(alpha);
+    picker.self.appendChild(alpha);
 
     picker.on("change", function(color) {
         var v = CP.HEX2RGB(color);
         v = alpha.value == 1 ? 'rgb(' + v.join(', ') + ')' : 'rgba(' + v.join(', ') + ', ' + alpha.value.replace(/^0\./, '.') + ')';
-        this.target.value = v;
+        this.source.value = v;
         document.body.style.backgroundColor = v;
     });
 

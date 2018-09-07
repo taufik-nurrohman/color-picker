@@ -12,16 +12,16 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var target = document.querySelector('input'),
-        picker = new CP(target);
+    var source = document.querySelector('input'),
+        picker = new CP(source);
 
     // prevent showing native color picker panel
-    target.onclick = function(e) {
+    source.onclick = function(e) {
         e.preventDefault();
     };
 
     picker.on("change", function(color) {
-        this.target.value = '#' + color;
+        this.source.value = '#' + color;
     });
 
     </script>

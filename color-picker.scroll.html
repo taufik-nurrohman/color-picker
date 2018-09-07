@@ -53,7 +53,7 @@
         picker_2 = new CP(input[1]);
 
     function change(color) {
-        this.target.value = '#' + color;
+        this.source.value = '#' + color;
     }
 
     picker_1.on("change", change);
@@ -65,14 +65,14 @@
             x: this._scrollPane.scrollTop,
             y: this._scrollPane.scrollLeft
         };
-        this.picker.style.marginTop = '0px';
-        this.picker.style.marginLeft = '0px';
+        this.self.style.marginTop = '0px';
+        this.self.style.marginLeft = '0px';
     });
 
     document.querySelector('#pane-2').addEventListener("scroll", function() {
         if (!picker_2._initScrollPosition) return;
-        picker_2.picker.style.marginTop = picker_2._initScrollPosition.x - this.scrollTop + 'px';
-        picker_2.picker.style.marginLeft = picker_2._initScrollPosition.y - this.scrollLeft + 'px';
+        picker_2.self.style.marginTop = picker_2._initScrollPosition.x - this.scrollTop + 'px';
+        picker_2.self.style.marginLeft = picker_2._initScrollPosition.y - this.scrollLeft + 'px';
     }, false);
 
     </script>

@@ -11,12 +11,12 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var target = document.querySelectorAll('input');
+    var source = document.querySelectorAll('input');
 
-    // set hooks for each target element
-    for (var i = 0, len = target.length; i < len; ++i) {
-        (new CP(target[i])).on("change", function(color) {
-            this.target.value = '#' + color;
+    // set hooks for each source element
+    for (var i = 0, len = source.length; i < len; ++i) {
+        (new CP(source[i])).on("change", function(color) {
+            this.source.value = '#' + color;
         });
     }
 

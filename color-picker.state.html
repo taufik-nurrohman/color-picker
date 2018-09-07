@@ -17,7 +17,7 @@
         button_text = button.innerHTML;
 
     picker.on("change", function(color) {
-        this.target.value = '#' + color;
+        this.source.value = '#' + color;
     });
 
     button.addEventListener("click", function(e) {

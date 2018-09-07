@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.3.10
+ *  COLOR PICKER PLUGIN 1.4.0
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -166,7 +166,7 @@
     (function($) {
 
         // plugin version
-        $.version = '1.3.10';
+        $.version = '1.4.0';
 
         // collect all instance(s)
         $[instance] = {};
@@ -176,7 +176,7 @@
             return delay(function() {
                 var ins = $[instance], i;
                 for (i in ins) {
-                    fn(ins[i], i, ins);
+                    fn.call(ins[i], i, ins);
                 }
             }, t === 0 ? 0 : (t || 1)), $;
         };
@@ -205,7 +205,7 @@
         };
         $.HEX2RGB = HEX2RGB;
 
-    })(win[NS] = function(target, events, parent) {
+    })(win[NS] = function(source, events, parent) {
 
         var b = doc.body,
             h = doc.documentElement,
@@ -213,7 +213,7 @@
             $$ = win[NS],
             _ = false,
             hooks = {},
-            picker = doc.createElement('div'),
+            self = doc.createElement('div'),
             on_down = "touchstart mousedown",
             on_move = "touchmove mousemove",
             on_up = "touchend mouseup",
@@ -221,11 +221,11 @@
 
         // return a new instance if `CP` was called without the `new` operator
         if (!($ instanceof $$)) {
-            return new $$(target, events);
+            return new $$(source, events);
         }
 
         // store color picker instance to `CP.__instance__`
-        $$[instance][target.id || target.name || object_length($$[instance])] = $;
+        $$[instance][source.id || source.name || object_length($$[instance])] = $;
 
         // trigger color picker panel on click by default
         if (!is_set(events) || events === true) {
@@ -343,12 +343,12 @@
         }
 
         // initialize data ...
-        set_data($$.parse(target.getAttribute('data-color') || target.value || [0, 1, 1]));
+        set_data($$.parse(source.getAttribute('data-color') || source.value || [0, 1, 1]));
 
         // generate color picker pane ...
-        picker.className = 'color-picker';
-        picker.innerHTML = '<div class="color-picker-container"><span class="color-picker-h"><i></i></span><span class="color-picker-sv"><i></i></span></div>';
-        var c = picker[first].children,
+        self.className = 'color-picker';
+        self.innerHTML = '<div class="color-picker-container"><span class="color-picker-h"><i></i></span><span class="color-picker-sv"><i></i></span></div>';
+        var c = self[first].children,
             HSV = get_data([0, 1, 1]), // default is red
             H = c[0],
             SV = c[1],
@@ -378,16 +378,16 @@
 
         // is visible?
         function visible() {
-            return picker.parentNode;
+            return self.parentNode;
         }
 
         // create
         function create(first, bucket) {
             if (!first) {
-                (parent || bucket || b).appendChild(picker), $.visible = true;
+                (parent || bucket || b).appendChild(self), $.visible = true;
             }
-            P_W = size(picker).w;
-            P_H = size(picker).h;
+            P_W = size(self).w;
+            P_H = size(self).h;
             var SV_size = size(SV),
                 SV_point_size = size(SV_point),
                 H_H = size(H).h,
@@ -397,26 +397,26 @@
                 SV_point_W = SV_point_size.w,
                 SV_point_H = SV_point_size.h;
             if (first) {
-                picker.style.left = picker.style.top = '-9999px';
+                self.style.left = self.style.top = '-9999px';
                 function click(e) {
                     var t = e.target,
-                        is_target = t === target || closest(t, target) === target;
-                    if (is_target) {
+                        is_source = t === source || closest(t, source) === source;
+                    if (is_source) {
                         create();
                     } else {
                         $.exit();
                     }
-                    trigger(is_target ? "enter" : "exit", [$]);
+                    trigger(is_source ? "enter" : "exit", [$]);
                 }
                 if (events !== false) {
-                    on(events, target, click);
+                    on(events, source, click);
                 }
                 $.create = function() {
                     return create(1), trigger("create", [$]), $;
                 };
                 $.destroy = function() {
                     if (events !== false) {
-                        off(events, target, click);
+                        off(events, source, click);
                     }
                     $.exit(), set_data(false);
                     return trigger("destroy", [$]), $;
@@ -432,7 +432,7 @@
             };
             $.exit = function(e) {
                 if (visible()) {
-                    visible().removeChild(picker);
+                    visible().removeChild(self);
                     $.visible = false;
                 }
                 off(on_down, H, down_H);
@@ -490,13 +490,13 @@
                 var t = e.target,
                     k = drag_H ? "h" : "sv",
                     a = [HSV2HEX(HSV), $],
-                    is_target = t === target || closest(t, target) === target,
-                    is_picker = t === picker || closest(t, picker) === picker;
-                if (!is_target && !is_picker) {
-                    // click outside the target or picker element to exit
+                    is_source = t === source || closest(t, source) === source,
+                    is_self = t === self || closest(t, self) === self;
+                if (!is_source && !is_self) {
+                    // click outside the source or picker element to exit
                     if (visible() && events !== false) $.exit(), trigger("exit", [$]), trigger_(0, a);
                 } else {
-                    if (is_picker) {
+                    if (is_self) {
                         trigger("stop:" + k, a);
                         trigger("stop", a);
                         trigger_(k, a);
@@ -543,9 +543,9 @@
                 screen_w = w.w - y.w, // vertical scroll bar
                 screen_h = w.h - h.clientHeight, // horizontal scroll bar
                 ww = offset(win),
-                to = offset(target);
+                to = offset(source);
             left = to.l + ww.l;
-            top = to.t + ww.t + size(target).h; // drop!
+            top = to.t + ww.t + size(source).h; // drop!
             if (is_object(o)) {
                 is_set(o[0]) && (left = o[0]);
                 is_set(o[1]) && (top = o[1]);
@@ -557,8 +557,8 @@
                 left = edge(left, min_x, max_x) >> 0;
                 top = edge(top, min_y, max_y) >> 0;
             }
-            picker.style.left = left + 'px';
-            picker.style.top = top + 'px';
+            self.style.left = left + 'px';
+            self.style.top = top + 'px';
             return trigger("fit", [$]), $;
         };
 
@@ -582,8 +582,8 @@
         };
 
         // register to global ...
-        $.target = target;
-        $.picker = picker;
+        $.source = source;
+        $.self = self;
         $.visible = false;
         $.on = add;
         $.off = remove;

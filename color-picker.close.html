@@ -15,7 +15,7 @@
     var picker = new CP(document.querySelector('input'));
 
     picker.on("change", function(color) {
-        this.target.value = '#' + color;
+        this.source.value = '#' + color;
     });
 
     var x = document.createElement('a');
@@ -25,7 +25,7 @@
             picker.exit();
         }, false);
 
-    picker.picker.appendChild(x);
+    picker.self.appendChild(x);
 
     </script>
   </body>

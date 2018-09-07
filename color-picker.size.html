@@ -22,11 +22,11 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var target = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+    var source = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
 
-    for (var i = 0, len = target.length; i < len; ++i) {
-        (new CP(target[i], true, target[i])).on("change", function(color) {
-            this.target.style.color = '#' + color;
+    for (var i = 0, len = source.length; i < len; ++i) {
+        (new CP(source[i], true, source[i])).on("change", function(color) {
+            this.source.style.color = '#' + color;
         });
     }
 
