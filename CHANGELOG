@@ -1,0 +1,62 @@
+Change Log
+==========
+
+v1.4.0
+------
+
+ - Renamed `target` property to `source` and `picker` property to `self`.
+
+v1.3.10
+-------
+
+ - Automatic color picker size based on container’s font size.
+
+v1.3.9
+------
+
+ - Renamed `trigger` method to `fire`.
+
+v1.3.8
+------
+
+ - Fixed color picker panel position using `HTMLElement.prototype.getBoundingClientRect()` by @flamestream and @alex3683 #29
+
+v1.3.5
+------
+
+ - Allow users to change the plugin name from `CP` to another.
+
+v1.3.2
+------
+
+ - Allow users to override the `fit` method.
+
+v1.3.0
+------
+
+ - Converted all color converters into static function.
+
+v1.2.0
+------
+
+ - Added static `__instance__` property to collect all of the color picker instance.
+
+v1.1.0
+------
+
+ - Fixed Chrome bug with desktop events #9
+
+v1.0.3
+------
+
+ - Fixed `event.stopPropagation()` issue #8
+
+v1.0.2
+------
+
+ - Added `change` hook.
+
+v1.0.0
+------
+
+ - Initial release.
