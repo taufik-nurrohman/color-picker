@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+v1.4.1
+------
+
+ - Trigger `enter` and `exit` hooks on `enter` and `exit` method call.
+
 v1.4.0
 ------
 

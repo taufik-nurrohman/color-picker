@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.4.0
+ *  COLOR PICKER PLUGIN 1.4.1
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -166,7 +166,7 @@
     (function($) {
 
         // plugin version
-        $.version = '1.4.0';
+        $.version = '1.4.1';
 
         // collect all instance(s)
         $[instance] = {};
@@ -362,7 +362,7 @@
             top = 0,
             P_W = 0,
             P_H = 0,
-            v = HSV2HEX(HSV),
+            v = [HSV2HEX(HSV)],
             set;
 
         // on update ...
@@ -402,24 +402,23 @@
                     var t = e.target,
                         is_source = t === source || closest(t, source) === source;
                     if (is_source) {
-                        create();
+                        create(), trigger("enter");
                     } else {
                         $.exit();
                     }
-                    trigger(is_source ? "enter" : "exit", [$]);
                 }
                 if (events !== false) {
                     on(events, source, click);
                 }
                 $.create = function() {
-                    return create(1), trigger("create", [$]), $;
+                    return create(1), trigger("create"), $;
                 };
                 $.destroy = function() {
                     if (events !== false) {
                         off(events, source, click);
                     }
                     $.exit(), set_data(false);
-                    return trigger("destroy", [$]), $;
+                    return trigger("destroy"), $;
                 };
             } else {
                 fit();
@@ -440,7 +439,7 @@
                 off(on_move, doc, move);
                 off(on_up, doc, stop);
                 off(on_resize, win, fit);
-                return $;
+                return trigger("exit"), $;
             };
             function color(e) {
                 var a = HSV2RGB(HSV),
@@ -468,19 +467,19 @@
             }
             function move(e) {
                 if (drag_H) {
-                    do_H(e), v = HSV2HEX(HSV);
+                    do_H(e), v = [HSV2HEX(HSV)];
                     if (!start_H) {
-                        trigger("drag:h", [v, $]);
-                        trigger("drag", [v, $]);
-                        trigger_("h", [v, $]);
+                        trigger("drag:h", v);
+                        trigger("drag", v);
+                        trigger_("h", v);
                     }
                 }
                 if (drag_SV) {
-                    do_SV(e), v = HSV2HEX(HSV);
+                    do_SV(e), v = [HSV2HEX(HSV)];
                     if (!start_SV) {
-                        trigger("drag:sv", [v, $]);
-                        trigger("drag", [v, $]);
-                        trigger_("sv", [v, $]);
+                        trigger("drag:sv", v);
+                        trigger("drag", v);
+                        trigger_("sv", v);
                     }
                 }
                 start_H = 0,
@@ -494,7 +493,7 @@
                     is_self = t === self || closest(t, self) === self;
                 if (!is_source && !is_self) {
                     // click outside the source or picker element to exit
-                    if (visible() && events !== false) $.exit(), trigger("exit", [$]), trigger_(0, a);
+                    if (visible() && events !== false) $.exit(), trigger_(0, a);
                 } else {
                     if (is_self) {
                         trigger("stop:" + k, a);
@@ -509,17 +508,17 @@
                 start_H = 1,
                 drag_H = 1,
                 move(e), prevent(e);
-                trigger("start:h", [v, $]);
-                trigger("start", [v, $]);
-                trigger_("h", [v, $]);
+                trigger("start:h", v);
+                trigger("start", v);
+                trigger_("h", v);
             }
             function down_SV(e) {
                 start_SV = 1,
                 drag_SV = 1,
                 move(e), prevent(e);
-                trigger("start:sv", [v, $]);
-                trigger("start", [v, $]);
-                trigger_("sv", [v, $]);
+                trigger("start:sv", v);
+                trigger("start", v);
+                trigger_("sv", v);
             }
             if (!first) {
                 on(on_down, H, down_H);
@@ -531,7 +530,7 @@
         } create(1);
 
         delay(function() {
-            var a = [HSV2HEX(HSV), $];
+            var a = [HSV2HEX(HSV)];
             trigger("create", a);
             trigger_(0, a);
         }, 0);
@@ -559,7 +558,7 @@
             }
             self.style.left = left + 'px';
             self.style.top = top + 'px';
-            return trigger("fit", [$]), $;
+            return trigger("fit"), $;
         };
 
         // for event listener ID
@@ -581,7 +580,7 @@
             return get_data(a);
         };
 
-        // register to global ...
+        // register to global
         $.source = source;
         $.self = self;
         $.visible = false;
@@ -590,7 +589,7 @@
         $.fire = trigger;
         $.hooks = hooks;
         $.enter = function(bucket) {
-            return create(0, bucket);
+            return create(0, bucket), trigger("enter"), $;
         };
 
         // return the global object

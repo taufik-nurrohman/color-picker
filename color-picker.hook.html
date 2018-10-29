@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <p><input type="text"></p>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var picker = new CP(document.querySelector('input'));
+
+    picker.on("change", function(color) {
+        this.source.value = '#' + color;
+    });
+
+    'create,destroy,enter,exit,fit,change,change:h,change:sv,start,start:h,start:sv,drag,drag:h,drag:sv,stop,stop:h,stop:sv'.split(',').forEach(function(e) {
+        picker.on(e, function() {
+            console.log([e, arguments]);
+        });
+    });
+
+    </script>
+  </body>
+</html>
