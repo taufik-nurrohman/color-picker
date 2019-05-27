@@ -7,15 +7,18 @@
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
     .color-view {
-      display:block;
-      width:50%;
-      height:50px;
-      float:left;
-      margin-top:1px;
-      border-color:inherit;
-      cursor:pointer;
+      display: block;
+      border: 1px solid #000;
+      border-top-width: 0;
+      overflow: hidden;
     }
-    .color-view:first-child {clear:both}
+    .color-view span {
+      display: block;
+      float: left;
+      width: 50%;
+      height: 50px;
+      cursor: pointer;
+    }
     </style>
   </head>
   <body>
@@ -25,39 +28,39 @@
     <script>
 
     var picker = new CP(document.querySelector('input')),
-        box_1 = document.createElement('span'),
-        box_2 = document.createElement('span');
+        box = document.createElement('span'),
+        a = document.createElement('span'),
+        b = document.createElement('span');
+
+    box.className = 'color-view';
+    box.appendChild(a);
+    box.appendChild(b);
+    picker.self.appendChild(box);
 
     picker.on("enter", function() {
         var color = '#' + CP._HSV2HEX(this.get());
-        box_1.title = color;
-        box_2.title = color;
-        box_1.style.backgroundColor = color;
-        box_2.style.backgroundColor = color;
+        a.title = color;
+        b.title = color;
+        a.style.backgroundColor = color;
+        b.style.backgroundColor = color;
     });
 
     picker.on("change", function(color) {
-        box_2.title = '#' + color;
-        box_2.style.backgroundColor = '#' + color;
+        b.title = '#' + color;
+        b.style.backgroundColor = '#' + color;
     });
 
-    box_1.className = 'color-view';
-    box_2.className = 'color-view';
-
-    picker.self.firstChild.appendChild(box_1);
-    picker.self.firstChild.appendChild(box_2);
-
     // click to reset
-    box_1.addEventListener("click", function(e) {
+    a.addEventListener("click", function(e) {
         var color = this.title;
         picker.set(color);
-        box_2.title = color;
-        box_2.style.backgroundColor = color;
+        b.title = color;
+        b.style.backgroundColor = color;
         e.stopPropagation();
     }, false);
 
     // click to set
-    box_2.addEventListener("click", function(e) {
+    b.addEventListener("click", function(e) {
         var color = this.title;
         picker.exit();
         picker.source.value = color;

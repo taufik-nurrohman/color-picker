@@ -7,22 +7,24 @@
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
     .color-code {
-      display:block;
-      float:left;
-      width:100%;
-      height:2em;
-      margin:1px 0 0;
-      padding:0 .5em;
-      background:#ffa;
-      border:0;
-      font:normal normal 13px/2em Helmet,FreeSans,Sans-Serif;
-      color:#000;
-      -webkit-box-sizing:border-box;
-      -moz-box-sizing:border-box;
-      box-sizing:border-box;
-      clear:both;
+      display: block;
+      float: left;
+      width: 100%;
+      height: 2em;
+      margin: 0;
+      padding: 0 .5em;
+      background: #ffa;
+      border: 1px solid #000;
+      border-top-width: 0;
+      font: normal normal 13px/2em Helmet, FreeSans, sans-serif;
+      color: #000;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
     }
-    .color-code:invalid {color:#f00}
+    .color-code:invalid {
+      color: #f00;
+    }
     </style>
   </head>
   <body>
@@ -51,7 +53,7 @@
         code.value = '#' + color;
     });
 
-    picker.self.firstChild.appendChild(code);
+    picker.self.appendChild(code);
 
     function update() {
         if (this.value.length) {

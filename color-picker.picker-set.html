@@ -6,16 +6,19 @@
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
-    .color-picker-box {
-      display:block;
-      margin-top:1px;
-      border-color:inherit;
-      float:left;
-      width:10%;
-      height:1.25em;
-      cursor:pointer;
+    .color-pickers {
+      display: block;
+      border: 1px solid #000;
+      border-top-width: 0;
+      overflow: hidden;
     }
-    .color-picker-box:first-child {clear:both}
+    .color-pickers span {
+      display: block;
+      float: left;
+      width: 10%;
+      height: 1.25em;
+      cursor: pointer;
+    }
     </style>
   </head>
   <body>
@@ -31,19 +34,21 @@
         document.body.style.backgroundColor = '#' + color;
     }, 'main-change');
 
-    var colors = ['012', '123', '234', '345', '456', '567', '678', '789', '89a', '9ab'], box;
+    var colors = ['012', '123', '234', '345', '456', '567', '678', '789', '89a', '9ab'],
+        box = document.createElement('span'), c;
+    box.className = 'color-pickers';
+    picker.self.appendChild(box);
 
-    for (var i = 0, len = colors.length; i < len; ++i) {
-        box = document.createElement('span');
-        box.className = 'color-picker-box';
-        box.title = '#' + colors[i];
-        box.style.backgroundColor = '#' + colors[i];
-        box.addEventListener("click", function(e) {
+    for (var i = 0, j = colors.length; i < j; ++i) {
+        c = document.createElement('span');
+        c.title = '#' + colors[i];
+        c.style.backgroundColor = '#' + colors[i];
+        c.addEventListener("click", function(e) {
             picker.set(this.title);
             picker.fire("change", [this.title.slice(1)], 'main-change');
             e.stopPropagation();
         }, false);
-        picker.self.firstChild.appendChild(box);
+        box.appendChild(c);
     }
 
     </script>
