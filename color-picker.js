@@ -1,6 +1,6 @@
 /*!
  * ==========================================================
- *  COLOR PICKER PLUGIN 1.4.1
+ *  COLOR PICKER PLUGIN 1.4.2
  * ==========================================================
  * Author: Taufik Nurrohman <https://github.com/tovic>
  * License: MIT
@@ -166,7 +166,7 @@
     (function($) {
 
         // plugin version
-        $.version = '1.4.1';
+        $.version = '1.4.2';
 
         // collect all instance(s)
         $[instance] = {};
@@ -402,7 +402,7 @@
                     var t = e.target,
                         is_source = t === source || closest(t, source) === source;
                     if (is_source) {
-                        create(), trigger("enter");
+                        !visible() && (create(), trigger("enter"));
                     } else {
                         $.exit();
                     }
@@ -430,8 +430,9 @@
                 SV_point.style.top = (SV_H - (SV_point_H / 2) - (SV_H * +HSV[2])) + 'px';
             };
             $.exit = function(e) {
-                if (visible()) {
-                    visible().removeChild(self);
+                var exist = visible();
+                if (exist) {
+                    exist.removeChild(self);
                     $.visible = false;
                 }
                 off(on_down, H, down_H);
