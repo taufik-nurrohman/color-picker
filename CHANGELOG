@@ -1,10 +1,17 @@
 Change Log
 ==========
 
+v1.4.2
+------
+
+ - Fix #48
+ - Change to CSS flexbox for layout.
+
 v1.4.1
 ------
 
  - Trigger `enter` and `exit` hooks on `enter` and `exit` method call.
+ - Remove the instance parameter in the first function argument of the hook and move the `this` scope in the function body to the current color picker instance.
 
 v1.4.0
 ------
