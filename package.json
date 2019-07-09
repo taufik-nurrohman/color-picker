@@ -4,7 +4,8 @@
   "version": "1.4.2",
   "main": "color-picker.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "opencollective-postinstall || true"
   },
   "repository": {
     "type": "git",
@@ -19,5 +20,12 @@
   "bugs": {
     "url": "https://github.com/tovic/color-picker/issues"
   },
-  "homepage": "https://tovic.github.io/color-picker"
+  "homepage": "https://tovic.github.io/color-picker",
+  "dependencies": {
+    "opencollective-postinstall": "^2.0.2"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/color-picker"
+  }
 }
