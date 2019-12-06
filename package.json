@@ -1,5 +1,5 @@
 {
-  "name": "c-p",
+  "name": "@taufik-nurrohman/color-picker",
   "description": "A simple color picker plugin written in pure JavaScript, for modern browsers.",
   "version": "1.4.2",
   "main": "color-picker.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tovic/color-picker.git"
+    "url": "git+https://github.com/taufik-nurrohman/color-picker.git"
   },
   "keywords": [
     "color",
@@ -18,9 +18,9 @@
   "author": "Taufik Nurrohman",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tovic/color-picker/issues"
+    "url": "https://github.com/taufik-nurrohman/color-picker/issues"
   },
-  "homepage": "https://tovic.github.io/color-picker",
+  "homepage": "https://taufik-nurrohman.github.io/color-picker",
   "dependencies": {
     "opencollective-postinstall": "^2.0.2"
   },
