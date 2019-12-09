@@ -5,7 +5,7 @@ Color Picker
 
 Has support for touch events. Touchy… touchy…
 
-[Demo and Documentation](https://tovic.github.io/color-picker)
+[Demo and Documentation](https://taufik-nurrohman.github.io/color-picker)
 ## Contributors
 
 ### Code Contributors
