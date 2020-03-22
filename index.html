@@ -23,6 +23,7 @@
       <p style="
         margin: 0;
         padding: 3em;
+        font-size: 14px;
       ">
         <input type="text">
       </p>
@@ -59,14 +60,14 @@
     <pre><code>var picker = new CP(<var>source</var>, <var>state</var> = {
         color: 'HEX',
         e: ['touchstart', 'mousedown'],
-        parent: false
+        parent: null
     });</code></pre>
     <ul>
       <li><var>source</var> &rarr; The text input element.</li>
       <li><var>state</var> &rarr; The configuration data.</li>
-      <li><var>state.color</var> &rarr; ...</li>
-      <li><var>state.e</var> &rarr; ...</li>
-      <li><var>state.parent</var> &rarr; ...</li>
+      <li><var>state.color</var> &rarr; Name of the color parser defined in the <code>CP</code> object.</li>
+      <li><var>state.e</var> &rarr; Default events to show the color picker pane.</li>
+      <li><var>state.parent</var> &rarr; Parent element to append the color picker element (default will be appended to the <code>&lt;body&gt;</code> element).</li>
     </ul>
     <h2>Instance</h2>
     <p>All color picker instances will be stored in <code>CP.__instance__</code>. To iterate the instances is possible with <code>CP.each()</code>:</p>
@@ -81,6 +82,10 @@
     <h2>Methods and Properties</h2>
     <h3>CP.version</h3>
     <p>Return the color picker version.</p>
+    <h3>CP.HEX(color | [r, g, b, a])</h3>
+    <p>Hex color converter as the default color parser.</p>
+    <pre><code>console.log(CP.HEX('#ff0')); // &rarr; `[255, 255, 0, 1]`
+console.log(CP.HEX([255, 255, 0, 1])); // &rarr; `'#ffff00'`</code></pre>
     <h3>CP._</h3>
     <p>Return the color picker prototypes.</p>
     <h3>picker.state</h3>
@@ -89,32 +94,33 @@
     <p>Return the <code>&lt;input&gt;</code> element.</p>
     <h3>picker.self</h3>
     <p>Return the color picker element.</p>
-    <p><mark>TODO...</mark></p>
-    <!--
-    <h3>picker.set(name, index, guard = false)</h3>
-    <p>Add a new tag.</p>
-    <pre><code>picker.set('foo'); // Append a `foo` tag
-picker.set('foo', 1); // Insert a `foo` tag exactly at index `1`
-picker.set('foo', null, true); // Insert a `foo` tag and enable alert message</code></pre>
-    <h3>picker.value(tags)</h3>
-    <p>Add multiple tags at once.</p>
-    <pre><code>picker.value('foo, bar, baz'); // Add `foo`, `bar` and `baz`
-picker.value(""); // Remove all tags</code></pre>
-    <h3>picker.get(name)</h3>
-    <p>Check the existence of a tag.</p>
-    <pre><code>if (null !== picker.get('foo')) { &hellip; }</code></pre>
-    <h3>picker.let(name, guard = false)</h3>
-    <p>Remove a tag.</p>
-    <pre><code>picker.let('foo'); // Remove `foo` tag
-picker.let('foo', true); // Remove `foo` tag and enable alert message</code></pre>
-    <h3>picker.blur()</h3>
-    <p>Blur from the content-editable element.</p>
-    <h3>picker.focus()</h3>
-    <p>Focus to the content-editable element.</p>
-    <h3>picker.click()</h3>
-    <p>Click the content-editable element.</p>
+    <h3>picker.visible</h3>
+    <p>Check if color picker pane is visible.</p>
+    <pre><code>if (picker.visible) { &hellip; }</code></pre>
+    <h3>picker.set(r, g, b, a)</h3>
+    <p>Set color picker state based on the given color data.</p>
+    <pre><code>// Set color picker state to yellow, with 50% opacity
+picker.set(255, 255, 0, .5);
+// Set color picker source value to yellow, with 50% opacity
+picker.fire('change', [255, 255, 0, .5]);</code></pre>
+    <h3>picker.get()</h3>
+    <p>Get current color value as RGBA.</p>
+    <pre><code>console.log(picker.get());</code></pre>
+    <h3>picker.color(r, g, b, a)</h3>
+    <p>Call current color parser function that is defined in the <code>state.color</code> value.</p>
+    <h3>picker.enter(to)</h3>
+    <p>Show the color picker pane.</p>
+    <pre><code>picker.enter(); // Enter to the `&lt;body&gt;` element
+picker.enter(document.querySelector('#container')); // Enter to a specific container</code></pre>
+    <h3>picker.exit()</h3>
+    <p>Hide the color picker pane.</p>
+    <pre><code>picker.exit();</code></pre>
+    <h3>picker.fit([x, y])</h3>
+    <p>Set color picker position measured from the window edges.</p>
+    <pre><code>picker.enter();
+picker.fit([30, 30]);</code></pre>
     <h3>picker.pop()</h3>
-    <p>Convert the tag picker element back to its original <code>&lt;input&gt;</code> element.</p>
+    <p>Remove color picker feature from the source element.</p>
     <h2>Hooks</h2>
     <table border="1">
       <thead>
@@ -125,75 +131,107 @@ picker.let('foo', true); // Remove `foo` tag and enable alert message</code></pr
       </thead>
       <tbody>
         <tr>
-          <td><code>blur</code></td>
-          <td>Will be triggered after release focus on the tag editor.</td>
+          <td><code>enter</code></td>
+          <td>Will be triggered when color picker pane is visible.</td>
+        </tr>
+        <tr>
+          <td><code>exit</code></td>
+          <td>Will be triggered when color picker pane is hidden.</td>
+        </tr>
+        <tr>
+          <td><code>fit</code></td>
+          <td>Will be triggered when color picker pane is positioned.</td>
         </tr>
         <tr>
           <td><code>change</code></td>
-          <td>Will be triggered on every time the tags data is updated.</td>
+          <td>Will be triggered on every color change.</td>
         </tr>
         <tr>
-          <td><code>click</code></td>
-          <td>Will be triggered after click on the tag editor.</td>
+          <td><code>change.h</code></td>
+          <td>Will be triggered on every color hue change.</td>
         </tr>
         <tr>
-          <td><code>focus</code></td>
-          <td>Will be triggered after focus on the tag editor.</td>
+          <td><code>change.sv</code></td>
+          <td>Will be triggered on every color saturation and value change.</td>
+        </tr>
+        <tr>
+          <td><code>change.a</code></td>
+          <td>Will be triggered on every color opacity change.</td>
+        </tr>
+        <tr>
+          <td><code>start</code></td>
+          <td>Will be triggered when the color picker control starts dragging.</td>
+        </tr>
+        <tr>
+          <td><code>start.h</code></td>
+          <td>Will be triggered when the color picker hue control starts dragging.</td>
+        </tr>
+        <tr>
+          <td><code>start.sv</code></td>
+          <td>Will be triggered when the color picker saturation and value control starts dragging.</td>
+        </tr>
+        <tr>
+          <td><code>start.a</code></td>
+          <td>Will be triggered when the color picker opacity control starts dragging.</td>
+        </tr>
+        <tr>
+          <td><code>drag</code></td>
+          <td>Will be triggered when the color picker control is dragging.</td>
+        </tr>
+        <tr>
+          <td><code>drag.h</code></td>
+          <td>Will be triggered when the color picker hue control is dragging.</td>
+        </tr>
+        <tr>
+          <td><code>drag.sv</code></td>
+          <td>Will be triggered when the color picker saturation and value control is dragging.</td>
+        </tr>
+        <tr>
+          <td><code>drag.a</code></td>
+          <td>Will be triggered when the color picker opacity control is dragging.</td>
+        </tr>
+        <tr>
+          <td><code>stop</code></td>
+          <td>Will be triggered when the color picker control stops dragging.</td>
+        </tr>
+        <tr>
+          <td><code>stop.h</code></td>
+          <td>Will be triggered when the color picker hue control stops dragging.</td>
+        </tr>
+        <tr>
+          <td><code>start.sv</code></td>
+          <td>Will be triggered when the color picker saturation and value control stops dragging.</td>
+        </tr>
+        <tr>
+          <td><code>start.a</code></td>
+          <td>Will be triggered when the color picker opacity control stops dragging.</td>
         </tr>
         <tr>
           <td><code>pop</code></td>
           <td>Will be triggered after <code>picker.pop()</code>.</td>
         </tr>
-        <tr>
-          <td><code>blur.tag</code></td>
-          <td>Will be triggered after release focus on a tag item.</td>
-        </tr>
-        <tr>
-          <td><code>click.tag</code></td>
-          <td>Will be triggered after click on a tag item.</td>
-        </tr>
-        <tr>
-          <td><code>focus.tag</code></td>
-          <td>Will be triggered after focus on a tag item.</td>
-        </tr>
-        <tr>
-          <td><code>get.tag</code></td>
-          <td>Will be triggered after <code>picker.get('foo')</code>.</td>
-        </tr>
-        <tr>
-          <td><code>let.tag</code></td>
-          <td>Will be triggered after <code>picker.let('foo')</code>.</td>
-        </tr>
-        <tr>
-          <td><code>set.tag</code></td>
-          <td>Will be triggered after <code>picker.set('foo')</code>.</td>
-        </tr>
       </tbody>
     </table>
-    <h3>picker.on(name, fn, id)</h3>
+    <h3>picker.on(name, fn)</h3>
     <p>Add a new hook.</p>
-    <pre><code>picker.on('set.tag', function(name, index) {
-    alert('name: ' + name + ', index: ' + index);
-});
+    <pre><code>picker.on('change', function(r, g, b, a) {
+    console.log(this.color(r, g, b, a));
+});</code></pre>
+    <pre><code>function onChange(r, g, b, a) {
+    console.log(this.color(r, g, b, a));
+}
 
-picker.on('set.tag', function(name, index) {
-    alert('name: ' + name + ', index: ' + index);
-}, 'hook-id'); // With context</code></pre>
-    <h3>picker.off(name, id)</h3>
+picker.on('change', onChange); // With context</code></pre>
+    <h3>picker.off(name, fn)</h3>
     <p>Remove a hook.</p>
-    <pre><code>picker.off('set.tag');
-picker.off('set.tag', 'hook-id'); // With context</code></pre>
-    <h3>picker.fire(name, lot, id)</h3>
+    <pre><code>picker.off('change');</code></pre>
+    <pre><code>picker.off('change', onChange); // With context</code></pre>
+    <h3>picker.fire(name, lot)</h3>
     <p>Trigger hooks.</p>
-    <pre><code>picker.fire('set.tag', ['foo', 0]);
-picker.fire('set.tag', ['foo', 0], 'hook-id'); // With context</code></pre>
-    <h2>Translations</h2>
-    <p>Translation data are stored in the <code>TP.I</code> as object:</p>
-    <pre><code>console.log(TP.I);</code></pre>
-    <p>To print the translation string, use <code>TP.i</code>:</p>
-    <pre><code>TP.I['Hi %s!'] = 'Hai %s!';
+    <pre><code>picker.fire('change', [255, 255, 0, .5]);</code></pre>
 
-alert(TP.i('Hi %s!', ['Taufik Nurrohman']));</code></pre>
+    <p><mark>TODO...</mark></p>
+    <!--
     <h2>Examples</h2>
     <ul>
       <li><a href="tag-picker.html" target="_blank">No Idea?</a></li>
@@ -218,7 +256,10 @@ alert(TP.i('Hi %s!', ['Taufik Nurrohman']));</code></pre>
     -->
     <script src="color-picker.js"></script>
     <script>
-    var picker = new CP(document.querySelector('input'));
+    var picker = new CP(document.querySelector('input'), {
+            parent: document.querySelector('h1 + div p')
+        });
+
     picker.on('change', function(r, g, b, a) {
         this.source.value = this.color(r, g, b, a);
         this.source.parentNode.style.backgroundColor = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';

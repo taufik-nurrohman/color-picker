@@ -11,7 +11,7 @@ Has support for touch events. Touchy… touchy…
 ### Code Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/tovic/color-picker/graphs/contributors"><img src="https://opencollective.com/color-picker/contributors.svg?width=890&button=false" /></a>
+<a href="https://github.com/taufik-nurrohman/color-picker/graphs/contributors"><img src="https://opencollective.com/color-picker/contributors.svg?width=890&button=false" /></a>
 
 ### Financial Contributors
 
@@ -35,4 +35,3 @@ Support this project with your organization. Your logo will show up here with a 
 <a href="https://opencollective.com/color-picker/organization/7/website"><img src="https://opencollective.com/color-picker/organization/7/avatar.svg"></a>
 <a href="https://opencollective.com/color-picker/organization/8/website"><img src="https://opencollective.com/color-picker/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/color-picker/organization/9/website"><img src="https://opencollective.com/color-picker/organization/9/avatar.svg"></a>
->>>>>>> 73789b1469dcaa0ffb8b42c02c37f354b71a9546

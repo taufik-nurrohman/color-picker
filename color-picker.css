@@ -25,7 +25,7 @@
 }
 .color-picker i {
   font: inherit;
-  font-size: 12px; /* measure the color picker control size by measuring the text size */
+  font-size: 12px; /* Measure the color picker control size by measuring the text size */
 }
 .color-picker-a,
 .color-picker-h,
@@ -102,7 +102,7 @@
   z-index: 2;
 }
 .color-picker-a div + div {
-  background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%), linear-gradient(45deg, #eee 25%, #fff 25%, #fff 75%, #eee 75%, #eee 100%);
+  background-image: linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd 100%), linear-gradient(45deg, #ddd 25%, #fff 25%, #fff 75%, #ddd 75%, #ddd 100%);
   background-size: .5em .5em;
   background-position: 0 0, .25em .25em;
   z-index: 1;

@@ -63,30 +63,29 @@
 
     // Convert RGBA to HSVA
     function RGB2HSV(a) {
-        var r = +a[0],
-            g = +a[1],
-            b = +a[2],
+        var r = +a[0] / 255,
+            g = +a[1] / 255,
+            b = +a[2] / 255,
             max = Math.max(r, g, b),
             min = Math.min(r, g, b),
+            h, s, v = max,
             d = max - min,
-            h, s = (max === 0 ? 0 : d / max),
-            v = max / 255;
-        switch (max) {
-            case min:
-                h = 0;
-                break;
-            case r:
-                h = (g - b) + d * (g < b ? 6 : 0);
-                h /= 6 * d;
-                break;
-            case g:
-                h = (b - r) + d * 2;
-                h /= 6 * d;
-                break;
-            case b:
-                h = (r - g) + d * 4;
-                h /= 6 * d;
-                break;
+            s = max === 0 ? 0 : d / max;
+        if (max === min) {
+            h = 0; // Achromatic
+        } else {
+            switch (max) {
+                case r:
+                    h = (g - b) / d + (g < b ? 6 : 0);
+                    break;
+                case g:
+                    h = (b - r) / d + 2;
+                    break;
+                case b:
+                    h = (r - g) / d + 4;
+                    break;
+            }
+            h /= 6;
         }
         return [h, s, v, isSet(a[3]) ? +a[3] : 1];
     }
@@ -141,7 +140,7 @@
     }
 
     function isSet(x) {
-        return 'undefined' !== typeof x;
+        return 'undefined' !== typeof x || null === x;
     }
 
     function isString(x) {
@@ -213,9 +212,9 @@
                 } else if ((5 === i || 9 === i) && '#' === x[0]) {
                     if (/^\s*#([a-z\d]{1,2}){4}\s*$/i.test(x)) {
                         if (5 === i) {
-                            return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), (+(toInt(x[4] + x[4], 16) / 255)).toFixed(3)];
+                            return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), +(toInt(x[4] + x[4], 16) / 255).toFixed(3)];
                         }
-                        return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), (+(toInt(x[7] + x[8], 16) / 255)).toFixed(3)];
+                        return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), +(toInt(x[7] + x[8], 16) / 255).toFixed(3)];
                     }
                 }
                 return [255, 0, 0, 1]; // Default to red
@@ -233,11 +232,11 @@
             $$ = win[NS],
             hooks = {},
             self = doc.createElement('div'),
-            defaults = {
-                color: HEX,
-                e: downEvents,
-                parent: false
-            };
+            state = Object.assign({
+                'color': HEX,
+                'e': downEvents,
+                'parent': null
+            }, o || {});
 
         // Already instantiated, skip!
         if (source[NS]) {
@@ -246,22 +245,20 @@
 
         // Return new instance if `CP` was called without the `new` operator
         if (!($ instanceof $$)) {
-            return new $$(source, o);
+            return new $$(source, state);
         }
 
         // Store color picker instance to `CP.__instance__`
         $$[__instance__][source.id || source.name || Object.keys($$[__instance__]).length] = $;
 
-        // Mark current DOM as active tag picker to prevent duplicate instance
+        // Mark current DOM as active color picker to prevent duplicate instance
         source[NS] = 1;
 
         $.visible = false;
 
-        o = Object.assign(defaults, o || {});
-
         function value() {
             var color = source.getAttribute('data-color') || source.value || source.innerHTML;
-            return color ? $$[isFunction($$[o.color]) ? o.color : HEX](color) : [255, 0, 0, 1]; // Default is red
+            return color ? $$[isFunction($$[state.color]) ? state.color : HEX](color) : [255, 0, 0, 1]; // Default is red
         }
 
         function hookLet(name, fn) {
@@ -345,17 +342,27 @@
             return self.parentNode;
         }
 
+        function doClick(e) {
+            var t = e.target,
+                isSource = source === closestGet(t, source);
+            if (isSource) {
+                !isVisible() && doApply(0, state.parent);
+            } else {
+                doExit();
+            }
+        }
+
         function doApply(isFirst, to) {
 
             // Refresh value
             data = RGB2HSV(color = value());
 
             if (!isFirst) {
-                (to || o.parent || body).appendChild(self), ($.visible = true);
+                (to || state.parent || body).appendChild(self), ($.visible = true);
             }
 
             doEnter = function(to) {
-                return doApply(0, to), $;
+                return doApply(0, to), hookFire('enter'), $;
             };
 
             doExit = function() {
@@ -370,7 +377,7 @@
                 eventsLet(doc, moveEvents, doMove);
                 eventsLet(doc, upEvents, doStop);
                 eventsLet(win, resizeEvents, doFit);
-                return $;
+                return hookFire('exit'), $;
             };
 
             doFit = function(to) {
@@ -395,6 +402,7 @@
                 }
                 styleSet(self, left, selfOffsetLeft + px);
                 styleSet(self, top, selfOffsetTop + px);
+                return hookFire('fit'), $;
             };
 
             var selfSize = sizeGet(self),
@@ -413,22 +421,13 @@
             selfSizeHeight = selfSize[1];
 
             if (isFirst) {
-                function onClick(e) {
-                    var t = e.target,
-                        isSource = source === closestGet(t, source);
-                    if (isSource) {
-                        !isVisible() && doEnter(to);
-                    } else {
-                        doExit();
-                    }
-                }
-                if (false !== o.e) {
-                    eventsSet(source, o.e, onClick);
+                if (false !== state.e) {
+                    eventsSet(source, state.e, doClick);
                 }
                 delay(function() {
-                    hookFire('change:sv', color);
-                    hookFire('change:h', color);
-                    hookFire('change:a', color);
+                    hookFire('change.sv', color);
+                    hookFire('change.h', color);
+                    hookFire('change.a', color);
                     hookFire('change', color);
                 }, 1);
             } else {
@@ -445,18 +444,18 @@
                 color = P2RGB(data);
                 if (SV_Dragging) {
                     cursorSVSet(e);
-                    hookFire((SV_Starting ? 'start' : 'drag') + ':sv', color);
-                    hookFire('change:sv', color);
+                    hookFire((SV_Starting ? 'start' : 'drag') + '.sv', color);
+                    hookFire('change.sv', color);
                 }
                 if (H_Dragging) {
                     cursorHSet(e);
-                    hookFire((H_Starting ? 'start' : 'drag') + ':h', color);
-                    hookFire('change:h', color);
+                    hookFire((H_Starting ? 'start' : 'drag') + '.h', color);
+                    hookFire('change.h', color);
                 }
                 if (A_Dragging) {
                     cursorASet(e);
-                    hookFire((A_Starting ? 'start' : 'drag') + ':a', color);
-                    hookFire('change:a', color);
+                    hookFire((A_Starting ? 'start' : 'drag') + '.a', color);
+                    hookFire('change.a', color);
                 }
                 hookFire((SV_Starting || H_Starting || A_Starting ? 'start' : 'drag'), color);
                 if (SV_Dragging || H_Dragging || A_Dragging) {
@@ -472,14 +471,14 @@
                     isSelf = self === closestGet(t, self);
                 if (!isSource && !isSelf) {
                     // Click outside the source or picker element to exit
-                    if (isVisible() && false !== o.e) {
+                    if (isVisible() && false !== state.e) {
                         doExit();
                     }
                 } else {
                     if (isSelf) {
-                        SV_Dragging && hookFire('stop:sv', color);
-                        H_Dragging && hookFire('stop:h', color);
-                        A_Dragging && hookFire('stop:a', color);
+                        SV_Dragging && hookFire('stop.sv', color);
+                        H_Dragging && hookFire('stop.h', color);
+                        A_Dragging && hookFire('stop.a', color);
                         if (SV_Dragging || H_Dragging || A_Dragging) {
                             hookFire('stop', color);
                         }
@@ -513,8 +512,13 @@
                 isSet(x[3]) && styleSet(A_Cursor, top, (A_SizeHeight - (A_CursorSizeHeight / 2) - (A_SizeHeight * +x[3])) + px);
             }
 
+            $.get = function() {
+                return value();
+            };
+
             $.set = function(r, g, b, a) {
-                return cursorSet(RGB2HSV([r, g, b, a])), $;
+                data = RGB2HSV([r, g, b, a]);
+                return colorSet(), $;
             };
 
             function cursorSVSet(e) {
@@ -547,8 +551,9 @@
         } doApply(1);
 
         $.color = function(r, g, b, a) {
-            return $$[isFunction($$[o.color]) ? o.color : HEX]([r, g, b, a]);
+            return $$[isFunction($$[state.color]) ? state.color : HEX]([r, g, b, a]);
         };
+
         $.enter = doEnter;
         $.exit = doExit;
         $.fire = hookFire;
@@ -556,9 +561,21 @@
         $.hooks = hooks;
         $.off = hookLet;
         $.on = hookSet;
+
+        $.pop = function() {
+            if (!source[NS]) {
+                return $; // Already ejected
+            }
+            delete source[NS];
+            if (false !== state.e) {
+                eventsLet(source, state.e, doClick);
+            }
+            return doExit(), hookFire('pop');
+        };
+
         $.self = self;
         $.source = source;
-        $.state = o;
+        $.state = state;
 
     });
 
