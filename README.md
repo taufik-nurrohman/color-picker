@@ -5,7 +5,7 @@ Color Picker
 
 Has support for touch events. Touchy… touchy…
 
-[Demo and Documentation](https://tovic.github.io/color-picker)
+[Demo and Documentation](https://taufik-nurrohman.github.io/color-picker)
 ## Contributors
 
 ### Code Contributors
@@ -35,3 +35,4 @@ Support this project with your organization. Your logo will show up here with a 
 <a href="https://opencollective.com/color-picker/organization/7/website"><img src="https://opencollective.com/color-picker/organization/7/avatar.svg"></a>
 <a href="https://opencollective.com/color-picker/organization/8/website"><img src="https://opencollective.com/color-picker/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/color-picker/organization/9/website"><img src="https://opencollective.com/color-picker/organization/9/avatar.svg"></a>
+>>>>>>> 73789b1469dcaa0ffb8b42c02c37f354b71a9546
