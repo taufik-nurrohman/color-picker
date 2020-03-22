@@ -13,8 +13,8 @@
 
     var picker = new CP(document.querySelector('input'));
 
-    picker.on("change", function(color) {
-        this.source.value = '#' + color;
+    picker.on('change', function(r, g, b, a) {
+        this.source.value = this.color(r, g, b, a);
     });
 
     </script>

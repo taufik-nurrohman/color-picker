@@ -4,209 +4,225 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Color Picker</title>
-    <link href="favicon.ico" rel="shortcut icon">
-
-    <link href="index.min.css" rel="stylesheet">
-    <link href="color-picker.min.css" rel="stylesheet">
-    <style>
-    .color-picker.static {
-      display: inline-block !important;
-      position: static !important;
-      top: 0 !important;
-      left: 0 !important;
-    }
-    </style>
-
+    <link href="favicon.ico" rel="icon">
+    <link href="color-picker.css" rel="stylesheet">
   </head>
-  <body style="padding-top:3em;">
-
-    <p style="background:black;color:white;position:absolute;top:0;right:0;left:0;height:3em;line-height:3em;margin:0;padding:0 1em;">Like this project? Please support my <a href="https://github.com/mecha-cms">Mecha CMS</a> project too. Thank you!</p>
-
-    <header>
-      <h1>Color Picker</h1>
-      <p>A simple color picker plugin written in pure JavaScript, for modern browsers, with touch events support.</p>
-      <p><a class="button" href="https://github.com/tovic/color-picker/archive/master.zip"><i class="fa fa-cloud-download"></i> Download</a> <a class="button" href="#section:extend"><i class="fa fa-code"></i> Examples</a></p>
-      <section id="color-picker"></section>
-    </header>
-
-    <section>
-      <h2 id="section:start">Start</h2>
-      <pre><code>&lt;!DOCTYPE html&gt;
+  <body>
+    <p style="
+      background: #ffa;
+      border: 1px dashed;
+      margin-top: 0;
+      padding: .75em 1em;
+    ">Like this project? Please support my <a href="https://github.com/mecha-cms">Mecha CMS</a> project too. Thank you!</p>
+    <h1>Color Picker</h1>
+    <div style="
+      background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%), linear-gradient(45deg, #eee 25%, #fff 25%, #fff 75%, #eee 75%, #eee 100%);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+    ">
+      <p style="
+        margin: 0;
+        padding: 3em;
+      ">
+        <input type="text">
+      </p>
+    </div>
+    <h2>Features</h2>
+    <ul>
+      <li>Light-weight library. No dependencies. <strong>Color Picker</strong> uses plain JavaScript language.</li>
+      <li>Simple <abbr title="Application Programming Interface">API</abbr>. Easy to learn.</li>
+      <li>Blah blah blah. <mark>TODO</mark></li>
+    </ul>
+    <h2>Start</h2>
+    <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html dir="ltr"&gt;
   &lt;head&gt;
     &lt;meta charset="utf-8"&gt;
-    &lt;title&gt;Color Picker&lt;/title&gt;
-    &lt;link href="color-picker.min.css" rel="stylesheet"&gt;
+    &lt;link href="<a href="color-picker.min.css" target="_blank">color-picker.min.css</a>" rel="stylesheet"&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;p&gt;&lt;input type="text"&gt;&lt;/p&gt;
-    &lt;script src="color-picker.min.js"&gt;&lt;/script&gt;
+    &lt;script src="<a href="color-picker.min.js" target="_blank">color-picker.min.js</a>"&gt;&lt;/script&gt;
     &lt;script&gt;
-    var picker = new CP(document.querySelector('input[type="text"]'));
-    picker.on("change", function(color) {
-        this.source.value = '#' + color;
+    var picker = new CP(document.querySelector('input'));
+    picker.on('change', function(r, g, b, a) {
+        if (1 === a) {
+            this.source.value = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+        } else {
+            this.source.value = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+        }
     });
     &lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-      <h2 id="section:configure">Configure</h2>
-      <h3>Instance</h3>
-      <pre><code>new CP(<var>source</var>, <var>events</var>, <var>bounds</var>);</code></pre>
-      <ul>
-        <li><var>source</var> &rarr; The source element.</li>
-        <li><var>events</var> &rarr; How to show the color picker? By click? By hover?</li>
-      </ul>
-      <pre><code>var source = document.querySelector('input[type="color"]');
-
-// show color picker by click (default)
-var picker = new CP(source);
-
-// show color picker by hover
-var picker = new CP(source, "mouseover");
-
-// disable color picker by default
-// to enable it, try `picker.enter()`
-var picker = new CP(source, false);</code></pre>
-      <h2 id="section:method">Methods</h2>
-      <h3 id="section:data-hook">Hooks</h3>
-      <p>The available hooks:</p>
-      <ul>
-        <li><code>create</code></li>
-        <li><code>destroy</code></li>
-        <li><code>enter</code></li>
-        <li><code>exit</code></li>
-        <li><code>fit</code></li>
-        <li><code>change</code></li>
-        <li><code>change:h</code></li>
-        <li><code>change:sv</code></li>
-        <li><code>start</code></li>
-        <li><code>start:h</code></li>
-        <li><code>start:sv</code></li>
-        <li><code>drag</code></li>
-        <li><code>drag:h</code></li>
-        <li><code>drag:sv</code></li>
-        <li><code>stop</code></li>
-        <li><code>stop:h</code></li>
-        <li><code>stop:sv</code></li>
-      </ul>
-      <h3 id="section:method-on">Add a Hook</h3>
-      <p>Add a <code>change</code> hook:</p>
-      <pre><code>picker.on("change", function(color) {
-    console.log(color);
+    <h2>Configure</h2>
+    <pre><code>var picker = new CP(<var>source</var>, <var>state</var> = {
+        color: 'HEX',
+        e: ['touchstart', 'mousedown'],
+        parent: false
+    });</code></pre>
+    <ul>
+      <li><var>source</var> &rarr; The text input element.</li>
+      <li><var>state</var> &rarr; The configuration data.</li>
+      <li><var>state.color</var> &rarr; ...</li>
+      <li><var>state.e</var> &rarr; ...</li>
+      <li><var>state.parent</var> &rarr; ...</li>
+    </ul>
+    <h2>Instance</h2>
+    <p>All color picker instances will be stored in <code>CP.__instance__</code>. To iterate the instances is possible with <code>CP.each()</code>:</p>
+    <pre><code>CP.each(function(key) {
+    console.log(key);
+    console.log(this.source);
 });</code></pre>
-      <p>Add a <code>change</code> hook with ID of <code>test-id</code>:</p>
-      <pre><code>picker.on("change", function(color) {
-    console.log(color);
-}, 'test-id');</code></pre>
-      <h3 id="section:method-off">Remove a Hook</h3>
-      <p>Remove all <code>change</code> hooks:</p>
-      <pre><code>picker.off("change");</code></pre>
-      <p>Remove a <code>change</code> hook with ID of <code>test-id</code>:</p>
-      <pre><code>picker.off("change", 'test-id');</code></pre>
-      <h3 id="section:method-fire">Trigger a Hook with Custom Value</h3>
-      <p>Trigger all <code>change</code> hooks with pre-defined color value as <code>ffa500</code>:</p>
-      <pre><code>picker.fire("change", ['ffa500']);</code></pre>
-      <p>Trigger a <code>change</code> hook with ID of <code>test-id</code> and with pre-defined color value as <code>ffa500</code>:</p>
-      <pre><code>picker.fire("change", ['ffa500'], 'test-id');</code></pre>
-      <h2 id="section:data">Data</h2>
-      <h3 id="section:data-source">Get the Source Element</h3>
-      <pre><code>var source = picker.source;</code></pre>
-      <h3 id="section:data-self">Get the Picker Element</h3>
-      <pre><code>var picker = picker.self;</code></pre>
-      <h3 id="section:data-set">Get/Set Color Picker Data</h3>
-      <p>Get hidden color data in the source element:</p>
-      <pre><code>console.log(picker.get('&lt;alternate color&gt;'));</code></pre>
-      <p>Set hidden color data to the source element:</p>
-      <pre><code>picker.set([0, 1, 1]); // HSV color value, range from `0` to `1` for each</code></pre>
-      <pre><code>picker.set('rgb(255, 0, 0)'); // as color string</code></pre>
-      <h2 id="section:converter">Color Converter</h2>
-      <h3 id="section:converter-hsv2rgb">HSV to RGB</h3>
-      <pre><code>console.log(CP.HSV2RGB([360, 100, 100]));</code></pre>
-      <h3 id="section:converter-hsv2hex">HSV to HEX</h3>
-      <pre><code>console.log(CP.HSV2HEX([360, 100, 100]));</code></pre>
-      <h3 id="section:converter-rgb2hsv">RGB to HSV</h3>
-      <pre><code>console.log(CP.RGB2HSV([255, 255, 255]));</code></pre>
-      <h3 id="section:converter-rgb2hex">RGB to HEX</h3>
-      <pre><code>console.log(CP.RGB2HEX([255, 255, 255]));</code></pre>
-      <h3 id="section:converter-hex2hsv">HEX to HSV</h3>
-      <pre><code>console.log(CP.HEX2HSV('ffffff'));</code></pre>
-      <h3 id="section:converter-hex2rgb">HEX to RGB</h3>
-      <pre><code>console.log(CP.HEX2RGB('ffffff'));</code></pre>
-      <h3 id="section-converter-parse">Parse to Raw HSV Color Data</h3>
-      <p>All valid color string input will be converted into array of hue, saturation and value, with a range from <code>0</code> to <code>1</code>:</p>
-      <pre><code>console.log(CP.parse('#ffffff'));
-console.log(CP.parse('rgb(255, 255, 255)'));
-console.log(CP.parse('hsv(140, 20%, 60%)'));
-console.log(CP.parse([0, 1, 1])); // no changes</code></pre>
-      <h2 id="section:state">State</h2>
-      <h3 id="section:method-enter">Show</h3>
-      <pre><code>picker.enter(); // show the color picker</code></pre>
-      <h3 id="section:method-exit">Hide</h3>
-      <pre><code>picker.exit(); // hide the color picker</code></pre>
-      <h3 id="section:method-fit">Fit</h3>
-      <pre><code>picker.fit(); // fit to the visible area in window</code></pre>
-      <pre><code>picker.fit([10, 20]); // set `x` offset to `10` and `y` offset to `20`</code></pre>
-      <h3 id="section:data-visible">Visible</h3>
-      <pre><code>if (picker.visible) { &hellip; } // color picker is visible</code></pre>
-      <h2 id="section:extend">Extend</h2>
-      <p>All color picker instances are stored in <code>CP.__instance__</code>.</p>
-      <p>Show all instances:</p>
-      <pre><code>console.log(CP.__instance__);</code></pre>
-      <p>Do something with instances:</p>
-      <pre><code>CP.each(function(key, any) {
-    // `this` refers to the color picker instance
-    this.enter(); // this will show all of the color picker panel
-});</code></pre>
-      <h3 id="section:feature">Want to Add More Features?</h3>
-      <p>My purpose in making this plugin is to provide a JavaScript color picker solution as simple as possible with the most minimal features without requiring any dependency on JavaScript library such as jQuery or Prototype.</p>
-      <p>If you want to add new features, you can use the available hooks to make your own improvements without having to touch the plugin core. Here are some examples:</p>
-      <ul>
-        <li><a href="color-picker.html" target="_blank">No Idea?</a></li>
-        <li><a href="color-picker.picker.html" target="_blank">Multiple Instances</a></li>
-        <li><a href="color-picker.set.html" target="_blank">Pre-Defined Value</a></li>
-        <li><a href="color-picker.picker-set.html" target="_blank">Pre-Defined Color</a></li>
-        <li><a href="color-picker.update.html" target="_blank">Update Color Picker State on Value Changes</a></li>
-        <li><a href="color-picker.value.html" target="_blank">Convert HEX Color Value</a></li>
-        <li><a href="color-picker.color-hsl.html" target="_blank">Add Support for HSL Color Value</a></li>
-        <li><a href="color-picker.color-rgba.html" target="_blank">Transparency</a></li>
-        <li><a href="color-picker.state.html" target="_blank">Show and Hide with Buttons</a></li>
-        <li><a href="color-picker.trigger.html" target="_blank">Show and Hide with Double Click</a></li>
-        <li><a href="color-picker.close.html" target="_blank">Add Close Button</a></li>
-        <li><a href="color-picker.static.html" target="_blank">Static Color Picker</a></li>
-        <li><a href="color-picker.replace.html" target="_blank">Replace Text Input with Hidden Input</a></li>
-        <li><a href="color-picker.input-color.html" target="_blank">HTML5 Color Input</a></li>
-        <li><a href="color-picker.create-destroy.html" target="_blank">Create and Destroy Method</a></li>
-        <li><a href="color-picker.fit.html" target="_blank">Auto-Positioned to the Reachable Area in the Document</a></li>
-        <li><a href="color-picker.picker-view.html" target="_blank">Color Preview in Color Picker</a></li>
-        <li><a href="color-picker.picker-view-code.html" target="_blank">Color Code to Copy in Color Picker</a></li>
-        <li><a href="color-picker.scroll.html" target="_blank">Scroll Follow</a></li>
-        <li><a href="color-picker.size.html" target="_blank">Custom Color Picker Size</a></li>
-        <li><a href="color-picker.vue.html" target="_blank">Vue.js Integration (TODO)</a></li>
-      </ul>
-      <h2 id="section:support">Support</h2>
-      <p>Your small donation will keep this project going and allow me to do any further development.</p>
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-        <input name="cmd" value="_s-xclick" type="hidden">
-        <input name="hosted_button_id" value="TNVGH7NQ7E4EU" type="hidden">
-        <p><button type="submit" class="button"><i class="fa fa-paypal"></i> Donate</button></p>
-      </form>
-    </section>
+    <ul>
+      <li><var>this</var> &rarr; Refers to the color picker instance.</li>
+      <li><var>key</var> &rarr; Refers to the color picker target&rsquo;s <code>id</code> or <code>name</code> attribute value, or its current order.</li>
+    </ul>
+    <h2>Methods and Properties</h2>
+    <h3>CP.version</h3>
+    <p>Return the color picker version.</p>
+    <h3>CP._</h3>
+    <p>Return the color picker prototypes.</p>
+    <h3>picker.state</h3>
+    <p>Return the color picker states.</p>
+    <h3>picker.source</h3>
+    <p>Return the <code>&lt;input&gt;</code> element.</p>
+    <h3>picker.self</h3>
+    <p>Return the color picker element.</p>
+    <p><mark>TODO...</mark></p>
+    <!--
+    <h3>picker.set(name, index, guard = false)</h3>
+    <p>Add a new tag.</p>
+    <pre><code>picker.set('foo'); // Append a `foo` tag
+picker.set('foo', 1); // Insert a `foo` tag exactly at index `1`
+picker.set('foo', null, true); // Insert a `foo` tag and enable alert message</code></pre>
+    <h3>picker.value(tags)</h3>
+    <p>Add multiple tags at once.</p>
+    <pre><code>picker.value('foo, bar, baz'); // Add `foo`, `bar` and `baz`
+picker.value(""); // Remove all tags</code></pre>
+    <h3>picker.get(name)</h3>
+    <p>Check the existence of a tag.</p>
+    <pre><code>if (null !== picker.get('foo')) { &hellip; }</code></pre>
+    <h3>picker.let(name, guard = false)</h3>
+    <p>Remove a tag.</p>
+    <pre><code>picker.let('foo'); // Remove `foo` tag
+picker.let('foo', true); // Remove `foo` tag and enable alert message</code></pre>
+    <h3>picker.blur()</h3>
+    <p>Blur from the content-editable element.</p>
+    <h3>picker.focus()</h3>
+    <p>Focus to the content-editable element.</p>
+    <h3>picker.click()</h3>
+    <p>Click the content-editable element.</p>
+    <h3>picker.pop()</h3>
+    <p>Convert the tag picker element back to its original <code>&lt;input&gt;</code> element.</p>
+    <h2>Hooks</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>blur</code></td>
+          <td>Will be triggered after release focus on the tag editor.</td>
+        </tr>
+        <tr>
+          <td><code>change</code></td>
+          <td>Will be triggered on every time the tags data is updated.</td>
+        </tr>
+        <tr>
+          <td><code>click</code></td>
+          <td>Will be triggered after click on the tag editor.</td>
+        </tr>
+        <tr>
+          <td><code>focus</code></td>
+          <td>Will be triggered after focus on the tag editor.</td>
+        </tr>
+        <tr>
+          <td><code>pop</code></td>
+          <td>Will be triggered after <code>picker.pop()</code>.</td>
+        </tr>
+        <tr>
+          <td><code>blur.tag</code></td>
+          <td>Will be triggered after release focus on a tag item.</td>
+        </tr>
+        <tr>
+          <td><code>click.tag</code></td>
+          <td>Will be triggered after click on a tag item.</td>
+        </tr>
+        <tr>
+          <td><code>focus.tag</code></td>
+          <td>Will be triggered after focus on a tag item.</td>
+        </tr>
+        <tr>
+          <td><code>get.tag</code></td>
+          <td>Will be triggered after <code>picker.get('foo')</code>.</td>
+        </tr>
+        <tr>
+          <td><code>let.tag</code></td>
+          <td>Will be triggered after <code>picker.let('foo')</code>.</td>
+        </tr>
+        <tr>
+          <td><code>set.tag</code></td>
+          <td>Will be triggered after <code>picker.set('foo')</code>.</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>picker.on(name, fn, id)</h3>
+    <p>Add a new hook.</p>
+    <pre><code>picker.on('set.tag', function(name, index) {
+    alert('name: ' + name + ', index: ' + index);
+});
 
-    <footer>
-      <span class="left">&copy; 2016 &middot; Made with <i class="fa fa-fw fa-ambulance" onmouseover="this.className='fa fa-fw fa-heart';" ontouchstart="this.className='fa fa-fw fa-heart';"></i> by <a href="">Taufik Nurrohman</a></span>
-      <span class="right"><a href="https://github.com/tovic/color-picker"><i class="fa fa-github"></i> GitHub</a></span>
-    </footer>
+picker.on('set.tag', function(name, index) {
+    alert('name: ' + name + ', index: ' + index);
+}, 'hook-id'); // With context</code></pre>
+    <h3>picker.off(name, id)</h3>
+    <p>Remove a hook.</p>
+    <pre><code>picker.off('set.tag');
+picker.off('set.tag', 'hook-id'); // With context</code></pre>
+    <h3>picker.fire(name, lot, id)</h3>
+    <p>Trigger hooks.</p>
+    <pre><code>picker.fire('set.tag', ['foo', 0]);
+picker.fire('set.tag', ['foo', 0], 'hook-id'); // With context</code></pre>
+    <h2>Translations</h2>
+    <p>Translation data are stored in the <code>TP.I</code> as object:</p>
+    <pre><code>console.log(TP.I);</code></pre>
+    <p>To print the translation string, use <code>TP.i</code>:</p>
+    <pre><code>TP.I['Hi %s!'] = 'Hai %s!';
 
-    <script src="color-picker.min.js"></script>
+alert(TP.i('Hi %s!', ['Taufik Nurrohman']));</code></pre>
+    <h2>Examples</h2>
+    <ul>
+      <li><a href="tag-picker.html" target="_blank">No Idea?</a></li>
+      <li><a href="tag-picker.value.html" target="_blank">Set Pre-Defined Value</a></li>
+      <li><a href="tag-picker.placeholder.html" target="_blank">Set Placeholder</a></li>
+      <li><a href="tag-picker.focus.html" target="_blank">Focus State</a></li>
+      <li><a href="tag-picker.focus.placeholder.html" target="_blank">Hide Placeholder on Focus</a></li>
+      <li><a href="tag-picker.disabled.html" target="_blank">Disabled Input</a></li>
+      <li><a href="tag-picker.read-only.html" target="_blank">Read-Only Input</a></li>
+      <li><a href="tag-picker.min.html" target="_blank">Limit Minimum Tags</a></li>
+      <li><a href="tag-picker.max.html" target="_blank">Limit Maximum Tags</a></li>
+      <li><a href="tag-picker.x.html" target="_blank">Enable &ldquo;Remove&rdquo; Button</a></li>
+      <li><a href="tag-picker.paste.html" target="_blank">Paste Event</a></li>
+      <li><a href="tag-picker.alert.html" target="_blank">Default Alert</a></li>
+      <li><a href="tag-picker.alert.false.html" target="_blank">No Alert</a></li>
+      <li><a href="tag-picker.alert.function.html" target="_blank">Custom Alert</a></li>
+      <li><a href="tag-picker.escape.html" target="_blank">Disable Characters with <code>picker.state.escape</code></a></li>
+      <li><a href="tag-picker.f.html" target="_blank">Filter Characters with <code>picker.f</code></a></li>
+      <li><a href="tag-picker.i.html" target="_blank">Translations</a></li>
+      <li><a href="tag-picker.directory.html" target="_blank">Directory (Experiment)</a></li>
+    </ul>
+    -->
+    <script src="color-picker.js"></script>
     <script>
-    var container = document.querySelector('#color-picker'),
-        picker = new CP(container, false, container);
-    picker.self.classList.add('static');
-    picker.enter();
-    picker.on("change", function(color) {
-        container.parentNode.style.backgroundColor = '#' + color;
+    var picker = new CP(document.querySelector('input'));
+    picker.on('change', function(r, g, b, a) {
+        this.source.value = this.color(r, g, b, a);
+        this.source.parentNode.style.backgroundColor = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
     });
     </script>
-
   </body>
 </html>

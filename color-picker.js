@@ -1,50 +1,98 @@
 /*!
- * ==========================================================
- *  COLOR PICKER PLUGIN 1.4.2
- * ==========================================================
- * Author: Taufik Nurrohman <https://github.com/tovic>
+ * ==============================================================
+ *  COLOR PICKER PLUGIN 2.0.0
+ * ==============================================================
+ * Author: Taufik Nurrohman <https://github.com/taufik-nurrohman>
  * License: MIT
- * ----------------------------------------------------------
+ * --------------------------------------------------------------
  */
 
 (function(win, doc, NS) {
 
-    var instance = '__instance__',
-        first = 'firstChild',
-        delay = setTimeout;
+    var body = doc.body,
+        html = doc.documentElement,
+        HEX = 'HEX',
+        children = 'children',
+        top = 'top',
+        right = 'right',
+        left = 'left',
+        px = 'px',
+        delay = win.setTimeout,
 
-    function is_set(x) {
-        return typeof x !== "undefined";
+        downEvents = ['touchstart', 'mousedown'],
+        moveEvents = ['touchmove', 'mousemove'],
+        resizeEvents = ['orientationchange', 'resize'],
+        upEvents = ['touchend', 'mouseup'],
+
+        __instance__ = '__instance__';
+
+    function axixGet(el, e) {
+        var touches = 'touches',
+            clientX = 'clientX',
+            clientY = 'clientY',
+            x = !!e[touches] ? e[touches][0][clientX] : e[clientX],
+            y = !!e[touches] ? e[touches][0][clientY] : e[clientY],
+            offset = offsetGet(el);
+        return [x - offset[0], y - offset[1]];
     }
 
-    function is_string(x) {
-        return typeof x === "string";
-    }
-
-    function is_object(x) {
-        return typeof x === "object";
-    }
-
-    function object_length(x) {
-        return Object.keys(x).length;
-    }
-
-    function edge(a, b, c) {
-        if (a < b) return b;
-        if (a > c) return c;
+    function closestGet(a, b) {
+        if (a === b) {
+            return a;
+        }
+        while ((a = a.parentElement) && a !== b);
         return a;
     }
 
-    function num(i, j) {
-        return parseInt(i, j || 10);
+    function offsetGet(el) {
+        var x, y, rect;
+        if (el === win) {
+            x = win.pageXOffset || html.scrollLeft;
+            y = win.pageYOffset || html.scrollTop;
+        } else {
+            rect = el.getBoundingClientRect();
+            x = rect.left;
+            y = rect.top;
+        }
+        return [x, y];
     }
 
-    function round(i) {
-        return Math.round(i);
+    function sizeGet(el) {
+        return el === win ? [win.innerWidth, win.innerHeight] : [el.offsetWidth, el.offsetHeight];
     }
 
-    // [h, s, v] ... 0 <= h, s, v <= 1
-    function HSV2RGB(a) {
+    // Convert RGBA to HSVA
+    function RGB2HSV(a) {
+        var r = +a[0],
+            g = +a[1],
+            b = +a[2],
+            max = Math.max(r, g, b),
+            min = Math.min(r, g, b),
+            d = max - min,
+            h, s = (max === 0 ? 0 : d / max),
+            v = max / 255;
+        switch (max) {
+            case min:
+                h = 0;
+                break;
+            case r:
+                h = (g - b) + d * (g < b ? 6 : 0);
+                h /= 6 * d;
+                break;
+            case g:
+                h = (b - r) + d * 2;
+                h /= 6 * d;
+                break;
+            case b:
+                h = (r - g) + d * 4;
+                h /= 6 * d;
+                break;
+        }
+        return [h, s, v, isSet(a[3]) ? +a[3] : 1];
+    }
+
+    // Convert cursor position to RGBA
+    function P2RGB(a) {
         var h = +a[0],
             s = +a[1],
             v = +a[2],
@@ -77,525 +125,441 @@
                 r = v, g = p, b = q;
                 break;
         }
-        return [round(r * 255), round(g * 255), round(b * 255)];
+        return [toRound(r * 255), toRound(g * 255), toRound(b * 255), (isSet(a[3]) ? +a[3] : 1).toFixed(3)];
     }
 
-    function HSV2HEX(a) {
-        return RGB2HEX(HSV2RGB(a));
+    function doPreventDefault(e) {
+        e && e.preventDefault();
     }
 
-    // [r, g, b] ... 0 <= r, g, b <= 255
-    function RGB2HSV(a) {
-        var r = +a[0],
-            g = +a[1],
-            b = +a[2],
-            max = Math.max(r, g, b),
-            min = Math.min(r, g, b),
-            d = max - min,
-            h, s = (max === 0 ? 0 : d / max),
-            v = max / 255;
-        switch (max) {
-            case min:
-                h = 0;
-                break;
-            case r:
-                h = (g - b) + d * (g < b ? 6 : 0);
-                h /= 6 * d;
-                break;
-            case g:
-                h = (b - r) + d * 2;
-                h /= 6 * d;
-                break;
-            case b:
-                h = (r - g) + d * 4;
-                h /= 6 * d;
-                break;
+    function isFunction(x) {
+        return 'function' === typeof x;
+    }
+
+    function isObject(x) {
+        return 'object' === typeof x;
+    }
+
+    function isSet(x) {
+        return 'undefined' !== typeof x;
+    }
+
+    function isString(x) {
+        return 'string' === typeof x;
+    }
+
+    function toEdge(a, b) {
+        if (a < b[0]) return b[0];
+        if (a > b[1]) return b[1];
+        return a;
+    }
+
+    function toInt(a, b) {
+        return parseInt(a, b || 10);
+    }
+
+    function toRound(a) {
+        return Math.round(a);
+    }
+
+    function toString(a, b) {
+        return a.toString(b);
+    }
+
+    function eventsLet(to, events, fn) {
+        for (var i = 0, j = events.length; i < j; ++i) {
+            to.removeEventListener(events[i], fn, false);
         }
-        return [h, s, v];
     }
 
-    function RGB2HEX(a) {
-        var s = +a[2] | (+a[1] << 8) | (+a[0] << 16);
-        s = '000000' + s.toString(16);
-        return s.slice(-6);
-    }
-
-    // rrggbb or rgb
-    function HEX2HSV(s) {
-        return RGB2HSV(HEX2RGB(s));
-    }
-
-    function HEX2RGB(s) {
-        if (s.length === 3) {
-            s = s.replace(/./g, '$&$&');
+    function eventsSet(to, events, fn) {
+        for (var i = 0, j = events.length; i < j; ++i) {
+            to.addEventListener(events[i], fn, false);
         }
-        return [num(s[0] + s[1], 16), num(s[2] + s[3], 16), num(s[4] + s[5], 16)];
     }
 
-    // convert range from `0` to `360` and `0` to `100` in color into range from `0` to `1`
-    function _2HSV_pri(a) {
-        return [+a[0] / 360, +a[1] / 100, +a[2] / 100];
+    function styleSet(to, prop, value) {
+        to.style[prop] = value;
     }
 
-    // convert range from `0` to `1` into `0` to `360` and `0` to `100` in color
-    function _2HSV_pub(a) {
-        return [round(+a[0] * 360), round(+a[1] * 100), round(+a[2] * 100)];
-    }
+    (function($$) {
 
-    // convert range from `0` to `255` in color into range from `0` to `1`
-    function _2RGB_pri(a) {
-        return [+a[0] / 255, +a[1] / 255, +a[2] / 255];
-    }
+        $$.version = '2.0.0';
 
-    // *
-    function parse(x) {
-        if (is_object(x)) return x;
-        var rgb = /\s*rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)\s*$/i.exec(x),
-            hsv = /\s*hsv\s*\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*\)\s*$/i.exec(x),
-            hex = x[0] === '#' && x.match(/^#([\da-f]{3}|[\da-f]{6})$/i);
-        if (hex) {
-            return HEX2HSV(x.slice(1));
-        } else if (hsv) {
-            return _2HSV_pri([+hsv[1], +hsv[2], +hsv[3]]);
-        } else if (rgb) {
-            return RGB2HSV([+rgb[1], +rgb[2], +rgb[3]]);
-        }
-        return [0, 1, 1]; // default is red
-    }
+        // Collect all instance(s)
+        $$[__instance__] = {};
 
-    (function($) {
-
-        // plugin version
-        $.version = '1.4.2';
-
-        // collect all instance(s)
-        $[instance] = {};
-
-        // plug to all instance(s)
-        $.each = function(fn, t) {
+        // Apply to all instance(s)
+        $$.each = function(fn, t) {
+            var i, j;
             return delay(function() {
-                var ins = $[instance], i;
-                for (i in ins) {
-                    fn.call(ins[i], i, ins);
+                j = $$[__instance__];
+                for (i in j) {
+                    fn.call(j[i], i);
                 }
-            }, t === 0 ? 0 : (t || 1)), $;
+            }, 0 === t ? 0 : (t || 1)), $$;
         };
 
-        // static method(s)
-        $.parse = parse;
-        $._HSV2RGB = HSV2RGB;
-        $._HSV2HEX = HSV2HEX;
-        $._RGB2HSV = RGB2HSV;
-        $._HEX2HSV = HEX2HSV;
-        $._HEX2RGB = function(a) {
-            return _2RGB_pri(HEX2RGB(a));
+        $$[HEX] = function(x) {
+            if (isString(x)) {
+                var i = x.length;
+                if ((4 === i || 7 === i) && '#' === x[0]) {
+                    if (/^\s*#([a-z\d]{1,2}){3}\s*$/i.test(x)) {
+                        if (4 === i) {
+                            return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), 1];
+                        }
+                        return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), 1];
+                    }
+                } else if ((5 === i || 9 === i) && '#' === x[0]) {
+                    if (/^\s*#([a-z\d]{1,2}){4}\s*$/i.test(x)) {
+                        if (5 === i) {
+                            return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), (+(toInt(x[4] + x[4], 16) / 255)).toFixed(3)];
+                        }
+                        return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), (+(toInt(x[7] + x[8], 16) / 255)).toFixed(3)];
+                    }
+                }
+                return [255, 0, 0, 1]; // Default to red
+            }
+            return '#' + ('000000' + toString(+x[2] | (+x[1] << 8) | (+x[0] << 16), 16)).slice(-6) + (isSet(x[3]) && x[3] < 1 ? toString(toRound(x[3] * 255) + 0x10000, 16).substr(-2) : "");
         };
-        $.HSV2RGB = function(a) {
-            return HSV2RGB(_2HSV_pri(a));
-        };
-        $.HSV2HEX = function(a) {
-            return HSV2HEX(_2HSV_pri(a));
-        };
-        $.RGB2HSV = function(a) {
-            return _2HSV_pub(RGB2HSV(a));
-        };
-        $.RGB2HEX = RGB2HEX;
-        $.HEX2HSV = function(s) {
-            return _2HSV_pub(HEX2HSV(s));
-        };
-        $.HEX2RGB = HEX2RGB;
 
-    })(win[NS] = function(source, events, parent) {
+        $$._ = $$.prototype;
 
-        var b = doc.body,
-            h = doc.documentElement,
-            $ = this,
+    })(win[NS] = function(source, o) {
+
+        if (!source) return;
+
+        var $ = this,
             $$ = win[NS],
-            _ = false,
             hooks = {},
             self = doc.createElement('div'),
-            on_down = "touchstart mousedown",
-            on_move = "touchmove mousemove",
-            on_up = "touchend mouseup",
-            on_resize = "orientationchange resize";
+            defaults = {
+                color: HEX,
+                e: downEvents,
+                parent: false
+            };
 
-        // return a new instance if `CP` was called without the `new` operator
+        // Already instantiated, skip!
+        if (source[NS]) {
+            return $;
+        }
+
+        // Return new instance if `CP` was called without the `new` operator
         if (!($ instanceof $$)) {
-            return new $$(source, events);
+            return new $$(source, o);
         }
 
-        // store color picker instance to `CP.__instance__`
-        $$[instance][source.id || source.name || object_length($$[instance])] = $;
+        // Store color picker instance to `CP.__instance__`
+        $$[__instance__][source.id || source.name || Object.keys($$[__instance__]).length] = $;
 
-        // trigger color picker panel on click by default
-        if (!is_set(events) || events === true) {
-            events = on_down;
+        // Mark current DOM as active tag picker to prevent duplicate instance
+        source[NS] = 1;
+
+        $.visible = false;
+
+        o = Object.assign(defaults, o || {});
+
+        function value() {
+            var color = source.getAttribute('data-color') || source.value || source.innerHTML;
+            return color ? $$[isFunction($$[o.color]) ? o.color : HEX](color) : [255, 0, 0, 1]; // Default is red
         }
 
-        // add event
-        function on(ev, el, fn) {
-            ev = ev.split(/\s+/);
-            for (var i = 0, ien = ev.length; i < ien; ++i) {
-                el.addEventListener(ev[i], fn, false);
+        function hookLet(name, fn) {
+            if (!isSet(name)) {
+                return (hooks = {}), $;
             }
-        }
-
-        // remove event
-        function off(ev, el, fn) {
-            ev = ev.split(/\s+/);
-            for (var i = 0, ien = ev.length; i < ien; ++i) {
-                el.removeEventListener(ev[i], fn);
-            }
-        }
-
-        // get mouse/finger coordinate
-        function point(el, e) {
-            var T = 'touches',
-                X = 'clientX',
-                Y = 'clientY',
-                x = !!e[T] ? e[T][0][X] : e[X],
-                y = !!e[T] ? e[T][0][Y] : e[Y],
-                o = offset(el);
-            return {
-                x: x - o.l,
-                y: y - o.t
-            };
-        }
-
-        // get position
-        function offset(el) {
-            var left, top, rect;
-            if (el === win) {
-                left = win.pageXOffset || h.scrollLeft;
-                top = win.pageYOffset || h.scrollTop;
-            } else {
-                rect = el.getBoundingClientRect();
-                left = rect.left;
-                top = rect.top;
-            }
-            return {
-                l: left,
-                t: top
-            };
-        }
-
-        // get closest parent
-        function closest(a, b) {
-            while ((a = a.parentElement) && a !== b);
-            return a;
-        }
-
-        // prevent default
-        function prevent(e) {
-            if (e) e.preventDefault();
-        }
-
-        // get dimension
-        function size(el) {
-            return el === win ? {
-                w: win.innerWidth,
-                h: win.innerHeight
-            } : {
-                w: el.offsetWidth,
-                h: el.offsetHeight
-            };
-        }
-
-        // get color data
-        function get_data(a) {
-            return _ || (is_set(a) ? a : false);
-        }
-
-        // set color data
-        function set_data(a) {
-            _ = a;
-        }
-
-        // add hook
-        function add(ev, fn, id) {
-            if (!is_set(ev)) return hooks;
-            if (!is_set(fn)) return hooks[ev];
-            if (!is_set(hooks[ev])) hooks[ev] = {};
-            if (!is_set(id)) id = object_length(hooks[ev]);
-            return hooks[ev][id] = fn, $;
-        }
-
-        // remove hook
-        function remove(ev, id) {
-            if (!is_set(ev)) return hooks = {}, $;
-            if (!is_set(id)) return hooks[ev] = {}, $;
-            return delete hooks[ev][id], $;
-        }
-
-        // trigger hook
-        function trigger(ev, a, id) {
-            if (!is_set(hooks[ev])) return $;
-            if (!is_set(id)) {
-                for (var i in hooks[ev]) {
-                    hooks[ev][i].apply($, a);
-                }
-            } else {
-                if (is_set(hooks[ev][id])) {
-                    hooks[ev][id].apply($, a);
+            if (isSet(hooks[name])) {
+                if (isSet(fn)) {
+                    for (var i = 0, j = hooks[name].length; i < j; ++i) {
+                        if (fn === hooks[name][i]) {
+                            hooks[name].splice(i, 1);
+                        }
+                    }
+                } else {
+                    delete hooks[name];
                 }
             }
             return $;
         }
 
-        // initialize data ...
-        set_data($$.parse(source.getAttribute('data-color') || source.value || [0, 1, 1]));
-
-        // generate color picker pane ...
-        self.className = 'color-picker';
-        self.innerHTML = '<div class="color-picker-container"><span class="color-picker-h"><i></i></span><span class="color-picker-sv"><i></i></span></div>';
-        var c = self[first].children,
-            HSV = get_data([0, 1, 1]), // default is red
-            H = c[0],
-            SV = c[1],
-            H_point = H[first],
-            SV_point = SV[first],
-            start_H = 0,
-            start_SV = 0,
-            drag_H = 0,
-            drag_SV = 0,
-            left = 0,
-            top = 0,
-            P_W = 0,
-            P_H = 0,
-            v = [HSV2HEX(HSV)],
-            set;
-
-        // on update ...
-        function trigger_(k, x) {
-            if (!k || k === "h") {
-                trigger("change:h", x);
+        function hookSet(name, fn) {
+            if (!isSet(hooks[name])) {
+                hooks[name] = [];
             }
-            if (!k || k === "sv") {
-                trigger("change:sv", x);
+            if (isSet(fn)) {
+                hooks[name].push(fn);
             }
-            trigger("change", x);
+            return $;
         }
 
-        // is visible?
-        function visible() {
+        function hookFire(name, lot) {
+            if (!isSet(hooks[name])) {
+                return $;
+            }
+            for (var i = 0, j = hooks[name].length; i < j; ++i) {
+                hooks[name][i].apply($, lot);
+            }
+            return $;
+        }
+
+        self.className = 'color-picker';
+        self.innerHTML = '<div class="color-picker-content"><div class="color-picker-sv"><div></div><div></div><div></div><i></i></div><div class="color-picker-h"><div></div><i></i></div><div class="color-picker-a"><div></div><div></div><i></i></div></div>';
+
+        var doEnter,
+            doExit,
+            doFit,
+            color = value(),
+            data = RGB2HSV(color),
+            C = self.firstChild,
+            SV = C[children][0],
+            H = C[children][1],
+            A = C[children][2],
+
+            SV_Color = SV[children][0],
+            SV_Saturation = SV[children][1],
+            SV_Value = SV[children][2],
+            SV_Cursor = SV[children][3],
+
+            H_Color = H[children][0],
+            H_Cursor = H[children][1],
+
+            A_Color = A[children][0],
+            A_Pattern = A[children][1],
+            A_Cursor = A[children][2],
+
+            SV_Starting = 0,
+            H_Starting = 0,
+            A_Starting = 0,
+
+            SV_Dragging = 0,
+            H_Dragging = 0,
+            A_Dragging = 0,
+
+            selfOffsetLeft = 0,
+            selfOffsetTop = 0,
+
+            selfSizeWidth = 0,
+            selfSizeHeight = 0;
+
+        function isVisible() {
             return self.parentNode;
         }
 
-        // create
-        function create(first, bucket) {
-            if (!first) {
-                (parent || bucket || b).appendChild(self), $.visible = true;
+        function doApply(isFirst, to) {
+
+            // Refresh value
+            data = RGB2HSV(color = value());
+
+            if (!isFirst) {
+                (to || o.parent || body).appendChild(self), ($.visible = true);
             }
-            P_W = size(self).w;
-            P_H = size(self).h;
-            var SV_size = size(SV),
-                SV_point_size = size(SV_point),
-                H_H = size(H).h,
-                SV_W = SV_size.w,
-                SV_H = SV_size.h,
-                H_point_H = size(H_point).h,
-                SV_point_W = SV_point_size.w,
-                SV_point_H = SV_point_size.h;
-            if (first) {
-                self.style.left = self.style.top = '-9999px';
-                function click(e) {
-                    var t = e.target,
-                        is_source = t === source || closest(t, source) === source;
-                    if (is_source) {
-                        !visible() && (create(), trigger("enter"));
-                    } else {
-                        $.exit();
-                    }
-                }
-                if (events !== false) {
-                    on(events, source, click);
-                }
-                $.create = function() {
-                    return create(1), trigger("create"), $;
-                };
-                $.destroy = function() {
-                    if (events !== false) {
-                        off(events, source, click);
-                    }
-                    $.exit(), set_data(false);
-                    return trigger("destroy"), $;
-                };
-            } else {
-                fit();
-            }
-            set = function() {
-                HSV = get_data(HSV), color();
-                H_point.style.top = (H_H - (H_point_H / 2) - (H_H * +HSV[0])) + 'px';
-                SV_point.style.right = (SV_W - (SV_point_W / 2) - (SV_W * +HSV[1])) + 'px';
-                SV_point.style.top = (SV_H - (SV_point_H / 2) - (SV_H * +HSV[2])) + 'px';
+
+            doEnter = function(to) {
+                return doApply(0, to), $;
             };
-            $.exit = function(e) {
-                var exist = visible();
+
+            doExit = function() {
+                var exist = isVisible();
                 if (exist) {
                     exist.removeChild(self);
                     $.visible = false;
                 }
-                off(on_down, H, down_H);
-                off(on_down, SV, down_SV);
-                off(on_move, doc, move);
-                off(on_up, doc, stop);
-                off(on_resize, win, fit);
-                return trigger("exit"), $;
+                eventsLet(SV, downEvents, doDownSV);
+                eventsLet(H, downEvents, doDownH);
+                eventsLet(A, downEvents, doDownA);
+                eventsLet(doc, moveEvents, doMove);
+                eventsLet(doc, upEvents, doStop);
+                eventsLet(win, resizeEvents, doFit);
+                return $;
             };
-            function color(e) {
-                var a = HSV2RGB(HSV),
-                    b = HSV2RGB([HSV[0], 1, 1]);
-                SV.style.backgroundColor = 'rgb(' + b.join(',') + ')';
-                set_data(HSV);
-                prevent(e);
-            };
-            set();
-            function do_H(e) {
-                var y = edge(point(H, e).y, 0, H_H);
-                HSV[0] = (H_H - y) / H_H;
-                H_point.style.top = (y - (H_point_H / 2)) + 'px';
-                color(e);
-            }
-            function do_SV(e) {
-                var o = point(SV, e),
-                    x = edge(o.x, 0, SV_W),
-                    y = edge(o.y, 0, SV_H);
-                HSV[1] = 1 - ((SV_W - x) / SV_W);
-                HSV[2] = (SV_H - y) / SV_H;
-                SV_point.style.right = (SV_W - x - (SV_point_W / 2)) + 'px';
-                SV_point.style.top = (y - (SV_point_H / 2)) + 'px';
-                color(e);
-            }
-            function move(e) {
-                if (drag_H) {
-                    do_H(e), v = [HSV2HEX(HSV)];
-                    if (!start_H) {
-                        trigger("drag:h", v);
-                        trigger("drag", v);
-                        trigger_("h", v);
-                    }
-                }
-                if (drag_SV) {
-                    do_SV(e), v = [HSV2HEX(HSV)];
-                    if (!start_SV) {
-                        trigger("drag:sv", v);
-                        trigger("drag", v);
-                        trigger_("sv", v);
-                    }
-                }
-                start_H = 0,
-                start_SV = 0;
-            }
-            function stop(e) {
-                var t = e.target,
-                    k = drag_H ? "h" : "sv",
-                    a = [HSV2HEX(HSV), $],
-                    is_source = t === source || closest(t, source) === source,
-                    is_self = t === self || closest(t, self) === self;
-                if (!is_source && !is_self) {
-                    // click outside the source or picker element to exit
-                    if (visible() && events !== false) $.exit(), trigger_(0, a);
+
+            doFit = function(to) {
+                var winSize = sizeGet(win),
+                    htmlSize = sizeGet(html),
+                    scrollBarSizeWidth = win[0] - html[0], // Vertical scroll bar
+                    scrollBarSizeHeight = win[1] - html.clientHeight, // Horizontal scroll bar
+                    winOffset = offsetGet(win),
+                    sourceOffset = offsetGet(source);
+                selfOffsetLeft = sourceOffset[0] + winOffset[0];
+                selfOffsetTop = sourceOffset[1] + winOffset[1] + sizeGet(source)[1]; // Drop!
+                if (isObject(to)) {
+                    isSet(to[0]) && (selfOffsetLeft = to[0]);
+                    isSet(to[1]) && (selfOffsetTop = to[1]);
                 } else {
-                    if (is_self) {
-                        trigger("stop:" + k, a);
-                        trigger("stop", a);
-                        trigger_(k, a);
+                    var min_x = winOffset[0],
+                        min_y = winOffset[1],
+                        max_x = winOffset[0] + winSize[0] - selfSizeWidth - scrollBarSizeWidth,
+                        max_y = winOffset[1] + winSize[1] - selfSizeHeight - scrollBarSizeHeight;
+                    selfOffsetLeft = toEdge(selfOffsetLeft, [min_x, max_x]) >> 0;
+                    selfOffsetTop = toEdge(selfOffsetTop, [min_y, max_y]) >> 0;
+                }
+                styleSet(self, left, selfOffsetLeft + px);
+                styleSet(self, top, selfOffsetTop + px);
+            };
+
+            var selfSize = sizeGet(self),
+                SV_Size = sizeGet(SV),
+                SV_SizeWidth = SV_Size[0],
+                SV_SizeHeight = SV_Size[1],
+                SV_CursorSize = sizeGet(SV_Cursor),
+                SV_CursorSizeWidth = SV_CursorSize[0],
+                SV_CursorSizeHeight = SV_CursorSize[1],
+                H_SizeHeight = sizeGet(H)[1],
+                H_CursorSizeHeight = sizeGet(H_Cursor)[1],
+                A_SizeHeight = sizeGet(A)[1],
+                A_CursorSizeHeight = sizeGet(A_Cursor)[1];
+
+            selfSizeWidth = selfSize[0];
+            selfSizeHeight = selfSize[1];
+
+            if (isFirst) {
+                function onClick(e) {
+                    var t = e.target,
+                        isSource = source === closestGet(t, source);
+                    if (isSource) {
+                        !isVisible() && doEnter(to);
+                    } else {
+                        doExit();
                     }
                 }
-                drag_H = 0,
-                drag_SV = 0;
-            }
-            function down_H(e) {
-                start_H = 1,
-                drag_H = 1,
-                move(e), prevent(e);
-                trigger("start:h", v);
-                trigger("start", v);
-                trigger_("h", v);
-            }
-            function down_SV(e) {
-                start_SV = 1,
-                drag_SV = 1,
-                move(e), prevent(e);
-                trigger("start:sv", v);
-                trigger("start", v);
-                trigger_("sv", v);
-            }
-            if (!first) {
-                on(on_down, H, down_H);
-                on(on_down, SV, down_SV);
-                on(on_move, doc, move);
-                on(on_up, doc, stop);
-                on(on_resize, win, fit);
-            }
-        } create(1);
-
-        delay(function() {
-            var a = [HSV2HEX(HSV)];
-            trigger("create", a);
-            trigger_(0, a);
-        }, 0);
-
-        // fit to window
-        $.fit = function(o) {
-            var w = size(win),
-                y = size(h),
-                screen_w = w.w - y.w, // vertical scroll bar
-                screen_h = w.h - h.clientHeight, // horizontal scroll bar
-                ww = offset(win),
-                to = offset(source);
-            left = to.l + ww.l;
-            top = to.t + ww.t + size(source).h; // drop!
-            if (is_object(o)) {
-                is_set(o[0]) && (left = o[0]);
-                is_set(o[1]) && (top = o[1]);
+                if (false !== o.e) {
+                    eventsSet(source, o.e, onClick);
+                }
+                delay(function() {
+                    hookFire('change:sv', color);
+                    hookFire('change:h', color);
+                    hookFire('change:a', color);
+                    hookFire('change', color);
+                }, 1);
             } else {
-                var min_x = ww.l,
-                    min_y = ww.t,
-                    max_x = ww.l + w.w - P_W - screen_w,
-                    max_y = ww.t + w.h - P_H - screen_h;
-                left = edge(left, min_x, max_x) >> 0;
-                top = edge(top, min_y, max_y) >> 0;
+                eventsSet(SV, downEvents, doDownSV);
+                eventsSet(H, downEvents, doDownH);
+                eventsSet(A, downEvents, doDownA);
+                eventsSet(doc, moveEvents, doMove);
+                eventsSet(doc, upEvents, doStop);
+                eventsSet(win, resizeEvents, doFit);
+                doFit();
             }
-            self.style.left = left + 'px';
-            self.style.top = top + 'px';
-            return trigger("fit"), $;
-        };
 
-        // for event listener ID
-        function fit() {
-            return $.fit();
-        }
-
-        // set hidden color picker data
-        $.set = function(a) {
-            if (!is_set(a)) return get_data();
-            if (is_string(a)) {
-                a = $$.parse(a);
+            function doMove(e) {
+                color = P2RGB(data);
+                if (SV_Dragging) {
+                    cursorSVSet(e);
+                    hookFire((SV_Starting ? 'start' : 'drag') + ':sv', color);
+                    hookFire('change:sv', color);
+                }
+                if (H_Dragging) {
+                    cursorHSet(e);
+                    hookFire((H_Starting ? 'start' : 'drag') + ':h', color);
+                    hookFire('change:h', color);
+                }
+                if (A_Dragging) {
+                    cursorASet(e);
+                    hookFire((A_Starting ? 'start' : 'drag') + ':a', color);
+                    hookFire('change:a', color);
+                }
+                hookFire((SV_Starting || H_Starting || A_Starting ? 'start' : 'drag'), color);
+                if (SV_Dragging || H_Dragging || A_Dragging) {
+                    hookFire('change', color);
+                }
+                SV_Starting = H_Starting = A_Starting = 0;
             }
-            return set_data(a), set(), $;
-        };
 
-        // alias for `$.set()`
-        $.get = function(a) {
-            return get_data(a);
-        };
+            function doStop(e) {
+                color = P2RGB(data);
+                var t = e.target,
+                    isSource = source === closestGet(t, source),
+                    isSelf = self === closestGet(t, self);
+                if (!isSource && !isSelf) {
+                    // Click outside the source or picker element to exit
+                    if (isVisible() && false !== o.e) {
+                        doExit();
+                    }
+                } else {
+                    if (isSelf) {
+                        SV_Dragging && hookFire('stop:sv', color);
+                        H_Dragging && hookFire('stop:h', color);
+                        A_Dragging && hookFire('stop:a', color);
+                        if (SV_Dragging || H_Dragging || A_Dragging) {
+                            hookFire('stop', color);
+                        }
+                    }
+                }
+                SV_Dragging = H_Dragging = A_Dragging = 0;
+            }
 
-        // register to global
-        $.source = source;
-        $.self = self;
-        $.visible = false;
-        $.on = add;
-        $.off = remove;
-        $.fire = trigger;
+            function doDownSV(e) {
+                SV_Starting = SV_Dragging = 1;
+                doMove(e);
+                doPreventDefault(e);
+            }
+
+            function doDownH(e) {
+                H_Starting = H_Dragging = 1;
+                doMove(e);
+                doPreventDefault(e);
+            }
+
+            function doDownA(e) {
+                A_Starting = A_Dragging = 1;
+                doMove(e);
+                doPreventDefault(e);
+            }
+
+            function cursorSet(x) {
+                isSet(x[1]) && styleSet(SV_Cursor, right, (SV_SizeWidth - (SV_CursorSizeWidth / 2) - (SV_SizeWidth * +x[1])) + px);
+                isSet(x[2]) && styleSet(SV_Cursor, top, (SV_SizeHeight - (SV_CursorSizeHeight / 2) - (SV_SizeHeight * +x[2])) + px);
+                isSet(x[0]) && styleSet(H_Cursor, top, (H_SizeHeight - (H_CursorSizeHeight / 2) - (H_SizeHeight * +x[0])) + px);
+                isSet(x[3]) && styleSet(A_Cursor, top, (A_SizeHeight - (A_CursorSizeHeight / 2) - (A_SizeHeight * +x[3])) + px);
+            }
+
+            $.set = function(r, g, b, a) {
+                return cursorSet(RGB2HSV([r, g, b, a])), $;
+            };
+
+            function cursorSVSet(e) {
+                var SV_Point = axixGet(SV, e),
+                    x = toEdge(SV_Point[0], [0, SV_SizeWidth]),
+                    y = toEdge(SV_Point[1], [0, SV_SizeHeight]);
+                data[1] = 1 - ((SV_SizeWidth - x) / SV_SizeWidth);
+                data[2] = (SV_SizeHeight - y) / SV_SizeHeight;
+                colorSet();
+            }
+
+            function cursorHSet(e) {
+                data[0] = (H_SizeHeight - toEdge(axixGet(H, e)[1], [0, H_SizeHeight])) / H_SizeHeight;
+                colorSet();
+            }
+
+            function cursorASet(e) {
+                data[3] = (A_SizeHeight - toEdge(axixGet(A, e)[1], [0, A_SizeHeight])) / A_SizeHeight;
+                colorSet();
+            }
+
+            function colorSet() {
+                cursorSet(data);
+                var a = P2RGB(data),
+                    b = P2RGB([data[0], 1, 1]);
+                styleSet(SV_Color, 'backgroundColor', 'rgb(' + b[0] + ',' + b[1] + ',' + b[2] + ')');
+                styleSet(A_Color, 'backgroundImage', 'linear-gradient(rgb(' + a[0] + ',' + a[1] + ',' + a[2] + '),transparent)');
+            } colorSet();
+
+        } doApply(1);
+
+        $.color = function(r, g, b, a) {
+            return $$[isFunction($$[o.color]) ? o.color : HEX]([r, g, b, a]);
+        };
+        $.enter = doEnter;
+        $.exit = doExit;
+        $.fire = hookFire;
+        $.fit = doFit;
         $.hooks = hooks;
-        $.enter = function(bucket) {
-            return create(0, bucket), trigger("enter"), $;
-        };
-
-        // return the global object
-        return $;
+        $.off = hookLet;
+        $.on = hookSet;
+        $.self = self;
+        $.source = source;
+        $.state = o;
 
     });
 
-})(window, document, 'CP');
+})(this, this.document, 'CP');
