@@ -13,20 +13,21 @@ Has support for touch events. Touchy… touchy…
 
 ### Code Contributors
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/taufik-nurrohman/color-picker/graphs/contributors"><img src="https://opencollective.com/color-picker/contributors.svg?width=890&button=false" /></a>
+This project exists thanks to all the people who contribute.
+
+[![Contributors](https://opencollective.com/color-picker/contributors.svg?width=890&button=false)](https://github.com/taufik-nurrohman/color-picker/graphs/contributors)
 
 ### Financial Contributors
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/color-picker/contribute)]
+[Become a financial contributor](https://opencollective.com/color-picker/contribute) and help us sustain our community.
 
 #### Individuals
 
-<a href="https://opencollective.com/color-picker"><img src="https://opencollective.com/color-picker/individuals.svg?width=890"></a>
+[![Contribute](https://opencollective.com/color-picker/individuals.svg?width=890)](https://opencollective.com/color-picker)
 
 #### Organizations
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/color-picker/contribute)]
+[Support this project with your organization](https://opencollective.com/color-picker/contribute). Your logo will show up here with a link to your website.
 
 <a href="https://opencollective.com/color-picker/organization/0/website"><img src="https://opencollective.com/color-picker/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/color-picker/organization/1/website"><img src="https://opencollective.com/color-picker/organization/1/avatar.svg"></a>
