@@ -4,19 +4,21 @@ Change Log
 v2.0.0
 ------
 
- - TODO
+ - Removed `change:sv`, `change:h`, `start:sv`, `start:h`, `drag:sv`, `drag:h`, `stop:sv`, `stop:h` hooks.
+ - Hooks function arguments is now contains red, green, blue and alpha color value instead of static hex color string value.
+ - Reduced file size by removing all color supports other than hex.
 
 v1.4.2
 ------
 
- - Fix #48
- - Change to CSS flexbox for layout.
+ - Fixed #48
+ - Changed to CSS flexbox for layout.
 
 v1.4.1
 ------
 
  - Trigger `enter` and `exit` hooks on `enter` and `exit` method call.
- - Remove the instance parameter in the first function argument of the hook and move the `this` scope in the function body to the current color picker instance.
+ - Removed the instance parameter in the first function argument of the hook and move the `this` scope in the function body to the current color picker instance.
 
 v1.4.0
 ------

@@ -330,13 +330,7 @@
 
             SV_Dragging = 0,
             H_Dragging = 0,
-            A_Dragging = 0,
-
-            selfOffsetLeft = 0,
-            selfOffsetTop = 0,
-
-            selfSizeWidth = 0,
-            selfSizeHeight = 0;
+            A_Dragging = 0;
 
         function isVisible() {
             return self.parentNode;
@@ -362,13 +356,14 @@
             }
 
             doEnter = function(to) {
-                return doApply(0, to), hookFire('enter'), $;
+                return doApply(0, to), hookFire('enter', color), $;
             };
 
             doExit = function() {
                 var exist = isVisible();
                 if (exist) {
                     exist.removeChild(self);
+                    $.control = null;
                     $.visible = false;
                 }
                 eventsLet(SV, downEvents, doDownSV);
@@ -377,7 +372,7 @@
                 eventsLet(doc, moveEvents, doMove);
                 eventsLet(doc, upEvents, doStop);
                 eventsLet(win, resizeEvents, doFit);
-                return hookFire('exit'), $;
+                return hookFire('exit', color), $;
             };
 
             doFit = function(to) {
@@ -386,9 +381,12 @@
                     scrollBarSizeWidth = win[0] - html[0], // Vertical scroll bar
                     scrollBarSizeHeight = win[1] - html.clientHeight, // Horizontal scroll bar
                     winOffset = offsetGet(win),
-                    sourceOffset = offsetGet(source);
-                selfOffsetLeft = sourceOffset[0] + winOffset[0];
-                selfOffsetTop = sourceOffset[1] + winOffset[1] + sizeGet(source)[1]; // Drop!
+                    sourceOffset = offsetGet(source),
+                    selfSize = sizeGet(self),
+                    selfSizeWidth = selfSize[0],
+                    selfSizeHeight = selfSize[1],
+                    selfOffsetLeft = sourceOffset[0] + winOffset[0],
+                    selfOffsetTop = sourceOffset[1] + winOffset[1] + sizeGet(source)[1]; // Drop!
                 if (isObject(to)) {
                     isSet(to[0]) && (selfOffsetLeft = to[0]);
                     isSet(to[1]) && (selfOffsetTop = to[1]);
@@ -402,11 +400,10 @@
                 }
                 styleSet(self, left, selfOffsetLeft + px);
                 styleSet(self, top, selfOffsetTop + px);
-                return hookFire('fit'), $;
+                return hookFire('fit', color), $;
             };
 
-            var selfSize = sizeGet(self),
-                SV_Size = sizeGet(SV),
+            var SV_Size = sizeGet(SV),
                 SV_SizeWidth = SV_Size[0],
                 SV_SizeHeight = SV_Size[1],
                 SV_CursorSize = sizeGet(SV_Cursor),
@@ -417,17 +414,11 @@
                 A_SizeHeight = sizeGet(A)[1],
                 A_CursorSizeHeight = sizeGet(A_Cursor)[1];
 
-            selfSizeWidth = selfSize[0];
-            selfSizeHeight = selfSize[1];
-
             if (isFirst) {
                 if (false !== state.e) {
                     eventsSet(source, state.e, doClick);
                 }
                 delay(function() {
-                    hookFire('change.sv', color);
-                    hookFire('change.h', color);
-                    hookFire('change.a', color);
                     hookFire('change', color);
                 }, 1);
             } else {
@@ -442,21 +433,9 @@
 
             function doMove(e) {
                 color = P2RGB(data);
-                if (SV_Dragging) {
-                    cursorSVSet(e);
-                    hookFire((SV_Starting ? 'start' : 'drag') + '.sv', color);
-                    hookFire('change.sv', color);
-                }
-                if (H_Dragging) {
-                    cursorHSet(e);
-                    hookFire((H_Starting ? 'start' : 'drag') + '.h', color);
-                    hookFire('change.h', color);
-                }
-                if (A_Dragging) {
-                    cursorASet(e);
-                    hookFire((A_Starting ? 'start' : 'drag') + '.a', color);
-                    hookFire('change.a', color);
-                }
+                SV_Dragging && cursorSVSet(e);
+                H_Dragging && cursorHSet(e);
+                A_Dragging && cursorASet(e);
                 hookFire((SV_Starting || H_Starting || A_Starting ? 'start' : 'drag'), color);
                 if (SV_Dragging || H_Dragging || A_Dragging) {
                     hookFire('change', color);
@@ -469,6 +448,7 @@
                 var t = e.target,
                     isSource = source === closestGet(t, source),
                     isSelf = self === closestGet(t, self);
+                $.control = null;
                 if (!isSource && !isSelf) {
                     // Click outside the source or picker element to exit
                     if (isVisible() && false !== state.e) {
@@ -476,9 +456,6 @@
                     }
                 } else {
                     if (isSelf) {
-                        SV_Dragging && hookFire('stop.sv', color);
-                        H_Dragging && hookFire('stop.h', color);
-                        A_Dragging && hookFire('stop.a', color);
                         if (SV_Dragging || H_Dragging || A_Dragging) {
                             hookFire('stop', color);
                         }
@@ -488,18 +465,21 @@
             }
 
             function doDownSV(e) {
+                $.control = SV;
                 SV_Starting = SV_Dragging = 1;
                 doMove(e);
                 doPreventDefault(e);
             }
 
             function doDownH(e) {
+                $.control = H;
                 H_Starting = H_Dragging = 1;
                 doMove(e);
                 doPreventDefault(e);
             }
 
             function doDownA(e) {
+                $.control = A;
                 A_Starting = A_Dragging = 1;
                 doMove(e);
                 doPreventDefault(e);
@@ -554,6 +534,7 @@
             return $$[isFunction($$[state.color]) ? state.color : HEX]([r, g, b, a]);
         };
 
+        $.control = null;
         $.enter = doEnter;
         $.exit = doExit;
         $.fire = hookFire;
