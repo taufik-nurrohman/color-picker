@@ -26,6 +26,72 @@
 
         __instance__ = '__instance__';
 
+    // Convert cursor position to RGBA
+    function P2RGB(a) {
+        var h = +a[0],
+            s = +a[1],
+            v = +a[2],
+            r, g, b, i, f, p, q, t;
+        i = Math.floor(h * 6);
+        f = h * 6 - i;
+        p = v * (1 - s);
+        q = v * (1 - f * s);
+        t = v * (1 - (1 - f) * s);
+        i = i || 0;
+        q = q || 0;
+        t = t || 0;
+        switch (i % 6) {
+            case 0:
+                r = v, g = t, b = p;
+                break;
+            case 1:
+                r = q, g = v, b = p;
+                break;
+            case 2:
+                r = p, g = v, b = t;
+                break;
+            case 3:
+                r = p, g = q, b = v;
+                break;
+            case 4:
+                r = t, g = p, b = v;
+                break;
+            case 5:
+                r = v, g = p, b = q;
+                break;
+        }
+        return [toRound(r * 255), toRound(g * 255), toRound(b * 255), toFixed(isSet(a[3]) ? +a[3] : 1, 3)];
+    }
+
+    // Convert RGBA to HSVA
+    function RGB2HSV(a) {
+        var r = +a[0] / 255,
+            g = +a[1] / 255,
+            b = +a[2] / 255,
+            max = Math.max(r, g, b),
+            min = Math.min(r, g, b),
+            h, s, v = max,
+            d = max - min,
+            s = max === 0 ? 0 : d / max;
+        if (max === min) {
+            h = 0; // Achromatic
+        } else {
+            switch (max) {
+                case r:
+                    h = (g - b) / d + (g < b ? 6 : 0);
+                    break;
+                case g:
+                    h = (b - r) / d + 2;
+                    break;
+                case b:
+                    h = (r - g) / d + 4;
+                    break;
+            }
+            h /= 6;
+        }
+        return [h, s, v, isSet(a[3]) ? +a[3] : 1];
+    }
+
     function axixGet(el, e) {
         var touches = 'touches',
             clientX = 'clientX',
@@ -61,72 +127,6 @@
         return el === win ? [win.innerWidth, win.innerHeight] : [el.offsetWidth, el.offsetHeight];
     }
 
-    // Convert RGBA to HSVA
-    function RGB2HSV(a) {
-        var r = +a[0] / 255,
-            g = +a[1] / 255,
-            b = +a[2] / 255,
-            max = Math.max(r, g, b),
-            min = Math.min(r, g, b),
-            h, s, v = max,
-            d = max - min,
-            s = max === 0 ? 0 : d / max;
-        if (max === min) {
-            h = 0; // Achromatic
-        } else {
-            switch (max) {
-                case r:
-                    h = (g - b) / d + (g < b ? 6 : 0);
-                    break;
-                case g:
-                    h = (b - r) / d + 2;
-                    break;
-                case b:
-                    h = (r - g) / d + 4;
-                    break;
-            }
-            h /= 6;
-        }
-        return [h, s, v, isSet(a[3]) ? +a[3] : 1];
-    }
-
-    // Convert cursor position to RGBA
-    function P2RGB(a) {
-        var h = +a[0],
-            s = +a[1],
-            v = +a[2],
-            r, g, b, i, f, p, q, t;
-        i = Math.floor(h * 6);
-        f = h * 6 - i;
-        p = v * (1 - s);
-        q = v * (1 - f * s);
-        t = v * (1 - (1 - f) * s);
-        i = i || 0;
-        q = q || 0;
-        t = t || 0;
-        switch (i % 6) {
-            case 0:
-                r = v, g = t, b = p;
-                break;
-            case 1:
-                r = q, g = v, b = p;
-                break;
-            case 2:
-                r = p, g = v, b = t;
-                break;
-            case 3:
-                r = p, g = q, b = v;
-                break;
-            case 4:
-                r = t, g = p, b = v;
-                break;
-            case 5:
-                r = v, g = p, b = q;
-                break;
-        }
-        return [toRound(r * 255), toRound(g * 255), toRound(b * 255), (isSet(a[3]) ? +a[3] : 1).toFixed(3)];
-    }
-
     function doPreventDefault(e) {
         e && e.preventDefault();
     }
@@ -151,6 +151,10 @@
         if (a < b[0]) return b[0];
         if (a > b[1]) return b[1];
         return a;
+    }
+
+    function toFixed(a, b) {
+        return +(a.toFixed(b));
     }
 
     function toInt(a, b) {
@@ -212,12 +216,12 @@
                 } else if ((5 === i || 9 === i) && '#' === x[0]) {
                     if (/^\s*#([a-z\d]{1,2}){4}\s*$/i.test(x)) {
                         if (5 === i) {
-                            return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), +(toInt(x[4] + x[4], 16) / 255).toFixed(3)];
+                            return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), toFixed(toInt(x[4] + x[4], 16) / 255, 3)];
                         }
-                        return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), +(toInt(x[7] + x[8], 16) / 255).toFixed(3)];
+                        return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), toFixed(toInt(x[7] + x[8], 16) / 255, 3)];
                     }
                 }
-                return [255, 0, 0, 1]; // Default to red
+                return [0, 0, 0, 1]; // Default to black
             }
             return '#' + ('000000' + toString(+x[2] | (+x[1] << 8) | (+x[0] << 16), 16)).slice(-6) + (isSet(x[3]) && x[3] < 1 ? toString(toRound(x[3] * 255) + 0x10000, 16).substr(-2) : "");
         };
@@ -236,7 +240,9 @@
                 'color': HEX,
                 'e': downEvents,
                 'parent': null
-            }, o || {});
+            }, false === o || o instanceof Array ? {
+                'e': o
+            } : (o || {}));
 
         // Already instantiated, skip!
         if (source[NS]) {
@@ -256,9 +262,31 @@
 
         $.visible = false;
 
-        function value() {
-            var color = source.getAttribute('data-color') || source.value || source.innerHTML;
-            return color ? $$[isFunction($$[state.color]) ? state.color : HEX](color) : [255, 0, 0, 1]; // Default is red
+        function value(a) {
+            var to = $$[isFunction($$[state.color]) ? state.color : HEX],
+                color;
+            if (color = source.dataset.color) {
+                if (isSet(a)) {
+                    return (source.dataset.color = to(color));
+                }
+                return to(color);
+            }
+            if (color = source.value) {
+                if (isSet(a)) {
+                    return (source.value = to(color));
+                }
+                return to(color);
+            }
+            if (color = source.textContent) {
+                if (isSet(a)) {
+                    return (source.textContent = to(color));
+                }
+                return to(color);
+            }
+            if (isSet(a)) {
+                return; // Do nothing
+            }
+            return [0, 0, 0, 1]; // Default to black
         }
 
         function hookLet(name, fn) {
@@ -300,7 +328,7 @@
         }
 
         self.className = 'color-picker';
-        self.innerHTML = '<div class="color-picker-content"><div class="color-picker-sv"><div></div><div></div><div></div><i></i></div><div class="color-picker-h"><div></div><i></i></div><div class="color-picker-a"><div></div><div></div><i></i></div></div>';
+        self.innerHTML = '<div><div class="color-picker:sv"><div></div><div></div><div></div><i></i></div><div class="color-picker:h"><div></div><i></i></div><div class="color-picker:a"><div></div><div></div><i></i></div></div>';
 
         var doEnter,
             doExit,
@@ -313,15 +341,15 @@
             A = C[children][2],
 
             SV_Color = SV[children][0],
-            SV_Saturation = SV[children][1],
-            SV_Value = SV[children][2],
+            // SV_Saturation = SV[children][1],
+            // SV_Value = SV[children][2],
             SV_Cursor = SV[children][3],
 
             H_Color = H[children][0],
             H_Cursor = H[children][1],
 
             A_Color = A[children][0],
-            A_Pattern = A[children][1],
+            // A_Pattern = A[children][1],
             A_Cursor = A[children][2],
 
             SV_Starting = 0,
@@ -340,7 +368,7 @@
             var t = e.target,
                 isSource = source === closestGet(t, source);
             if (isSource) {
-                !isVisible() && doApply(0, state.parent);
+                !isVisible() && doEnter(state.parent);
             } else {
                 doExit();
             }
@@ -363,7 +391,7 @@
                 var exist = isVisible();
                 if (exist) {
                     exist.removeChild(self);
-                    $.control = null;
+                    $.current = null;
                     $.visible = false;
                 }
                 eventsLet(SV, downEvents, doDownSV);
@@ -436,8 +464,8 @@
                 SV_Dragging && cursorSVSet(e);
                 H_Dragging && cursorHSet(e);
                 A_Dragging && cursorASet(e);
-                hookFire((SV_Starting || H_Starting || A_Starting ? 'start' : 'drag'), color);
                 if (SV_Dragging || H_Dragging || A_Dragging) {
+                    hookFire((SV_Starting || H_Starting || A_Starting ? 'start' : 'drag'), color);
                     hookFire('change', color);
                 }
                 SV_Starting = H_Starting = A_Starting = 0;
@@ -448,7 +476,7 @@
                 var t = e.target,
                     isSource = source === closestGet(t, source),
                     isSelf = self === closestGet(t, self);
-                $.control = null;
+                $.current = null;
                 if (!isSource && !isSelf) {
                     // Click outside the source or picker element to exit
                     if (isVisible() && false !== state.e) {
@@ -465,21 +493,21 @@
             }
 
             function doDownSV(e) {
-                $.control = SV;
+                $.current = SV;
                 SV_Starting = SV_Dragging = 1;
                 doMove(e);
                 doPreventDefault(e);
             }
 
             function doDownH(e) {
-                $.control = H;
+                $.current = H;
                 H_Starting = H_Dragging = 1;
                 doMove(e);
                 doPreventDefault(e);
             }
 
             function doDownA(e) {
-                $.control = A;
+                $.current = A;
                 A_Starting = A_Dragging = 1;
                 doMove(e);
                 doPreventDefault(e);
@@ -534,7 +562,7 @@
             return $$[isFunction($$[state.color]) ? state.color : HEX]([r, g, b, a]);
         };
 
-        $.control = null;
+        $.current = null;
         $.enter = doEnter;
         $.exit = doExit;
         $.fire = hookFire;
@@ -551,7 +579,11 @@
             if (false !== state.e) {
                 eventsLet(source, state.e, doClick);
             }
-            return doExit(), hookFire('pop');
+            return doExit(), hookFire('pop', color);
+        };
+
+        $.value = function(r, g, b, a) {
+            return $.set(r, g, b, a), hookFire('change', [r, g, b, a]);
         };
 
         $.self = self;

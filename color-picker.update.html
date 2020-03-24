@@ -7,25 +7,25 @@
     <link href="color-picker.min.css" rel="stylesheet">
   </head>
   <body>
-    <p>Update color picker state on <code>keyup</code>, <code>cut</code>, <code>paste</code> and <code>input</code> event in the source element.</p>
-    <p><input type="text" placeholder="#387a40"></p>
+    <p>Update color picker&rsquo;s color state on <code>keyup</code>, <code>cut</code>, <code>paste</code> and <code>input</code> event in the source element.</p>
+    <p><input placeholder="#387a40" type="text"></p>
     <script src="color-picker.min.js"></script>
     <script>
 
     var picker = new CP(document.querySelector('input'));
 
-    picker.on("change", function(color) {
-        this.source.value = '#' + color;
+    picker.on('change', function(r, g, b, a) {
+        this.source.value = this.color(r, g, b, a);
     });
 
-    function update() {
-        picker.set(this.value).enter();
+    function onUpdate() {
+        picker.set.apply(picker, CP.HEX(this.value)).enter();
     }
 
-    picker.source.oncut = update;
-    picker.source.onpaste = update;
-    picker.source.onkeyup = update;
-    picker.source.oninput = update;
+    picker.source.oncut = onUpdate;
+    picker.source.onpaste = onUpdate;
+    picker.source.onkeyup = onUpdate;
+    picker.source.oninput = onUpdate;
 
     </script>
   </body>

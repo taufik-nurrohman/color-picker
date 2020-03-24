@@ -5,22 +5,26 @@
     <meta name="viewport" content="width=device-width">
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
+    <style>
+
+    .color-picker.no-alpha .color-picker\:a {
+      display: none;
+    }
+
+    </style>
   </head>
   <body>
-    <p><input type="text"></p>
+    <p>Disable alpha channel support with CSS.</p>
+    <p><input type="text" value="#f00"></p>
     <script src="color-picker.min.js"></script>
     <script>
 
     var picker = new CP(document.querySelector('input'));
 
-    picker.on("change", function(color) {
-        this.source.value = '#' + color;
-    });
+    picker.self.classList.add('no-alpha');
 
-    'create,destroy,enter,exit,fit,change,change:h,change:sv,start,start:h,start:sv,drag,drag:h,drag:sv,stop,stop:h,stop:sv'.split(',').forEach(function(e) {
-        picker.on(e, function() {
-            console.log([e, arguments]);
-        });
+    picker.on('change', function(r, g, b) {
+        this.source.value = this.color(r, g, b, 1);
     });
 
     </script>

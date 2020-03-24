@@ -14,14 +14,14 @@
 
     var picker = new CP(document.querySelector('input'));
 
-    picker.on("change", function(color) {
-        this.source.value = '#' + color;
+    picker.on('change', function(r, g, b, a) {
+        this.source.value = this.color(r, g, b, a);
     });
 
     var x = document.createElement('a');
         x.href = 'javascript:;';
         x.innerHTML = 'Close Me!';
-        x.addEventListener("click", function() {
+        x.addEventListener('click', function() {
             picker.exit();
         }, false);
 

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <p><input type="text"> <button>Pick a Color!</button></p>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var picker = new CP(document.querySelector('input'), false),
+        button = document.querySelector('button'),
+        text = button.textContent;
+
+    picker.on('change', function(r, g, b, a) {
+        this.source.value = this.color(r, g, b, a);
+    });
+
+    button.addEventListener('click', function() {
+        picker[picker.visible ? 'exit' : 'enter']();
+        picker.fit([button.offsetLeft, button.offsetTop + button.offsetHeight + 2]);
+        button.textContent = picker.visible ? 'Done' : text;
+    }, false);
+
+    </script>
+  </body>
+</html>

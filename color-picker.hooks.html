@@ -7,7 +7,9 @@
     <link href="color-picker.min.css" rel="stylesheet">
   </head>
   <body>
+    <p>Open your web console.</p>
     <p><input type="text"></p>
+    <p><button onclick="picker.pop();">Destroy</button>
     <script src="color-picker.min.js"></script>
     <script>
 
@@ -15,6 +17,12 @@
 
     picker.on('change', function(r, g, b, a) {
         this.source.value = this.color(r, g, b, a);
+    });
+
+    ['enter', 'exit', 'fit', 'change', 'start', 'drag', 'stop', 'pop'].forEach(function(name) {
+        picker.on(name, function(r, g, b, a) {
+            console.log([name, r, g, b, a, this.current]);
+        });
     });
 
     </script>

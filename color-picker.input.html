@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width">
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
+    <style>
+
+    .color-picker\:a {
+      display: none; /* There is no alpha channel support in HTML5 color input */
+    }
+
+    </style>
   </head>
   <body>
     <p>With HTML5 color input.</p>
@@ -15,13 +22,13 @@
     var source = document.querySelector('input'),
         picker = new CP(source);
 
-    // prevent showing native color picker panel
-    source.onclick = function(e) {
+    // Prevent showing native color picker panel
+    source.addEventListener('click', function(e) {
         e.preventDefault();
-    };
+    }, false);
 
-    picker.on("change", function(color) {
-        this.source.value = '#' + color;
+    picker.on('change', function(r, g, b) {
+        this.source.value = this.color(r, g, b, 1); // There is no alpha channel support in HTML5 color input
     });
 
     </script>

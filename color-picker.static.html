@@ -6,14 +6,13 @@
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
-    .color-picker.static {
+
+    .color-picker.is-static {
       display: inline-block;
       position: static;
       box-shadow: none;
     }
-    .color-picker.static .color-picker-container {
-      border: 3px double #000;
-    }
+
     </style>
   </head>
   <body>
@@ -23,22 +22,25 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var p = document.querySelectorAll('p')[1], // put color picker panel in the second `<p>` element
-        picker = new CP(document.querySelector('input'), false, p);
+    var p = document.querySelectorAll('p')[1], // Put color picker panel to the second `<p>` element
+        picker = new CP(document.querySelector('input'), {
+            e: false,
+            parent: p
+        });
 
-    picker.on("change", function(color) {
-        this.source.value = '#' + color;
+    picker.on('change', function(r, g, b, a) {
+        this.source.value = this.color(r, g, b, a);
     });
 
     // ...
-    picker.fit = function() { // do nothing ...
+    picker.fit = function() { // Do nothing
         this.self.style.left = this.self.style.top = "";
     };
 
-    // add a `static` class to the color picker panel
-    picker.self.classList.add('static');
+    // Add a `is-static` class to the color picker panel
+    picker.self.classList.add('is-static');
 
-    // force to show the color picker panel
+    // Force to show the color picker panel
     picker.enter();
 
     </script>

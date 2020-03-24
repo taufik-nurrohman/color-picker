@@ -6,12 +6,19 @@
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
+
     .color-box {
       display: inline-block;
-      width: 20px;
-      height: 20px;
+      width: 30px;
+      height: 30px;
+      border: 1px solid;
       cursor: pointer;
     }
+
+    .color-picker {
+      margin-top: -1px;
+    }
+
     </style>
   </head>
   <body>
@@ -31,9 +38,9 @@
 
     var picker = new CP(box);
 
-    picker.on("change", function(color) {
-        input.value = '#' + color;
-        this.source.style.backgroundColor = '#' + color;
+    picker.on('change', function(r, g, b, a) {
+        input.value = this.color(r, g, b, a);
+        this.source.style.backgroundColor = this.color(r, g, b, a);
     });
 
     </script>

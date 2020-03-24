@@ -12,10 +12,10 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input'), "dblclick");
+    var picker = new CP(document.querySelector('input'), ['dblclick']);
 
-    picker.on("change", function(color) {
-        this.source.value = '#' + color;
+    picker.on('change', function(r, g, b, a) {
+        this.source.value = this.color(r, g, b, a);
     });
 
     </script>

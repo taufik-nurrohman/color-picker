@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <p>Create and destroy method.</p>
+    <p><input type="text" value="#ff0"> <button disabled>Create</button> <button>Destroy</button></p>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var picker = new CP(document.querySelector('input')),
+        buttons = document.querySelectorAll('button');
+
+    function onChange(r, g, b, a) {
+        this.source.value = this.color(r, g, b, a);
+        document.body.style.backgroundColor = this.color(r, g, b, a);
+    }
+
+    picker.on('change', onChange);
+
+    buttons[0].addEventListener('click', function(e) {
+        picker = new CP(picker.source);
+        picker.on('change', onChange);
+        this.disabled = true;
+        this.nextElementSibling.disabled = false;
+        e.stopPropagation();
+    });
+
+    buttons[1].addEventListener('click', function(e) {
+        picker.pop();
+        this.disabled = true;
+        this.previousElementSibling.disabled = false;
+        e.stopPropagation();
+    });
+
+    </script>
+  </body>
+</html>
