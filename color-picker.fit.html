@@ -6,6 +6,7 @@
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
+
     input {
       display: block;
       float: left;
@@ -14,14 +15,16 @@
       border: 0;
       outline: 0;
       width: 5%;
-      font: normal normal 30px/normal Helmet,FreeSans,Sans-Serif;
+      font: normal normal 30px/1.4em sans-serif;
       color: black;
       text-align: center;
     }
+
     p {
       overflow: hidden;
       width: 120%;
     }
+
     </style>
   </head>
   <body>
@@ -34,14 +37,14 @@
         input, color;
 
     for (var i = 0; i < 800; ++i) {
-        color = ('00000'+(Math.random() * (1 << 24) | 0).toString(16)).slice(-6); // random HEX color
+        color = ('00000' + (Math.random() * (1 << 24) | 0).toString(16)).slice(-6); // Random HEX color
         input = document.createElement('input');
         input.type = 'text';
         input.value = '#' + color;
         input.style.backgroundColor = '#' + color;
-        (new CP(input)).on("change", function(v) {
-            this.source.value = '#' + v;
-            this.source.style.backgroundColor = '#' + v;
+        (new CP(input)).on('change', function(r, g, b, a) {
+            this.source.value = this.color(r, g, b, a);
+            this.source.style.backgroundColor = this.color(r, g, b, a);
         });
         container.appendChild(input);
     }

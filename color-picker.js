@@ -7,10 +7,9 @@
  * --------------------------------------------------------------
  */
 
-(function(win, doc, NS) {
+(function(win, doc, name) {
 
-    var body = doc.body,
-        html = doc.documentElement,
+    var html = doc.documentElement,
         HEX = 'HEX',
         children = 'children',
         top = 'top',
@@ -60,7 +59,7 @@
                 r = v, g = p, b = q;
                 break;
         }
-        return [toRound(r * 255), toRound(g * 255), toRound(b * 255), toFixed(isSet(a[3]) ? +a[3] : 1, 3)];
+        return [toRound(r * 255), toRound(g * 255), toRound(b * 255), toFixed(isSet(a[3]) ? +a[3] : 1, 2)];
     }
 
     // Convert RGBA to HSVA
@@ -205,20 +204,20 @@
 
         $$[HEX] = function(x) {
             if (isString(x)) {
-                var i = x.length;
-                if ((4 === i || 7 === i) && '#' === x[0]) {
-                    if (/^\s*#([a-z\d]{1,2}){3}\s*$/i.test(x)) {
-                        if (4 === i) {
+                var count = (x = x.trim()).length;
+                if ((4 === count || 7 === count) && '#' === x[0]) {
+                    if (/^#([a-z\d]{1,2}){3}$/i.test(x)) {
+                        if (4 === count) {
                             return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), 1];
                         }
                         return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), 1];
                     }
-                } else if ((5 === i || 9 === i) && '#' === x[0]) {
-                    if (/^\s*#([a-z\d]{1,2}){4}\s*$/i.test(x)) {
-                        if (5 === i) {
-                            return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), toFixed(toInt(x[4] + x[4], 16) / 255, 3)];
+                } else if ((5 === count || 9 === count) && '#' === x[0]) {
+                    if (/^#([a-z\d]{1,2}){4}$/i.test(x)) {
+                        if (5 === count) {
+                            return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), toFixed(toInt(x[4] + x[4], 16) / 255, 2)];
                         }
-                        return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), toFixed(toInt(x[7] + x[8], 16) / 255, 3)];
+                        return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), toFixed(toInt(x[7] + x[8], 16) / 255, 2)];
                     }
                 }
                 return [0, 0, 0, 1]; // Default to black
@@ -228,37 +227,37 @@
 
         $$._ = $$.prototype;
 
-    })(win[NS] = function(source, o) {
+    })(win[name] = function(source, o) {
 
         if (!source) return;
 
         var $ = this,
-            $$ = win[NS],
+            $$ = win[name],
             hooks = {},
             self = doc.createElement('div'),
             state = Object.assign({
                 'color': HEX,
-                'e': downEvents,
+                'events': downEvents,
                 'parent': null
             }, false === o || o instanceof Array ? {
                 'e': o
             } : (o || {}));
 
         // Already instantiated, skip!
-        if (source[NS]) {
+        if (source[name]) {
             return $;
         }
 
         // Return new instance if `CP` was called without the `new` operator
         if (!($ instanceof $$)) {
-            return new $$(source, state);
+            return new $$(source, o);
         }
 
         // Store color picker instance to `CP.__instance__`
         $$[__instance__][source.id || source.name || Object.keys($$[__instance__]).length] = $;
 
         // Mark current DOM as active color picker to prevent duplicate instance
-        source[NS] = 1;
+        source[name] = 1;
 
         $.visible = false;
 
@@ -333,6 +332,8 @@
         var doEnter,
             doExit,
             doFit,
+            doFitTo,
+            body = doc.body,
             color = value(),
             data = RGB2HSV(color),
             C = self.firstChild,
@@ -340,25 +341,25 @@
             H = C[children][1],
             A = C[children][2],
 
-            SV_Color = SV[children][0],
-            // SV_Saturation = SV[children][1],
-            // SV_Value = SV[children][2],
-            SV_Cursor = SV[children][3],
+            SVColor = SV[children][0],
+            // SVSaturation = SV[children][1],
+            // SVValue = SV[children][2],
+            SVCursor = SV[children][3],
 
-            H_Color = H[children][0],
-            H_Cursor = H[children][1],
+            HColor = H[children][0],
+            HCursor = H[children][1],
 
-            A_Color = A[children][0],
-            // A_Pattern = A[children][1],
-            A_Cursor = A[children][2],
+            AColor = A[children][0],
+            // APattern = A[children][1],
+            ACursor = A[children][2],
 
-            SV_Starting = 0,
-            H_Starting = 0,
-            A_Starting = 0,
+            SVStarting = 0,
+            HStarting = 0,
+            AStarting = 0,
 
-            SV_Dragging = 0,
-            H_Dragging = 0,
-            A_Dragging = 0;
+            SVDragging = 0,
+            HDragging = 0,
+            ADragging = 0;
 
         function isVisible() {
             return self.parentNode;
@@ -399,15 +400,15 @@
                 eventsLet(A, downEvents, doDownA);
                 eventsLet(doc, moveEvents, doMove);
                 eventsLet(doc, upEvents, doStop);
-                eventsLet(win, resizeEvents, doFit);
+                eventsLet(win, resizeEvents, doFitTo);
                 return hookFire('exit', color), $;
             };
 
             doFit = function(to) {
                 var winSize = sizeGet(win),
                     htmlSize = sizeGet(html),
-                    scrollBarSizeWidth = win[0] - html[0], // Vertical scroll bar
-                    scrollBarSizeHeight = win[1] - html.clientHeight, // Horizontal scroll bar
+                    scrollBarSizeV = winSize[0] - htmlSize[0], // Vertical scroll bar
+                    scrollBarSizeH = winSize[1] - html.clientHeight, // Horizontal scroll bar
                     winOffset = offsetGet(win),
                     sourceOffset = offsetGet(source),
                     selfSize = sizeGet(self),
@@ -419,32 +420,36 @@
                     isSet(to[0]) && (selfOffsetLeft = to[0]);
                     isSet(to[1]) && (selfOffsetTop = to[1]);
                 } else {
-                    var min_x = winOffset[0],
-                        min_y = winOffset[1],
-                        max_x = winOffset[0] + winSize[0] - selfSizeWidth - scrollBarSizeWidth,
-                        max_y = winOffset[1] + winSize[1] - selfSizeHeight - scrollBarSizeHeight;
-                    selfOffsetLeft = toEdge(selfOffsetLeft, [min_x, max_x]) >> 0;
-                    selfOffsetTop = toEdge(selfOffsetTop, [min_y, max_y]) >> 0;
+                    var minX = winOffset[0],
+                        minY = winOffset[1],
+                        maxX = winOffset[0] + winSize[0] - selfSizeWidth - scrollBarSizeV,
+                        maxY = winOffset[1] + winSize[1] - selfSizeHeight - scrollBarSizeH;
+                    selfOffsetLeft = toEdge(selfOffsetLeft, [minX, maxX]) >> 0;
+                    selfOffsetTop = toEdge(selfOffsetTop, [minY, maxY]) >> 0;
                 }
                 styleSet(self, left, selfOffsetLeft + px);
                 styleSet(self, top, selfOffsetTop + px);
                 return hookFire('fit', color), $;
             };
 
-            var SV_Size = sizeGet(SV),
-                SV_SizeWidth = SV_Size[0],
-                SV_SizeHeight = SV_Size[1],
-                SV_CursorSize = sizeGet(SV_Cursor),
-                SV_CursorSizeWidth = SV_CursorSize[0],
-                SV_CursorSizeHeight = SV_CursorSize[1],
-                H_SizeHeight = sizeGet(H)[1],
-                H_CursorSizeHeight = sizeGet(H_Cursor)[1],
-                A_SizeHeight = sizeGet(A)[1],
-                A_CursorSizeHeight = sizeGet(A_Cursor)[1];
+            doFitTo = function() {
+                return doFit();
+            };
+
+            var SVSize = sizeGet(SV),
+                SVSizeWidth = SVSize[0],
+                SVSizeHeight = SVSize[1],
+                SVCursorSize = sizeGet(SVCursor),
+                SVCursorSizeWidth = SVCursorSize[0],
+                SVCursorSizeHeight = SVCursorSize[1],
+                HSizeHeight = sizeGet(H)[1],
+                HCursorSizeHeight = sizeGet(HCursor)[1],
+                ASizeHeight = sizeGet(A)[1],
+                ACursorSizeHeight = sizeGet(ACursor)[1];
 
             if (isFirst) {
-                if (false !== state.e) {
-                    eventsSet(source, state.e, doClick);
+                if (false !== state.events) {
+                    eventsSet(source, state.events, doClick);
                 }
                 delay(function() {
                     hookFire('change', color);
@@ -455,20 +460,20 @@
                 eventsSet(A, downEvents, doDownA);
                 eventsSet(doc, moveEvents, doMove);
                 eventsSet(doc, upEvents, doStop);
-                eventsSet(win, resizeEvents, doFit);
+                eventsSet(win, resizeEvents, doFitTo);
                 doFit();
             }
 
             function doMove(e) {
+                SVDragging && cursorSVSet(e);
+                HDragging && cursorHSet(e);
+                ADragging && cursorASet(e);
                 color = P2RGB(data);
-                SV_Dragging && cursorSVSet(e);
-                H_Dragging && cursorHSet(e);
-                A_Dragging && cursorASet(e);
-                if (SV_Dragging || H_Dragging || A_Dragging) {
-                    hookFire((SV_Starting || H_Starting || A_Starting ? 'start' : 'drag'), color);
+                if (SVDragging || HDragging || ADragging) {
+                    hookFire((SVStarting || HStarting || AStarting ? 'start' : 'drag'), color);
                     hookFire('change', color);
                 }
-                SV_Starting = H_Starting = A_Starting = 0;
+                SVStarting = HStarting = AStarting = 0;
             }
 
             function doStop(e) {
@@ -479,45 +484,45 @@
                 $.current = null;
                 if (!isSource && !isSelf) {
                     // Click outside the source or picker element to exit
-                    if (isVisible() && false !== state.e) {
+                    if (isVisible() && false !== state.events) {
                         doExit();
                     }
                 } else {
                     if (isSelf) {
-                        if (SV_Dragging || H_Dragging || A_Dragging) {
+                        if (SVDragging || HDragging || ADragging) {
                             hookFire('stop', color);
                         }
                     }
                 }
-                SV_Dragging = H_Dragging = A_Dragging = 0;
+                SVDragging = HDragging = ADragging = 0;
             }
 
             function doDownSV(e) {
                 $.current = SV;
-                SV_Starting = SV_Dragging = 1;
+                SVStarting = SVDragging = 1;
                 doMove(e);
                 doPreventDefault(e);
             }
 
             function doDownH(e) {
                 $.current = H;
-                H_Starting = H_Dragging = 1;
+                HStarting = HDragging = 1;
                 doMove(e);
                 doPreventDefault(e);
             }
 
             function doDownA(e) {
                 $.current = A;
-                A_Starting = A_Dragging = 1;
+                AStarting = ADragging = 1;
                 doMove(e);
                 doPreventDefault(e);
             }
 
             function cursorSet(x) {
-                isSet(x[1]) && styleSet(SV_Cursor, right, (SV_SizeWidth - (SV_CursorSizeWidth / 2) - (SV_SizeWidth * +x[1])) + px);
-                isSet(x[2]) && styleSet(SV_Cursor, top, (SV_SizeHeight - (SV_CursorSizeHeight / 2) - (SV_SizeHeight * +x[2])) + px);
-                isSet(x[0]) && styleSet(H_Cursor, top, (H_SizeHeight - (H_CursorSizeHeight / 2) - (H_SizeHeight * +x[0])) + px);
-                isSet(x[3]) && styleSet(A_Cursor, top, (A_SizeHeight - (A_CursorSizeHeight / 2) - (A_SizeHeight * +x[3])) + px);
+                isSet(x[1]) && styleSet(SVCursor, right, (SVSizeWidth - (SVCursorSizeWidth / 2) - (SVSizeWidth * +x[1])) + px);
+                isSet(x[2]) && styleSet(SVCursor, top, (SVSizeHeight - (SVCursorSizeHeight / 2) - (SVSizeHeight * +x[2])) + px);
+                isSet(x[0]) && styleSet(HCursor, top, (HSizeHeight - (HCursorSizeHeight / 2) - (HSizeHeight * +x[0])) + px);
+                isSet(x[3]) && styleSet(ACursor, top, (ASizeHeight - (ACursorSizeHeight / 2) - (ASizeHeight * +x[3])) + px);
             }
 
             $.get = function() {
@@ -530,21 +535,21 @@
             };
 
             function cursorSVSet(e) {
-                var SV_Point = axixGet(SV, e),
-                    x = toEdge(SV_Point[0], [0, SV_SizeWidth]),
-                    y = toEdge(SV_Point[1], [0, SV_SizeHeight]);
-                data[1] = 1 - ((SV_SizeWidth - x) / SV_SizeWidth);
-                data[2] = (SV_SizeHeight - y) / SV_SizeHeight;
+                var SVPoint = axixGet(SV, e),
+                    x = toEdge(SVPoint[0], [0, SVSizeWidth]),
+                    y = toEdge(SVPoint[1], [0, SVSizeHeight]);
+                data[1] = 1 - ((SVSizeWidth - x) / SVSizeWidth);
+                data[2] = (SVSizeHeight - y) / SVSizeHeight;
                 colorSet();
             }
 
             function cursorHSet(e) {
-                data[0] = (H_SizeHeight - toEdge(axixGet(H, e)[1], [0, H_SizeHeight])) / H_SizeHeight;
+                data[0] = (HSizeHeight - toEdge(axixGet(H, e)[1], [0, HSizeHeight])) / HSizeHeight;
                 colorSet();
             }
 
             function cursorASet(e) {
-                data[3] = (A_SizeHeight - toEdge(axixGet(A, e)[1], [0, A_SizeHeight])) / A_SizeHeight;
+                data[3] = (ASizeHeight - toEdge(axixGet(A, e)[1], [0, ASizeHeight])) / ASizeHeight;
                 colorSet();
             }
 
@@ -552,8 +557,8 @@
                 cursorSet(data);
                 var a = P2RGB(data),
                     b = P2RGB([data[0], 1, 1]);
-                styleSet(SV_Color, 'backgroundColor', 'rgb(' + b[0] + ',' + b[1] + ',' + b[2] + ')');
-                styleSet(A_Color, 'backgroundImage', 'linear-gradient(rgb(' + a[0] + ',' + a[1] + ',' + a[2] + '),transparent)');
+                styleSet(SVColor, 'backgroundColor', 'rgb(' + b[0] + ',' + b[1] + ',' + b[2] + ')');
+                styleSet(AColor, 'backgroundImage', 'linear-gradient(rgb(' + a[0] + ',' + a[1] + ',' + a[2] + '),transparent)');
             } colorSet();
 
         } doApply(1);
@@ -572,12 +577,12 @@
         $.on = hookSet;
 
         $.pop = function() {
-            if (!source[NS]) {
+            if (!source[name]) {
                 return $; // Already ejected
             }
-            delete source[NS];
-            if (false !== state.e) {
-                eventsLet(source, state.e, doClick);
+            delete source[name];
+            if (false !== state.events) {
+                eventsLet(source, state.events, doClick);
             }
             return doExit(), hookFire('pop', color);
         };

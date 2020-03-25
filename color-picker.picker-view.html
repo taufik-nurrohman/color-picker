@@ -6,12 +6,14 @@
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
+
     .color-view {
       display: block;
       border: 1px solid #000;
       border-top-width: 0;
       overflow: hidden;
     }
+
     .color-view span {
       display: block;
       float: left;
@@ -19,48 +21,50 @@
       height: 50px;
       cursor: pointer;
     }
+
     </style>
   </head>
   <body>
     <p>Add color preview in the color picker panel. Click on the first preview box to reset color to the previous state, click on the second preview box to set color value on the source element.</p>
-    <p><input type="text"></p>
+    <p><input readonly type="text"></p>
     <script src="color-picker.min.js"></script>
     <script>
 
     var picker = new CP(document.querySelector('input')),
         box = document.createElement('span'),
-        a = document.createElement('span'),
-        b = document.createElement('span');
+        boxLet = document.createElement('span'),
+        boxSet = document.createElement('span');
 
     box.className = 'color-view';
-    box.appendChild(a);
-    box.appendChild(b);
+    box.appendChild(boxLet);
+    box.appendChild(boxSet);
     picker.self.appendChild(box);
 
-    picker.on("enter", function() {
-        var color = '#' + CP._HSV2HEX(this.get());
-        a.title = color;
-        b.title = color;
-        a.style.backgroundColor = color;
-        b.style.backgroundColor = color;
+    picker.on('enter', function(r, g, b, a) {
+        var color = this.color(r, g, b, a);
+        boxLet.title = color;
+        boxSet.title = color;
+        boxLet.style.backgroundColor = color;
+        boxSet.style.backgroundColor = color;
     });
 
-    picker.on("change", function(color) {
-        b.title = '#' + color;
-        b.style.backgroundColor = '#' + color;
+    picker.on('change', function(r, g, b, a) {
+        var color = this.color(r, g, b, a);
+        boxSet.title = color;
+        boxSet.style.backgroundColor = color;
     });
 
-    // click to reset
-    a.addEventListener("click", function(e) {
+    // Click to reset
+    boxLet.addEventListener('click', function(e) {
         var color = this.title;
-        picker.set(color);
-        b.title = color;
-        b.style.backgroundColor = color;
+        picker.value.apply(picker, CP.HEX(color));
+        boxSet.title = color;
+        boxSet.style.backgroundColor = color;
         e.stopPropagation();
     }, false);
 
-    // click to set
-    b.addEventListener("click", function(e) {
+    // Click to set
+    boxSet.addEventListener('click', function(e) {
         var color = this.title;
         picker.exit();
         picker.source.value = color;

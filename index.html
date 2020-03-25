@@ -99,15 +99,15 @@
       <pre><code>const picker = new CP(<var>source</var>, <var>events</var>);</code></pre>
       <pre><code>const picker = new CP(<var>source</var>, <var>state</var> = {
         color: 'HEX',
-        e: ['touchstart', 'mousedown'],
+        events: ['touchstart', 'mousedown'],
         parent: null
     });</code></pre>
       <ul>
-        <li><var>source</var> &rarr; The color source element.</li>
+        <li><var>source</var> &rarr; The source element that holds the initial color data.</li>
         <li><var>events</var> &rarr; Default events to show the color picker pane.</li>
         <li><var>state</var> &rarr; The configuration data.</li>
         <li><var>state.color</var> &rarr; Name of the color parser defined in the <code>CP</code> object.</li>
-        <li><var>state.e</var> &rarr; Default events to show the color picker pane.</li>
+        <li><var>state.events</var> &rarr; Default events to show the color picker pane.</li>
         <li><var>state.parent</var> &rarr; Parent element to append the color picker element (default will be appended to the <code>&lt;body&gt;</code> element).</li>
       </ul>
       <h2>Instance</h2>
@@ -265,6 +265,7 @@ picker.on('change', onChange); // With context</code></pre>
         <li>Add Support for CMYK Color Value</li>
         <li>Add Support for &ldquo;Named&rdquo; Color Value</li>
         <li>Automatic Color Mode Detection</li>
+        <li><a href="color-picker.color.hex.html" target="_blank">Add Support for Short Hex Color Value (e.g. <code>#000</code> instead of <code>#000000</code>)</a></li>
         <li><a href="color-picker.alpha.html" target="_blank">Disable Alpha Channel Support</a></li>
         <li><a href="color-picker.input.html" target="_blank">Disable Native HTML5 Color Picker</a></li>
         <li><a href="color-picker.button.html" target="_blank">Show and Hide Color Picker with Buttons</a></li>
@@ -276,9 +277,9 @@ picker.on('change', onChange); // With context</code></pre>
         <li><a href="color-picker.fit.html" target="_blank">Auto-Positioned to the Reachable Area in the Document</a></li>
         <li><a href="color-picker.picker-view.html" target="_blank">Color Preview in Color Picker</a></li>
         <li><a href="color-picker.picker-view-code.html" target="_blank">Color Code to Copy in Color Picker</a></li>
-        <li><a href="color-picker.scroll.html" target="_blank">Scroll Follow</a></li>
+        <li><a href="color-picker.scroll.html" target="_blank">Scroll Follow Color Picker</a></li>
         <li><a href="color-picker.size.html" target="_blank">Custom Color Picker Size</a></li>
-        <li><a href="color-picker.vue.html" target="_blank">Vue.js Integration (TODO)</a></li>
+        <li><a href="color-picker.element.html" target="_blank">Native HTML5 Custom <code>&lt;color-picker&gt;</code> Element</a></li>
       </ul>
       <h2>Support</h2>
       <p>Use it for free, pay if you get paid. So, you&rsquo;ve just benefited financially after using this project, huh? It&rsquo;s a good idea to share a little financial support with this open source project too. Your support will motivate me to do any further development, as well as to provide voluntary support to overcome problems related to this project.</p>

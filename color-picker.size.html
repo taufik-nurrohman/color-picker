@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width">
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
+    <style>
+
+    h1, h2, h3, h4, h5, h6 {
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
+      text-decoration: underline;
+    }
+
+    </style>
   </head>
   <body>
     <h1>Size 1</h1>
@@ -14,23 +26,25 @@
     <h5>Size 5</h5>
     <h6>Size 6</h6>
     <p>By default, color picker size will follow the container&rsquo;s text size; the container that bounds to the color picker pane.</p>
-    <pre><code>/* to change the color picker size */
+    <pre><code>/* To change the color picker size */
 .color-picker {
   font-size: 20px;
 }
 
-/* to change the color picker control&rsquo;s size */
+/* To change the color picker control&rsquo;s size */
 .color-picker i {
   font-size: 15px;
 }</code></pre>
     <script src="color-picker.min.js"></script>
     <script>
 
-    var source = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+    var source = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
 
-    for (var i = 0, len = source.length; i < len; ++i) {
-        (new CP(source[i], true, source[i])).on("change", function(color) {
-            this.source.style.color = '#' + color;
+    for (var i = 0, j = source.length; i < j; ++i) {
+        (new CP(source[i], {
+            parent: source[i]
+        })).on('change', function(r, g, b, a) {
+            this.source.style.color = this.color(r, g, b, a);
         });
     }
 

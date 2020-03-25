@@ -6,9 +6,10 @@
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
+
     .color-code {
+      box-sizing: border-box;
       display: block;
-      float: left;
       width: 100%;
       height: 2em;
       margin: 0;
@@ -16,15 +17,23 @@
       background: #ffa;
       border: 1px solid #000;
       border-top-width: 0;
-      font: normal normal 13px/2em Helmet, FreeSans, sans-serif;
+      font: normal normal 13px/2em sans-serif;
       color: #000;
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
     }
+
     .color-code:invalid {
       color: #f00;
     }
+
+    .color-picker\:a {
+      pointer-events: none;
+    }
+
+    .color-picker\:a div,
+    .color-picker\:a i {
+      opacity: .25
+    }
+
     </style>
   </head>
   <body>
@@ -35,37 +44,37 @@
     var picker = new CP(document.querySelector('input')),
         code = document.createElement('input');
 
-    // prevent showing native color picker panel
-    picker.source.onclick = function(e) {
+    // Prevent showing native color picker panel
+    picker.source.addEventListener('click', function(e) {
         e.preventDefault();
-    };
+    }, false);
 
     code.className = 'color-code';
-    code.pattern = '^#[A-Fa-f0-9]{6}$';
+    code.pattern = '^#([A-Fa-f0-9]{1,2}){3}$';
     code.type = 'text';
 
-    picker.on("enter", function() {
-        code.value = '#' + CP._HSV2HEX(this.get());
+    picker.on('enter', function(r, g, b) {
+        code.value = this.color(r, g, b, 1);
     });
 
-    picker.on("change", function(color) {
-        this.source.value = '#' + color;
-        code.value = '#' + color;
+    picker.on('change', function(r, g, b) {
+        this.source.value = this.color(r, g, b, 1);
+        code.value = this.color(r, g, b, 1);
     });
 
     picker.self.appendChild(code);
 
-    function update() {
+    function onChange() {
         if (this.value.length) {
-            picker.set(this.value);
-            picker.fire("change", [this.value.slice(1)]);
+            var color = CP.HEX(this.value);
+            picker.set.apply(picker, color);
+            picker.source.value = CP.HEX(color);
         }
     }
 
-    code.oncut = update;
-    code.onpaste = update;
-    code.onkeyup = update;
-    code.oninput = update;
+    ['cut', 'paste', 'keyup', 'input'].forEach(function(name) {
+        code.addEventListener(name, onChange, false);
+    });
 
     </script>
   </body>
