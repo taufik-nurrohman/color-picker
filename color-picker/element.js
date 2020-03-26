@@ -6,23 +6,18 @@
             // Always call `super()` first in constructor
             super();
             // Create a shadow root
-            let shadow = this.attachShadow({
+            this.attachShadow({
                 mode: 'open'
             });
-            // Create color picker source element
-            let source = doc.createElement('span');
-            source.style.cssText = 'display:inline-block;vertical-align:middle;width:2em;height:2em;cursor:pointer;';
-            // Attach the created element to the shadow DOM
-            shadow.appendChild(source);
         }
 
         connectedCallback() {
-            const shadow = this.shadowRoot;
-            let host = shadow.host,
-                source = shadow.querySelector('span'),
+            let root = this.shadowRoot,
+                source = doc.createElement('span'),
                 input = doc.createElement('input'),
                 inputName = this.getAttribute('name'),
                 inputValue = this.getAttribute('value');
+            source.style.cssText = 'display:inline-block;vertical-align:middle;width:2em;height:2em;cursor:pointer;';
             input.type = 'hidden';
             if (inputName) {
                 input.name = inputName;
@@ -32,7 +27,8 @@
                 source.style.backgroundColor = inputValue;
                 source.setAttribute('data-color', inputValue);
             }
-            host.parentNode.insertBefore(input, host);
+            root.appendChild(source);
+            root.host.parentNode.insertBefore(input, root.host);
             // Apply the color picker widget
             const picker = new CP(source);
             picker.on('change', function(r, g, b, a) {

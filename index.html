@@ -42,7 +42,7 @@
       padding: .75em 1em;
     ">Do you like this project? Please support my <a href="https://github.com/mecha-cms">Mecha CMS</a> project too. Thank you!</p>
     <header>
-      <h1>Color Picker v2.0.0-dev</h1>
+      <h1>Color Picker v2.0.0</h1>
       <p>Color Picker is a simple JavaScript widget that aims to provide custom color picker feature to the web with the most basic appearance and usability.</p>
       <hr>
     </header>
@@ -67,7 +67,7 @@
       </form>
       <h2>Features</h2>
       <ul>
-        <li>Light-weight, no dependencies. It uses plain JavaScript language.</li>
+        <li>Light-weight, no dependencies. It uses vanilla JavaScript.</li>
         <li>Simple <abbr title="Application Programming Interface">API</abbr>. Easy to master.</li>
         <li>Responsive. It tries to place itself inside an area that is visible within the browser window.</li>
         <li>Has alpha channel support by default.</li>
@@ -95,6 +95,37 @@
     &lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;</code></pre>
+      <h2>Examples</h2>
+      <ul>
+        <li><a href="color-picker.html" target="_blank">No Idea?</a></li>
+        <li><a href="color-picker.picker.html" target="_blank">Multiple Instances</a></li>
+        <li><a href="color-picker.color.html" target="_blank">Pre-Defined Value</a></li>
+        <li><a href="color-picker.picker-color.html" target="_blank">Pre-Defined Color</a></li>
+        <li><a href="color-picker.update.html" target="_blank">Update Color Picker&rsquo;s Color State on Value Changes</a></li>
+        <li>Add Support for CMYK Color Value</li>
+        <li><a href="color-picker.color.hex.html" target="_blank">Add Support for Short Hex Color Value (e.g. <code>#000</code> instead of <code>#000000</code>)</a></li>
+        <li><a href="color-picker.color.rgba.html" target="_blank">Add Support for RGBA Color Value</a></li>
+        <li>Add Support for HSLA Color Value</li>
+        <li>Add Support for HWB Color Value</li>
+        <li>Add Support for LAB Color Value</li>
+        <li>Add Support for LCH Color Value</li>
+        <li><a href="color-picker.color.name.html" target="_blank">Add Support for &ldquo;Named&rdquo; Color Value</a></li>
+        <li>Automatic Color Mode Detection</li>
+        <li><a href="color-picker.alpha.html" target="_blank">Disable Alpha Channel Support</a></li>
+        <li><a href="color-picker.input.html" target="_blank">Disable Native HTML5 Color Picker</a></li>
+        <li><a href="color-picker.button.html" target="_blank">Show and Hide Color Picker with Buttons</a></li>
+        <li><a href="color-picker.events.html" target="_blank">Show and Hide Color Picker with Double Click</a></li>
+        <li><a href="color-picker.close.html" target="_blank">Add Close Button to the Color Picker</a></li>
+        <li><a href="color-picker.static.html" target="_blank">Static Color Picker</a></li>
+        <li><a href="color-picker.replace.html" target="_blank">Replace Text Input with Hidden Input</a></li>
+        <li><a href="color-picker.pop.html" target="_blank">Destroy Color Picker</a></li>
+        <li><a href="color-picker.fit.html" target="_blank">Auto-Positioned to the Reachable Area in the Document</a></li>
+        <li><a href="color-picker.picker-view.html" target="_blank">Color Preview in Color Picker</a></li>
+        <li><a href="color-picker.picker-view-code.html" target="_blank">Color Code to Copy in Color Picker</a></li>
+        <li><a href="color-picker.scroll.html" target="_blank">Scroll Follow Color Picker</a></li>
+        <li><a href="color-picker.size.html" target="_blank">Custom Color Picker Size</a></li>
+        <li><a href="color-picker.element.html" target="_blank">Native HTML5 Custom <code>&lt;color-picker&gt;</code> Element</a></li>
+      </ul>
       <h2>Settings</h2>
       <pre><code>const picker = new CP(<var>source</var>, <var>events</var>);</code></pre>
       <pre><code>const picker = new CP(<var>source</var>, <var>state</var> = {
@@ -178,7 +209,7 @@ picker.fit([30, 30]);</code></pre>
       <h2>Color Converters</h2>
       <p>Converters are defined as static methods in the scope of <code>CP</code>. This method accepts two types of input, a color string input and an array of red, green, blue and alpha color data. Every input given to this method will return the opposite version of the input. For example, with the <code>CP.HEX()</code> method, if I put <code>'#ffff00'</code> to the method argument, it will come out as <code>[255, 255, 0, 1]</code> and if I put <code>[255, 255, 0, 1]</code> to the method argument, it will come out as <code>'#ffff00'</code>.</p>
       <p>To make a color converter, be sure to check the input types first before doing the parsing:</p>
-      <pre><code>CP.RGB = x =&gt; {
+      <pre><code>CP.RGB = function(x) {
     if ('string' === typeof x) {
         // Use regular expression here to extract color data from the string input
         // and output it as an array of red, green, blue and alpha color data
@@ -254,65 +285,14 @@ picker.on('change', onChange); // With context</code></pre>
       <h3>picker.fire(name, lot)</h3>
       <p>Trigger hooks.</p>
       <pre><code>picker.fire('change', [255, 255, 0, .5]);</code></pre>
-      <ul>
-        <li><a href="color-picker.html" target="_blank">No Idea?</a></li>
-        <li><a href="color-picker.picker.html" target="_blank">Multiple Instances</a></li>
-        <li><a href="color-picker.color.html" target="_blank">Pre-Defined Value</a></li>
-        <li><a href="color-picker.picker-color.html" target="_blank">Pre-Defined Color</a></li>
-        <li><a href="color-picker.update.html" target="_blank">Update Color Picker&rsquo;s Color State on Value Changes</a></li>
-        <li><a href="color-picker.color.rgba.html" target="_blank">Add Support for RGBA Color Value</a></li>
-        <li>Add Support for HSLA Color Value</li>
-        <li>Add Support for CMYK Color Value</li>
-        <li>Add Support for &ldquo;Named&rdquo; Color Value</li>
-        <li>Automatic Color Mode Detection</li>
-        <li><a href="color-picker.color.hex.html" target="_blank">Add Support for Short Hex Color Value (e.g. <code>#000</code> instead of <code>#000000</code>)</a></li>
-        <li><a href="color-picker.alpha.html" target="_blank">Disable Alpha Channel Support</a></li>
-        <li><a href="color-picker.input.html" target="_blank">Disable Native HTML5 Color Picker</a></li>
-        <li><a href="color-picker.button.html" target="_blank">Show and Hide Color Picker with Buttons</a></li>
-        <li><a href="color-picker.events.html" target="_blank">Show and Hide Color Picker with Double Click</a></li>
-        <li><a href="color-picker.close.html" target="_blank">Add Close Button to the Color Picker</a></li>
-        <li><a href="color-picker.static.html" target="_blank">Static Color Picker</a></li>
-        <li><a href="color-picker.replace.html" target="_blank">Replace Text Input with Hidden Input</a></li>
-        <li><a href="color-picker.pop.html" target="_blank">Destroy Color Picker</a></li>
-        <li><a href="color-picker.fit.html" target="_blank">Auto-Positioned to the Reachable Area in the Document</a></li>
-        <li><a href="color-picker.picker-view.html" target="_blank">Color Preview in Color Picker</a></li>
-        <li><a href="color-picker.picker-view-code.html" target="_blank">Color Code to Copy in Color Picker</a></li>
-        <li><a href="color-picker.scroll.html" target="_blank">Scroll Follow Color Picker</a></li>
-        <li><a href="color-picker.size.html" target="_blank">Custom Color Picker Size</a></li>
-        <li><a href="color-picker.element.html" target="_blank">Native HTML5 Custom <code>&lt;color-picker&gt;</code> Element</a></li>
-      </ul>
-      <h2>Support</h2>
-      <p>Use it for free, pay if you get paid. So, you&rsquo;ve just benefited financially after using this project, huh? It&rsquo;s a good idea to share a little financial support with this open source project too. Your support will motivate me to do any further development, as well as to provide voluntary support to overcome problems related to this project.</p>
+      <h2>License</h2>
+      <p>Use it for free, pay if you get paid. So, you&rsquo;ve just benefited financially after using this project? It&rsquo;s a good idea to share a little financial support with this open source project too. Your support will motivate me to do any further development, as well as to provide voluntary support to overcome problems related to this project.</p>
       <p>Thank you! ❤️</p>
       <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
         <input name="cmd" value="_s-xclick" type="hidden">
         <input name="hosted_button_id" value="TNVGH7NQ7E4EU" type="hidden">
         <p><button type="submit" class="button">Donate</button></p>
       </form>
-      <hr>
-      <pre>The MIT License (MIT)
-
-Copyright (c) 2020 Taufik Nurrohman
-
-&lt;https://github.com/taufik-nurrohman/color-picker&gt;
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.</pre>
     </main>
     <footer>
       <hr>
@@ -320,10 +300,11 @@ SOFTWARE.</pre>
     </footer>
     <script src="color-picker.js"></script>
     <script>
-    var picker = new CP(document.querySelector('form').color),
-        meta = document.querySelector('meta[name=color-scheme]');
+    var source = document.querySelector('form').color;
+    source.value = '#' + ('00000' + (Math.random() * (1 << 24) | 0).toString(16)).slice(-6); // Random hex color
+    var picker = new CP(source);
     picker.on('change', function(r, g, b, a) {
-        this.source.value = meta.content = this.color(r, g, b, a);
+        this.source.value = this.color(r, g, b, a);
         this.source.parentNode.style.backgroundColor = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
     });
     </script>
