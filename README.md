@@ -7,7 +7,7 @@ Has support for touch events. Touchy… touchy…
 
 ![Color Picker](https://user-images.githubusercontent.com/1669261/77280787-e2710100-6cf7-11ea-912d-d7d89c67bf83.png)
 
-[Demo and Documentation](http://taufik-nurrohman.github.io/color-picker "View Demo")
+[Demo and Documentation](https://taufik-nurrohman.github.io/color-picker "View Demo")
 
 ## Contributors
 
