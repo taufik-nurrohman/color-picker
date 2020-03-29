@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta content="#000" name="color-scheme">
     <meta content="width=device-width" name="viewport">
-    <meta content="Color Picker is a simple JavaScript widget that aims to provide custom color picker feature to the web with the most basic appearance and usability." name="description">
+    <meta content="Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability." name="description">
     <title>Color Picker</title>
     <link href="favicon.ico" rel="icon">
     <link href="color-picker.css" rel="stylesheet">
@@ -42,12 +42,12 @@
       padding: .75em 1em;
     ">Do you like this project? Please support my <a href="https://github.com/mecha-cms">Mecha CMS</a> project too. Thank you!</p>
     <header>
-      <h1>Color Picker v2.0.0</h1>
-      <p>Color Picker is a simple JavaScript widget that aims to provide custom color picker feature to the web with the most basic appearance and usability.</p>
+      <h1>Color Picker v2.0.1</h1>
+      <p>Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability.</p>
       <hr>
     </header>
     <main>
-      <p>It&rsquo;s easy to set-up, has no animation effects, and no color support other than hex color code (you can add your own custom color supports yourself). My purpose in making this widget is to provide a JavaScript color picker solution as simple as possible with the most minimal features without requiring any dependency on JavaScript library such as jQuery. Use the available hooks to make your own improvements without having to touch the widget core.</p>
+      <p>It&rsquo;s easy to set-up, has no animation effects, and no color support other than hex color code (you can add your own custom color supports yourself). My purpose in making this application is to provide a JavaScript color picker solution as simple as possible with the most minimal features without requiring any dependency on JavaScript library such as jQuery. Use the available hooks to make your own improvements without having to touch the application core.</p>
       <form method="get" target="_blank">
         <div style="
           background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%), linear-gradient(45deg, #eee 25%, #fff 25%, #fff 75%, #eee 75%, #eee 100%);
@@ -103,13 +103,13 @@
         <li><a href="color-picker.picker-color.html" target="_blank">Pre-Defined Color</a></li>
         <li><a href="color-picker.update.html" target="_blank">Update Color Picker&rsquo;s Color State on Value Changes</a></li>
         <li>Add Support for CMYK Color Value</li>
-        <li><a href="color-picker.color.hex.html" target="_blank">Add Support for Short Hex Color Value (e.g. <code>#000</code> instead of <code>#000000</code>)</a></li>
         <li><a href="color-picker.color.rgba.html" target="_blank">Add Support for RGBA Color Value</a></li>
         <li>Add Support for HSLA Color Value</li>
         <li>Add Support for HWB Color Value</li>
         <li>Add Support for LAB Color Value</li>
         <li>Add Support for LCH Color Value</li>
         <li><a href="color-picker.color.name.html" target="_blank">Add Support for &ldquo;Named&rdquo; Color Value</a></li>
+        <li><a href="color-picker.color.hex.html" target="_blank">Add Support for Short Hex Color Value (e.g. <code>#000</code> instead of <code>#000000</code>)</a></li>
         <li>Automatic Color Mode Detection</li>
         <li><a href="color-picker.alpha.html" target="_blank">Disable Alpha Channel Support</a></li>
         <li><a href="color-picker.input.html" target="_blank">Disable Native HTML5 Color Picker</a></li>
@@ -141,33 +141,58 @@
         <li><var>state.events</var> &rarr; Default events to show the color picker pane.</li>
         <li><var>state.parent</var> &rarr; Parent element to append the color picker element (default will be appended to the <code>&lt;body&gt;</code> element).</li>
       </ul>
-      <h2>Instance</h2>
-      <p>All color picker instances will be stored in <code>CP.__instance__</code>. To iterate the instances is possible with <code>CP.each()</code>:</p>
-      <pre><code>CP.each(function(key) {
-    console.log(key);
-    console.log(this.source);
-});</code></pre>
-      <ul>
-        <li><var>this</var> &rarr; Refers to the color picker instance.</li>
-        <li><var>key</var> &rarr; Refers to the color picker target&rsquo;s <code>id</code> or <code>name</code> attribute value, or its current order.</li>
-      </ul>
       <h2>Methods and Properties</h2>
       <h3>CP.version</h3>
       <p>Return the color picker version.</p>
+      <pre><code>let version = CP.version,
+    major = version.split('.')[0];
+
+if (+major &lt; 2) {
+    // Has no alpha channel support
+}</code></pre>
+      <h3>CP.instances</h3>
+      <p>Return the color picker instances.</p>
+      <pre><code>for (let key in CP.instances) {
+    console.log(key);
+    console.log(CP.instances[key]);
+}</code></pre>
       <h3>CP.HEX(color | [r, g, b, a])</h3>
-      <p>Hex color converter as the default color string parser. This is the only color mode that this widget can parse into a series of RGBA color data. You can add your own color parser later to enhance the existing features.</p>
+      <p>Hex color converter as the default color string parser. This is the only color mode that this application can parse into a series of RGBA color data. You can add your own color parser later to enhance the existing features.</p>
       <pre><code>console.log(CP.HEX('#ff0')); // &rarr; `[255, 255, 0, 1]`
 console.log(CP.HEX([255, 255, 0, 1])); // &rarr; `'#ffff00'`</code></pre>
       <h3>CP._</h3>
-      <p>Return the color picker prototypes if any.</p>
+      <p>Alias of <code>CP.prototype</code> used to formalize the prototype creation.</p>
+      <pre><code>// Create `append()` and `appendTo()` method
+CP._.append = function() {
+    return this.enter();
+};
+
+CP._.appendTo = function(parent) {
+    return this.enter(parent);
+};
+
+// Usage
+let picker = new CP(document.querySelector('input'), false);
+document.querySelector('button').addEventListener('click', function() {
+    picker.appendTo(document.body);
+}, false);</code></pre>
       <h3>picker.state</h3>
       <p>Return the modified color picker states.</p>
       <h3>picker.source</h3>
       <p>Return the color picker source element that holds the initial color value. It can be any element with a <code>data-color</code> attribute, any element that has <code>value</code> attribute or any element that has color value in its content.</p>
+      <pre><code>picker.source.addEventListener('click', function() {
+    console.log(this.nodeName);
+}, false);</code></pre>
       <h3>picker.self</h3>
       <p>Return the color picker element.</p>
+      <pre><code>picker.self.style.borderWidth = '4px';</code></pre>
       <h3>picker.current</h3>
       <p>Return the active color picker control pane element.</p>
+      <pre><code>picker.on('change', function(r, g, b, a) {
+    if (this.current.classList.contains('color-picker:h')) {
+        // Is dragging the hue control
+    }
+});</code></pre>
       <h3>picker.visible</h3>
       <p>Check if color picker pane is visible.</p>
       <pre><code>if (picker.visible) { &hellip; }</code></pre>
@@ -221,7 +246,7 @@ picker.fit([30, 30]);</code></pre>
 
 console.log(CP.RGB('rgba(255, 255, 0, 1)'));
 console.log(CP.RGB([255, 255, 0, 1]));</code></pre>
-      <p>To apply it to the widget so that the widget can detect RGB color input through the string representation of RGB color given to the input element, set the <code>color</code> state value to <code>'RGB'</code>:</p>
+      <p>To apply it to the application so that the application can detect RGB color input through the string representation of RGB color given to the input element, set the <code>color</code> state value to <code>'RGB'</code>:</p>
       <pre><code>var picker = new CP(document.querySelector('input'), {
         color: 'RGB'
     });</code></pre>
@@ -268,6 +293,9 @@ console.log(CP.RGB([255, 255, 0, 1]));</code></pre>
           </tr>
         </tbody>
       </table>
+      <h3>picker.hooks</h3>
+      <p>Return the added hooks.</p>
+      <pre><code>console.log(picker.hooks);</code></pre>
       <h3>picker.on(name, fn)</h3>
       <p>Add a new hook.</p>
       <pre><code>picker.on('change', function(r, g, b, a) {

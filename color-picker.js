@@ -1,6 +1,6 @@
 /*!
  * ==============================================================
- *  COLOR PICKER PLUGIN 2.0.0
+ *  COLOR PICKER 2.0.1
  * ==============================================================
  * Author: Taufik Nurrohman <https://github.com/taufik-nurrohman>
  * License: MIT
@@ -17,13 +17,12 @@
         left = 'left',
         px = 'px',
         delay = win.setTimeout,
+        instances = 'instances',
 
         downEvents = ['touchstart', 'mousedown'],
         moveEvents = ['touchmove', 'mousemove'],
         resizeEvents = ['orientationchange', 'resize'],
-        upEvents = ['touchend', 'mouseup'],
-
-        __instance__ = '__instance__';
+        upEvents = ['touchend', 'mouseup'];
 
     // Convert cursor position to RGBA
     function P2RGB(a) {
@@ -186,21 +185,10 @@
 
     (function($$) {
 
-        $$.version = '2.0.0';
+        $$.version = '2.0.1';
 
         // Collect all instance(s)
-        $$[__instance__] = {};
-
-        // Apply to all instance(s)
-        $$.each = function(fn, t) {
-            var i, j;
-            return delay(function() {
-                j = $$[__instance__];
-                for (i in j) {
-                    fn.call(j[i], i);
-                }
-            }, 0 === t ? 0 : (t || 1)), $$;
-        };
+        $$[instances] = {};
 
         $$[HEX] = function(x) {
             if (isString(x)) {
@@ -236,12 +224,14 @@
             hooks = {},
             self = doc.createElement('div'),
             state = Object.assign({
+                'class': 'color-picker',
                 'color': HEX,
                 'events': downEvents,
                 'parent': null
             }, false === o || o instanceof Array ? {
                 'e': o
-            } : (o || {}));
+            } : (o || {})),
+            cn = state['class'];
 
         // Already instantiated, skip!
         if (source[name]) {
@@ -253,8 +243,8 @@
             return new $$(source, o);
         }
 
-        // Store color picker instance to `CP.__instance__`
-        $$[__instance__][source.id || source.name || Object.keys($$[__instance__]).length] = $;
+        // Store color picker instance to `CP.instances`
+        $$[instances][source.id || source.name || Object.keys($$[instances]).length] = $;
 
         // Mark current DOM as active color picker to prevent duplicate instance
         source[name] = 1;
@@ -326,8 +316,8 @@
             return $;
         }
 
-        self.className = 'color-picker';
-        self.innerHTML = '<div><div class="color-picker:sv"><div></div><div></div><div></div><i></i></div><div class="color-picker:h"><div></div><i></i></div><div class="color-picker:a"><div></div><div></div><i></i></div></div>';
+        self.className = cn;
+        self.innerHTML = '<div><div class="' + cn + ':sv"><div></div><div></div><div></div><i></i></div><div class="' + cn + ':h"><div></div><i></i></div><div class="' + cn + ':a"><div></div><div></div><i></i></div></div>';
 
         var doEnter,
             doExit,
@@ -336,6 +326,7 @@
             body = doc.body,
             color = value(),
             data = RGB2HSV(color),
+            events = state.events,
             C = self.firstChild,
             SV = C[children][0],
             H = C[children][1],
@@ -379,6 +370,7 @@
 
             // Refresh value
             data = RGB2HSV(color = value());
+            events = state.events;
 
             if (!isFirst) {
                 (to || state.parent || body).appendChild(self), ($.visible = true);
@@ -448,8 +440,8 @@
                 ACursorSizeHeight = sizeGet(ACursor)[1];
 
             if (isFirst) {
-                if (false !== state.events) {
-                    eventsSet(source, state.events, doClick);
+                if (false !== events) {
+                    eventsSet(source, events, doClick);
                 }
                 delay(function() {
                     hookFire('change', color);
@@ -484,7 +476,7 @@
                 $.current = null;
                 if (!isSource && !isSelf) {
                     // Click outside the source or picker element to exit
-                    if (isVisible() && false !== state.events) {
+                    if (isVisible() && false !== events) {
                         doExit();
                     }
                 } else {
@@ -581,8 +573,8 @@
                 return $; // Already ejected
             }
             delete source[name];
-            if (false !== state.events) {
-                eventsLet(source, state.events, doClick);
+            if (false !== events) {
+                eventsLet(source, events, doClick);
             }
             return doExit(), hookFire('pop', color);
         };
