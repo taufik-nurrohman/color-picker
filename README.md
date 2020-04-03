@@ -9,7 +9,8 @@ Has support for touch events. Touchy… touchy…
 
 [Demo and Documentation](https://taufik-nurrohman.github.io/color-picker "View Demo")
 
-## Contributors
+Contributors
+------------
 
 ### Code Contributors
 
@@ -39,3 +40,77 @@ This project exists thanks to all the people who contribute.
 <a href="https://opencollective.com/color-picker/organization/7/website"><img src="https://opencollective.com/color-picker/organization/7/avatar.svg"></a>
 <a href="https://opencollective.com/color-picker/organization/8/website"><img src="https://opencollective.com/color-picker/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/color-picker/organization/9/website"><img src="https://opencollective.com/color-picker/organization/9/avatar.svg"></a>
+
+---
+
+Release Notes
+-------------
+
+### 2.0.1
+
+ - Removed `CP.each()` method.
+ - Renamed `CP.__instance__` to `CP.instances`.
+
+### 2.0.0
+
+ - Removed `change:sv`, `change:h`, `start:sv`, `start:h`, `drag:sv`, `drag:h`, `stop:sv`, `stop:h` hooks.
+ - Hooks function arguments is now contains red, green, blue and alpha color value instead of static hex color string value.
+ - Reduced file size by removing all color supports other than hex.
+
+### 1.4.2
+
+ - Fixed #48
+ - Changed to CSS flexbox for layout.
+
+### 1.4.1
+
+ - Trigger `enter` and `exit` hooks on `enter` and `exit` method call.
+ - Removed the instance parameter in the first function argument of the hook and move the `this` scope in the function body to the current color picker instance.
+
+### 1.4.0
+
+ - Renamed `target` property to `source` and `picker` property to `self`.
+
+### 1.3.10
+
+ - Automatic color picker size based on container’s font size.
+
+### 1.3.9
+
+ - Renamed `trigger` method to `fire`.
+
+### 1.3.8
+
+ - Fixed color picker panel position using `HTMLElement.prototype.getBoundingClientRect()` by @flamestream and @alex3683 #29
+
+### 1.3.5
+
+ - Allow users to change the plugin name from `CP` to another.
+
+### 1.3.2
+
+ - Allow users to override the `fit` method.
+
+### 1.3.0
+
+ - Converted all color converters into static function.
+
+### 1.2.0
+
+ - Added static `__instance__` property to collect all of the color picker instance.
+
+### 1.1.0
+
+ - Fixed Chrome bug with desktop events #9
+
+### 1.0.3
+
+ - Fixed `event.stopPropagation()` issue #8
+
+### 1.0.2
+
+ - Added `change` hook.
+
+### 1.0.0
+
+ - Initial release.

@@ -156,10 +156,6 @@ if (+major &lt; 2) {
     console.log(key);
     console.log(CP.instances[key]);
 }</code></pre>
-      <h3>CP.HEX(color | [r, g, b, a])</h3>
-      <p>Hex color converter as the default color string parser. This is the only color mode that this application can parse into a series of RGBA color data. You can add your own color parser later to enhance the existing features.</p>
-      <pre><code>console.log(CP.HEX('#ff0')); // &rarr; `[255, 255, 0, 1]`
-console.log(CP.HEX([255, 255, 0, 1])); // &rarr; `'#ffff00'`</code></pre>
       <h3>CP._</h3>
       <p>Alias of <code>CP.prototype</code> used to formalize the prototype creation.</p>
       <pre><code>// Create `append()` and `appendTo()` method
@@ -176,6 +172,10 @@ let picker = new CP(document.querySelector('input'), false);
 document.querySelector('button').addEventListener('click', function() {
     picker.appendTo(document.body);
 }, false);</code></pre>
+      <h3>CP.HEX(color | [r, g, b, a])</h3>
+      <p>Hex color converter as the default color string parser. This is the only color mode that this application can parse into a series of RGBA color data. You can add your own color parser later to enhance the existing features.</p>
+      <pre><code>console.log(CP.HEX('#ff0')); // &rarr; `[255, 255, 0, 1]`
+console.log(CP.HEX([255, 255, 0, 1])); // &rarr; `'#ffff00'`</code></pre>
       <h3>picker.state</h3>
       <p>Return the modified color picker states.</p>
       <h3>picker.source</h3>
@@ -232,7 +232,7 @@ picker.fit([30, 30]);</code></pre>
       <h3>picker.pop()</h3>
       <p>Remove custom color picker features from the source element.</p>
       <h2>Color Converters</h2>
-      <p>Converters are defined as static methods in the scope of <code>CP</code>. This method accepts two types of input, a color string input and an array of red, green, blue and alpha color data. Every input given to this method will return the opposite version of the input. For example, with the <code>CP.HEX()</code> method, if I put <code>'#ffff00'</code> to the method argument, it will come out as <code>[255, 255, 0, 1]</code> and if I put <code>[255, 255, 0, 1]</code> to the method argument, it will come out as <code>'#ffff00'</code>.</p>
+      <p>Converters are defined as static methods in the scope of <code>CP</code>. This method accepts two types of input, a color string input and an array of red, green, blue and alpha color data. Every input given to this method will return the opposite version of the input. For example, with the <code>CP.HEX()</code> method, if you put <code>'#ffff00'</code> to the method argument, it will come out as <code>[255, 255, 0, 1]</code> and if you put <code>[255, 255, 0, 1]</code> to the method argument, it will come out as <code>'#ffff00'</code>.</p>
       <p>To make a color converter, be sure to check the input types first before doing the parsing:</p>
       <pre><code>CP.RGB = function(x) {
     if ('string' === typeof x) {
@@ -240,14 +240,14 @@ picker.fit([30, 30]);</code></pre>
         // and output it as an array of red, green, blue and alpha color data
         return [r, g, b, a];
     }
-    // Returns the string representation of color if input is an array of color data
+    // Return the string representation of color if input is an array of color data
     return 'rgba(' + x[0] + ', ' + x[1] + ', ' + x[2] + ', ' + x[3] + ')';
 };
 
 console.log(CP.RGB('rgba(255, 255, 0, 1)'));
 console.log(CP.RGB([255, 255, 0, 1]));</code></pre>
-      <p>To apply it to the application so that the application can detect RGB color input through the string representation of RGB color given to the input element, set the <code>color</code> state value to <code>'RGB'</code>:</p>
-      <pre><code>var picker = new CP(document.querySelector('input'), {
+      <p>To apply it to the application so that the application can <a href="color-picker.color.rgba.html" target="_blank">detect RGB color input through the string representation of RGB color</a> given to the input element, set the <code>color</code> state value to <code>'RGB'</code>:</p>
+      <pre><code>let picker = new CP(document.querySelector('input'), {
         color: 'RGB'
     });</code></pre>
       <h2>Hooks</h2>
