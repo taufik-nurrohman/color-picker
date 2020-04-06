@@ -9,16 +9,40 @@
     <link href="favicon.ico" rel="icon">
     <link href="color-picker.css" rel="stylesheet">
     <style>
-    html {
+    :root {
       background: #fff;
       color: #000;
+      border-top: 4px solid;
+      font-family: serif;
+    }
+    a {
+      color: #00f;
+      text-decoration: none;
+    }
+    a:focus {
+      text-decoration: underline;
+    }
+    a:visited {
+      color: #009;
     }
     a, code {
       word-wrap: break-word;
     }
+    code {
+      font-family: monospace;
+    }
     footer, header, main {
       max-width: 700px;
       margin: 0 auto;
+    }
+    footer hr, header hr {
+      display: none;
+    }
+    footer {
+      border-top: 1px dashed;
+    }
+    header {
+      border-bottom: 1px dashed;
     }
     pre {
       white-space: pre-wrap;
@@ -324,7 +348,7 @@ picker.on('change', onChange); // With context</code></pre>
     </main>
     <footer>
       <hr>
-      <p>&copy; 2020 <a href="https://github.com/taufik-nurrohman">Taufik Nurrohman</a></p>
+      <p>&copy; 2020 <a href="/">Taufik Nurrohman</a></p>
     </footer>
     <script src="color-picker.js"></script>
     <script>
