@@ -66,7 +66,7 @@
   <body>
     <p>Do you like this project? Please support my <a href="https://github.com/mecha-cms">Mecha CMS</a> project too. Thank you!</p>
     <header>
-      <h1>Color Picker v2.0.1</h1>
+      <h1>Color Picker v2.0.2</h1>
       <p>Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability.</p>
       <hr>
     </header>
@@ -138,7 +138,7 @@
         <li><a href="color-picker.alpha.html" target="_blank">Disable Alpha Channel Support</a></li>
         <li><a href="color-picker.input.html" target="_blank">Disable Native HTML5 Color Picker</a></li>
         <li><a href="color-picker.button.html" target="_blank">Show and Hide Color Picker with Buttons</a></li>
-        <li><a href="color-picker.events.html" target="_blank">Show and Hide Color Picker with Double Click</a></li>
+        <li><a href="color-picker.e.html" target="_blank">Show and Hide Color Picker with Double Click</a></li>
         <li><a href="color-picker.close.html" target="_blank">Add Close Button to the Color Picker</a></li>
         <li><a href="color-picker.static.html" target="_blank">Static Color Picker</a></li>
         <li><a href="color-picker.replace.html" target="_blank">Replace Text Input with Hidden Input</a></li>
@@ -151,18 +151,18 @@
         <li><a href="color-picker.element.html" target="_blank">Native HTML5 Custom <code>&lt;color-picker&gt;</code> Element</a></li>
       </ul>
       <h2>Settings</h2>
-      <pre><code>const picker = new CP(<var>source</var>, <var>events</var>);</code></pre>
+      <pre><code>const picker = new CP(<var>source</var>, <var>e</var>);</code></pre>
       <pre><code>const picker = new CP(<var>source</var>, <var>state</var> = {
         color: 'HEX',
-        events: ['touchstart', 'mousedown'],
+        e: ['touchstart', 'mousedown'],
         parent: null
     });</code></pre>
       <ul>
         <li><var>source</var> &rarr; The source element that holds the initial color data.</li>
-        <li><var>events</var> &rarr; Default events to show the color picker pane.</li>
+        <li><var>e</var> &rarr; Default events to show the color picker pane.</li>
         <li><var>state</var> &rarr; The configuration data.</li>
         <li><var>state.color</var> &rarr; Name of the color parser defined in the <code>CP</code> object.</li>
-        <li><var>state.events</var> &rarr; Default events to show the color picker pane.</li>
+        <li><var>state.e</var> &rarr; Default events to show the color picker pane.</li>
         <li><var>state.parent</var> &rarr; Parent element to append the color picker element (default will be appended to the <code>&lt;body&gt;</code> element).</li>
       </ul>
       <h2>Methods and Properties</h2>

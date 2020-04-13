@@ -2,7 +2,7 @@
 <html dir="ltr">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+    <meta content="width=device-width" name="viewport">
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
   </head>
@@ -12,7 +12,9 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input'), ['dblclick']);
+    var picker = new CP(document.querySelector('input'), {
+        e: ['dblclick']
+    });
 
     picker.on('change', function(r, g, b, a) {
         this.source.value = this.color(r, g, b, a);

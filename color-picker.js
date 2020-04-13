@@ -1,6 +1,6 @@
 /*!
  * ==============================================================
- *  COLOR PICKER 2.0.1
+ *  COLOR PICKER 2.0.2
  * ==============================================================
  * Author: Taufik Nurrohman <https://github.com/taufik-nurrohman>
  * License: MIT
@@ -185,7 +185,7 @@
 
     (function($$) {
 
-        $$.version = '2.0.1';
+        $$.version = '2.0.2';
 
         // Collect all instance(s)
         $$[instances] = {};
@@ -226,7 +226,7 @@
             state = Object.assign({
                 'class': 'color-picker',
                 'color': HEX,
-                'events': downEvents,
+                'e': downEvents,
                 'parent': null
             }, false === o || o instanceof Array ? {
                 'e': o
@@ -326,7 +326,7 @@
             body = doc.body,
             color = value(),
             data = RGB2HSV(color),
-            events = state.events,
+            events = state.e,
             C = self.firstChild,
             SV = C[children][0],
             H = C[children][1],
@@ -370,7 +370,7 @@
 
             // Refresh value
             data = RGB2HSV(color = value());
-            events = state.events;
+            events = state.e;
 
             if (!isFirst) {
                 (to || state.parent || body).appendChild(self), ($.visible = true);

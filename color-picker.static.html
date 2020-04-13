@@ -2,7 +2,7 @@
 <html dir="ltr">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+    <meta content="width=device-width" name="viewport">
     <title>Color Picker</title>
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
@@ -24,7 +24,7 @@
 
     var p = document.querySelectorAll('p')[1], // Put color picker panel to the second `<p>` element
         picker = new CP(document.querySelector('input'), {
-            events: false,
+            e: false,
             parent: p
         });
 
