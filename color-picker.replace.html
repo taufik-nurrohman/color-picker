@@ -39,8 +39,10 @@
     var picker = new CP(box);
 
     picker.on('change', function(r, g, b, a) {
-        input.value = this.color(r, g, b, a);
-        this.source.style.backgroundColor = this.color(r, g, b, a);
+        var color = this.color(r, g, b, a);
+        input.value = color;
+        this.source.style.backgroundColor = color;
+        this.source.setAttribute('data-color', color);
     });
 
     </script>
