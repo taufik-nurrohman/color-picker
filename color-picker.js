@@ -1,6 +1,6 @@
 /*!
  * ==============================================================
- *  COLOR PICKER 2.0.2
+ *  COLOR PICKER 2.0.3
  * ==============================================================
  * Author: Taufik Nurrohman <https://github.com/taufik-nurrohman>
  * License: MIT
@@ -185,7 +185,14 @@
 
     (function($$) {
 
-        $$.version = '2.0.2';
+        $$.version = '2.0.3';
+
+        $$.state = {
+            'class': 'color-picker',
+            'color': HEX,
+            'e': downEvents,
+            'parent': null
+        };
 
         // Collect all instance(s)
         $$[instances] = {};
@@ -223,12 +230,7 @@
             $$ = win[name],
             hooks = {},
             self = doc.createElement('div'),
-            state = Object.assign({
-                'class': 'color-picker',
-                'color': HEX,
-                'e': downEvents,
-                'parent': null
-            }, false === o || o instanceof Array ? {
+            state = Object.assign({}, $$.state, false === o || o instanceof Array ? {
                 'e': o
             } : (o || {})),
             cn = state['class'];

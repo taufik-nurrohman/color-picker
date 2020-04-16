@@ -46,6 +46,10 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
+### 2.0.3
+
+ - Added `CP.state` property to set initial state globally.
+
 ### 2.0.2
 
  - Renamed `state.events` to `state.e`.
