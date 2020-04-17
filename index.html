@@ -5,7 +5,7 @@
     <meta content="#000" name="theme-color">
     <meta content="width=device-width" name="viewport">
     <meta content="Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability." name="description">
-    <title>Color Picker</title>
+    <title>Color Picker &middot; A simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability.</title>
     <link href="favicon.ico" rel="icon">
     <link href="color-picker.css" rel="stylesheet">
     <style>
@@ -291,6 +291,14 @@ console.log(CP.RGB([255, 255, 0, 1]));</code></pre>
         </thead>
         <tbody>
           <tr>
+            <td><code>change</code></td>
+            <td>Will be triggered on every color change.</td>
+          </tr>
+          <tr>
+            <td><code>drag</code></td>
+            <td>Will be triggered when the color picker control is dragging.</td>
+          </tr>
+          <tr>
             <td><code>enter</code></td>
             <td>Will be triggered when color picker pane is visible.</td>
           </tr>
@@ -303,24 +311,16 @@ console.log(CP.RGB([255, 255, 0, 1]));</code></pre>
             <td>Will be triggered when color picker pane is positioned.</td>
           </tr>
           <tr>
-            <td><code>change</code></td>
-            <td>Will be triggered on every color change.</td>
+            <td><code>pop</code></td>
+            <td>Will be triggered after <code>picker.pop()</code>.</td>
           </tr>
           <tr>
             <td><code>start</code></td>
             <td>Will be triggered when the color picker control starts dragging.</td>
           </tr>
           <tr>
-            <td><code>drag</code></td>
-            <td>Will be triggered when the color picker control is dragging.</td>
-          </tr>
-          <tr>
             <td><code>stop</code></td>
             <td>Will be triggered when the color picker control stops dragging.</td>
-          </tr>
-          <tr>
-            <td><code>pop</code></td>
-            <td>Will be triggered after <code>picker.pop()</code>.</td>
           </tr>
         </tbody>
       </table>
@@ -348,9 +348,9 @@ picker.on('change', onChange); // With context</code></pre>
       <p>Use it for free, pay if you get paid. So, you&rsquo;ve just benefited financially after using this project? It&rsquo;s a good idea to share a little financial support with this open source project too. Your support will motivate me to do any further development, as well as to provide voluntary support to overcome problems related to this project.</p>
       <p>Thank you! ❤️</p>
       <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-        <input name="cmd" value="_s-xclick" type="hidden">
-        <input name="hosted_button_id" value="TNVGH7NQ7E4EU" type="hidden">
-        <p><button type="submit" class="button">Donate</button></p>
+        <input name="cmd" type="hidden" value="_s-xclick">
+        <input name="hosted_button_id" type="hidden" value="TNVGH7NQ7E4EU">
+        <p><button type="submit">Donate</button></p>
       </form>
     </main>
     <footer>
@@ -359,7 +359,7 @@ picker.on('change', onChange); // With context</code></pre>
     </footer>
     <script src="color-picker.js"></script>
     <script>
-    var source = document.querySelector('form').color;
+    var source = document.forms[0].color;
     source.value = '#' + ('00000' + (Math.random() * (1 << 24) | 0).toString(16)).slice(-6); // Random hex color
     var picker = new CP(source);
     picker.on('change', function(r, g, b, a) {
