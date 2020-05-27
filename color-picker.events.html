@@ -7,13 +7,12 @@
     <link href="color-picker.min.css" rel="stylesheet">
   </head>
   <body>
-    <p><input type="text"> <button>Pick a Color!</button></p>
+    <p>Show and hide color picker panel with double click.</p>
+    <p><input type="text"></p>
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input')),
-        button = document.querySelector('button'),
-        text = button.textContent;
+    var picker = new CP(document.querySelector('input'));
 
     // Disable the default blur and focus behavior
     picker.on('blur', function() {});
@@ -23,10 +22,13 @@
         this.source.value = this.color(r, g, b, a);
     });
 
-    button.addEventListener('click', function() {
-        picker[picker.visible ? 'exit' : 'enter']();
-        picker.fit([button.offsetLeft, button.offsetTop + button.offsetHeight + 2]);
-        button.textContent = picker.visible ? 'Done' : text;
+    picker.source.addEventListener('dblclick', function(e) {
+        picker.enter();
+        e.stopPropagation();
+    }, false);
+
+    document.documentElement.addEventListener('dblclick', function() {
+        picker.exit();
     }, false);
 
     </script>

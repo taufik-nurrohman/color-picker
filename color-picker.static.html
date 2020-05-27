@@ -10,6 +10,8 @@
     .color-picker.is-static {
       display: inline-block;
       position: static;
+      left: 0 !important;
+      top: 0 !important;
       box-shadow: none;
     }
 
@@ -22,26 +24,21 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var p = document.querySelectorAll('p')[1], // Put color picker panel to the second `<p>` element
-        picker = new CP(document.querySelector('input'), {
-            e: false,
-            parent: p
-        });
+    var picker = new CP(document.querySelector('input'));
+
+    // Disable default blur and focus behavior
+    picker.on('blur', function() {});
+    picker.on('focus', function() {});
 
     picker.on('change', function(r, g, b, a) {
         this.source.value = this.color(r, g, b, a);
     });
 
-    // ...
-    picker.fit = function() { // Do nothing
-        this.self.style.left = this.self.style.top = "";
-    };
-
     // Add a `is-static` class to the color picker panel
     picker.self.classList.add('is-static');
 
-    // Force to show the color picker panel
-    picker.enter();
+    // Put color picker panel to the second `<p>` element
+    picker.enter(document.querySelectorAll('p')[1]);
 
     </script>
   </body>

@@ -1,6 +1,6 @@
 /*!
  * ==============================================================
- *  COLOR PICKER 2.0.3
+ *  COLOR PICKER 2.1.0
  * ==============================================================
  * Author: Taufik Nurrohman <https://github.com/taufik-nurrohman>
  * License: MIT
@@ -185,12 +185,11 @@
 
     (function($$) {
 
-        $$.version = '2.0.3';
+        $$.version = '2.1.0';
 
         $$.state = {
             'class': 'color-picker',
             'color': HEX,
-            'e': downEvents,
             'parent': null
         };
 
@@ -230,8 +229,8 @@
             $$ = win[name],
             hooks = {},
             self = doc.createElement('div'),
-            state = Object.assign({}, $$.state, false === o || o instanceof Array ? {
-                'e': o
+            state = Object.assign({}, $$.state, isString(o) ? {
+                'color': o
             } : (o || {})),
             cn = state['class'];
 
@@ -291,6 +290,10 @@
                             hooks[name].splice(i, 1);
                         }
                     }
+                    // Clean-up empty hook(s)
+                    if (0 === j) {
+                        delete hooks[name];
+                    }
                 } else {
                     delete hooks[name];
                 }
@@ -328,7 +331,6 @@
             body = doc.body,
             color = value(),
             data = RGB2HSV(color),
-            events = state.e,
             C = self.firstChild,
             SV = C[children][0],
             H = C[children][1],
@@ -359,12 +361,16 @@
         }
 
         function doClick(e) {
-            var t = e.target,
-                isSource = source === closestGet(t, source);
-            if (isSource) {
-                !isVisible() && doEnter(state.parent);
+            if (hooks.focus) {
+                hookFire('focus', color);
             } else {
-                doExit();
+                var t = e.target,
+                    isSource = source === closestGet(t, source);
+                if (isSource) {
+                    !isVisible() && doEnter(state.parent);
+                } else {
+                    doExit();
+                }
             }
         }
 
@@ -372,7 +378,6 @@
 
             // Refresh value
             data = RGB2HSV(color = value());
-            events = state.e;
 
             if (!isFirst) {
                 (to || state.parent || body).appendChild(self), ($.visible = true);
@@ -442,9 +447,7 @@
                 ACursorSizeHeight = sizeGet(ACursor)[1];
 
             if (isFirst) {
-                if (false !== events) {
-                    eventsSet(source, events, doClick);
-                }
+                eventsSet(source, downEvents, doClick);
                 delay(function() {
                     hookFire('change', color);
                 }, 1);
@@ -477,9 +480,11 @@
                     isSelf = self === closestGet(t, self);
                 $.current = null;
                 if (!isSource && !isSelf) {
-                    // Click outside the source or picker element to exit
-                    if (isVisible() && false !== events) {
-                        doExit();
+                    if (hooks.blur) {
+                        hookFire('blur', color);
+                    } else {
+                        // Click outside the source or picker element to exit
+                        isVisible() && doExit();
                     }
                 } else {
                     if (isSelf) {
@@ -575,9 +580,7 @@
                 return $; // Already ejected
             }
             delete source[name];
-            if (false !== events) {
-                eventsLet(source, events, doClick);
-            }
+            eventsLet(source, downEvents, doClick);
             return doExit(), hookFire('pop', color);
         };
 

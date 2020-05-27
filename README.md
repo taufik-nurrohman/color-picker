@@ -46,6 +46,11 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
+### 2.1.0
+
+ - Added ability to clear the hook storage object if it’s empty.
+ - Added `blur` and `focus` hook that removed `state.e` option.
+
 ### 2.0.3
 
  - Added `CP.state` property to set initial state globally.
