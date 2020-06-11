@@ -46,6 +46,10 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
+### 2.1.1
+
+ - Fixed common issue with ES6 module which does not reference the `this` scope to `window` object by default.
+
 ### 2.1.0
 
  - Added ability to clear the hook storage object if it’s empty.

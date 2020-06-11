@@ -1,6 +1,6 @@
 /*!
  * ==============================================================
- *  COLOR PICKER 2.1.0
+ *  COLOR PICKER 2.1.1
  * ==============================================================
  * Author: Taufik Nurrohman <https://github.com/taufik-nurrohman>
  * License: MIT
@@ -185,7 +185,7 @@
 
     (function($$) {
 
-        $$.version = '2.1.0';
+        $$.version = '2.1.1';
 
         $$.state = {
             'class': 'color-picker',
@@ -594,4 +594,4 @@
 
     });
 
-})(this, this.document, 'CP');
+})(window, document, 'CP');
