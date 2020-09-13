@@ -46,6 +46,10 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
+### 2.1.2
+
+ - Updated the donation target.
+
 ### 2.1.1
 
  - Fixed common issue with ES6 module which does not reference the `this` scope to `window` object by default.
