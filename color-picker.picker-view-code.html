@@ -17,7 +17,7 @@
       background: #ffa;
       border: 1px solid #000;
       border-top-width: 0;
-      font: normal normal 13px/2em sans-serif;
+      font: normal normal 12px/2em sans-serif;
       color: #000;
     }
 
@@ -26,12 +26,7 @@
     }
 
     .color-picker\:a {
-      pointer-events: none;
-    }
-
-    .color-picker\:a div,
-    .color-picker\:a i {
-      opacity: .25
+      display: none;
     }
 
     </style>
@@ -50,7 +45,7 @@
     }, false);
 
     code.className = 'color-code';
-    code.pattern = '^#([A-Fa-f0-9]{1,2}){3}$';
+    code.pattern = '^#([a-fA-F\\d]{3}){1,2}$';
     code.type = 'text';
 
     picker.on('enter', function(r, g, b) {
