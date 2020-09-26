@@ -322,7 +322,35 @@
         }
 
         self.className = cn;
-        self.innerHTML = '<div><div class="' + cn + ':sv"><div></div><div></div><div></div><i></i></div><div class="' + cn + ':h"><div></div><i></i></div><div class="' + cn + ':a"><div></div><div></div><i></i></div></div>';
+        
+        var outerDiv = document.createElement('div');
+        
+        var svDiv = document.createElement('div');
+        svDiv.classList.add(cn + ':sv');
+        svDiv.appendChild(document.createElement('div'));
+        svDiv.appendChild(document.createElement('div'));
+        svDiv.appendChild(document.createElement('div'));
+        svDiv.appendChild(document.createElement('i'));
+        
+        var hDiv = document.createElement('div');
+        hDiv.classList.add(cn + ':h');
+        hDiv.appendChild(document.createElement('div'));
+        hDiv.appendChild(document.createElement('div'));
+        hDiv.appendChild(document.createElement('div'));
+        hDiv.appendChild(document.createElement('i'));
+        
+        var aDiv = document.createElement('div');
+        aDiv.classList.add(cn + ':a');
+        aDiv.appendChild(document.createElement('div'));
+        aDiv.appendChild(document.createElement('div'));
+        aDiv.appendChild(document.createElement('div'));
+        aDiv.appendChild(document.createElement('i'));
+        
+        outerDiv.appendChild(svDiv);
+        outerDiv.appendChild(hDiv);
+        outerDiv.appendChild(aDiv);
+        
+        self.appendChild(outerDiv);
 
         var doEnter,
             doExit,
