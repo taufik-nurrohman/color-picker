@@ -1,6 +1,6 @@
 /*!
  * ==============================================================
- *  COLOR PICKER 2.1.2
+ *  COLOR PICKER 2.1.3
  * ==============================================================
  * Author: Taufik Nurrohman <https://github.com/taufik-nurrohman>
  * License: MIT
@@ -11,7 +11,6 @@
 
     var html = doc.documentElement,
         HEX = 'HEX',
-        children = 'children',
         top = 'top',
         right = 'right',
         left = 'left',
@@ -58,7 +57,7 @@
                 r = v, g = p, b = q;
                 break;
         }
-        return [toRound(r * 255), toRound(g * 255), toRound(b * 255), toFixed(isSet(a[3]) ? +a[3] : 1, 2)];
+        return [toRound(r * 255), toRound(g * 255), toRound(b * 255), isSet(a[3]) ? +a[3] : 1];
     }
 
     // Convert RGBA to HSVA
@@ -151,12 +150,15 @@
         return a;
     }
 
-    function toFixed(a, b) {
-        return +(a.toFixed(b));
-    }
-
     function toInt(a, b) {
         return parseInt(a, b || 10);
+    }
+
+    function toNode(a, b, c) {
+        a = doc.createElement(a);
+        b && b.appendChild(a);
+        c && (a.className = c);
+        return a;
     }
 
     function toRound(a) {
@@ -185,7 +187,7 @@
 
     (function($$) {
 
-        $$.version = '2.1.2';
+        $$.version = '2.1.3';
 
         $$.state = {
             'class': 'color-picker',
@@ -200,18 +202,18 @@
             if (isString(x)) {
                 var count = (x = x.trim()).length;
                 if ((4 === count || 7 === count) && '#' === x[0]) {
-                    if (/^#([a-z\d]{1,2}){3}$/i.test(x)) {
+                    if (/^#([a-f\d]{3}){1,2}$/i.test(x)) {
                         if (4 === count) {
                             return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), 1];
                         }
                         return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), 1];
                     }
                 } else if ((5 === count || 9 === count) && '#' === x[0]) {
-                    if (/^#([a-z\d]{1,2}){4}$/i.test(x)) {
+                    if (/^#([a-f\d]{4}){1,2}$/i.test(x)) {
                         if (5 === count) {
-                            return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), toFixed(toInt(x[4] + x[4], 16) / 255, 2)];
+                            return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), toInt(x[4] + x[4], 16) / 255];
                         }
-                        return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), toFixed(toInt(x[7] + x[8], 16) / 255, 2)];
+                        return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), toInt(x[7] + x[8], 16) / 255];
                     }
                 }
                 return [0, 0, 0, 1]; // Default to black
@@ -228,11 +230,11 @@
         var $ = this,
             $$ = win[name],
             hooks = {},
-            self = doc.createElement('div'),
             state = Object.assign({}, $$.state, isString(o) ? {
                 'color': o
             } : (o || {})),
-            cn = state['class'];
+            cn = state['class'],
+            self = toNode('div', 0, cn);
 
         // Already instantiated, skip!
         if (source[name]) {
@@ -321,37 +323,6 @@
             return $;
         }
 
-        self.className = cn;
-        
-        var outerDiv = document.createElement('div');
-        
-        var svDiv = document.createElement('div');
-        svDiv.classList.add(cn + ':sv');
-        svDiv.appendChild(document.createElement('div'));
-        svDiv.appendChild(document.createElement('div'));
-        svDiv.appendChild(document.createElement('div'));
-        svDiv.appendChild(document.createElement('i'));
-        
-        var hDiv = document.createElement('div');
-        hDiv.classList.add(cn + ':h');
-        hDiv.appendChild(document.createElement('div'));
-        hDiv.appendChild(document.createElement('div'));
-        hDiv.appendChild(document.createElement('div'));
-        hDiv.appendChild(document.createElement('i'));
-        
-        var aDiv = document.createElement('div');
-        aDiv.classList.add(cn + ':a');
-        aDiv.appendChild(document.createElement('div'));
-        aDiv.appendChild(document.createElement('div'));
-        aDiv.appendChild(document.createElement('div'));
-        aDiv.appendChild(document.createElement('i'));
-        
-        outerDiv.appendChild(svDiv);
-        outerDiv.appendChild(hDiv);
-        outerDiv.appendChild(aDiv);
-        
-        self.appendChild(outerDiv);
-
         var doEnter,
             doExit,
             doFit,
@@ -359,22 +330,22 @@
             body = doc.body,
             color = value(),
             data = RGB2HSV(color),
-            C = self.firstChild,
-            SV = C[children][0],
-            H = C[children][1],
-            A = C[children][2],
+            C = toNode('div', self),
+            SV = toNode('div', C, cn + ':sv'),
+            H = toNode('div', C, cn + ':h'),
+            A = toNode('div', C, cn + ':a'),
 
-            SVColor = SV[children][0],
-            // SVSaturation = SV[children][1],
-            // SVValue = SV[children][2],
-            SVCursor = SV[children][3],
+            SVColor = toNode('div', SV),
+            SVSaturation = toNode('div', SV),
+            SVValue = toNode('div', SV),
+            SVCursor = toNode('i', SV),
 
-            HColor = H[children][0],
-            HCursor = H[children][1],
+            HColor = toNode('div', H),
+            HCursor = toNode('i', H),
 
-            AColor = A[children][0],
-            // APattern = A[children][1],
-            ACursor = A[children][2],
+            AColor = toNode('div', A),
+            APattern = toNode('div', A),
+            ACursor = toNode('i', A),
 
             SVStarting = 0,
             HStarting = 0,
