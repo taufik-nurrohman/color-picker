@@ -46,6 +46,12 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
+### 2.1.3
+
+ - Added transition effect example.
+ - Removed opacity value rounding internally.
+ - Updated to pass the Firefox extension validator (#57)
+
 ### 2.1.2
 
  - Updated the donation target.

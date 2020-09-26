@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width" name="viewport">
+    <title>Color Picker</title>
+    <link href="color-picker.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <p><input type="text"></p>
+    <script src="color-picker.min.js"></script>
+    <script>
+
+    var picker = new CP(document.querySelector('input'));
+
+    picker.on('change', function(r, g, b, a) {
+        this.source.value = this.color(r, g, b, a);
+    });
+
+    picker.self.style.opacity = 0;
+    picker.self.style.transition = 'opacity .5s ease';
+
+    picker.self.addEventListener('transitionend', function() {
+        var opacity = +(this.style.opacity || 0);
+        0 === opacity && picker.exit(); // Hide color picker pane on transition end
+    });
+
+    picker.on('focus', function() {
+        this.enter();
+        this.self.style.opacity = 1;
+    });
+
+    picker.on('blur', function() {
+        // this.exit();
+        this.self.style.opacity = 0;
+    });
+
+    </script>
+  </body>
+</html>
