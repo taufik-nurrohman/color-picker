@@ -35,6 +35,8 @@
             // Opaque, return as RGB color string
             return 'rgb(' + r + ', ' + g + ', ' + b + ')';
         }
+        // Rounding the decimal point of opacity
+        a = +a.toFixed(3);
         // Transparent, return as RGBA color string
         return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
     };
