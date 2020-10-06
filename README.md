@@ -46,6 +46,10 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
+### master
+
+ - Small bug fixes.
+
 ### 2.1.3
 
  - Added transition effect example.
