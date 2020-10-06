@@ -198,7 +198,11 @@ CP._.appendTo = function(parent) {
 };
 
 // Usage
-let picker = new CP(document.querySelector('input'), false);
+let picker = new CP(document.querySelector('input'));
+
+picker.on('blur', function() {});
+picker.on('focus', function() {});
+
 document.querySelector('button').addEventListener('click', function() {
     picker.appendTo(document.body);
 }, false);</code></pre>
