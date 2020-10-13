@@ -66,7 +66,7 @@
   <body>
     <p>Do you like this project? Please support my <a href="https://github.com/mecha-cms">Mecha CMS</a> project too. Thank you!</p>
     <header>
-      <h1>Color Picker v2.1.3</h1>
+      <h1>Color Picker v2.1.4</h1>
       <p>Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability.</p>
       <hr>
     </header>
@@ -186,26 +186,6 @@ console.log([CP.state, picker.state]);</code></pre>
     console.log(key);
     console.log(CP.instances[key]);
 }</code></pre>
-      <h3>CP._</h3>
-      <p>Alias of <code>CP.prototype</code> used to formalize the prototype creation.</p>
-      <pre><code>// Create `append()` and `appendTo()` method
-CP._.append = function() {
-    return this.enter();
-};
-
-CP._.appendTo = function(parent) {
-    return this.enter(parent);
-};
-
-// Usage
-let picker = new CP(document.querySelector('input'));
-
-picker.on('blur', function() {});
-picker.on('focus', function() {});
-
-document.querySelector('button').addEventListener('click', function() {
-    picker.appendTo(document.body);
-}, false);</code></pre>
       <h3>CP.HEX(color | [r, g, b, a])</h3>
       <p>Hex color converter as the default color string parser. This is the only color mode that this application can parse into a series of RGBA color data. You can add your own color parser later to enhance the existing features.</p>
       <pre><code>console.log(CP.HEX('#ff0')); // &rarr; `[255, 255, 0, 1]`

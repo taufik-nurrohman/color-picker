@@ -1,6 +1,6 @@
 /*!
  * ==============================================================
- *  COLOR PICKER 2.1.3
+ *  COLOR PICKER 2.1.4
  * ==============================================================
  * Author: Taufik Nurrohman <https://github.com/taufik-nurrohman>
  * License: MIT
@@ -187,7 +187,7 @@
 
     (function($$) {
 
-        $$.version = '2.1.3';
+        $$.version = '2.1.4';
 
         $$.state = {
             'class': 'color-picker',
@@ -209,7 +209,7 @@
                         return [toInt(x[1] + x[2], 16), toInt(x[3] + x[4], 16), toInt(x[5] + x[6], 16), 1];
                     }
                 } else if ((5 === count || 9 === count) && '#' === x[0]) {
-                    if (/^#([a-f\d]{4}){1,2}$/i.test(x)) {
+                    if (/^#([a-f\d]{3,4}){1,2}$/i.test(x)) {
                         if (5 === count) {
                             return [toInt(x[1] + x[1], 16), toInt(x[2] + x[2], 16), toInt(x[3] + x[3], 16), toInt(x[4] + x[4], 16) / 255];
                         }
@@ -220,8 +220,6 @@
             }
             return '#' + ('000000' + toString(+x[2] | (+x[1] << 8) | (+x[0] << 16), 16)).slice(-6) + (isSet(x[3]) && x[3] < 1 ? toString(toRound(x[3] * 255) + 0x10000, 16).substr(-2) : "");
         };
-
-        $$._ = $$.prototype;
 
     })(win[name] = function(source, o) {
 

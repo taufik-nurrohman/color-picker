@@ -46,8 +46,9 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
-### master
+### 2.1.4
 
+ - Removed `CP._` method.
  - Small bug fixes.
 
 ### 2.1.3
