@@ -46,6 +46,10 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
+### 2.1.5
+
+ - Fixed minified code does not yet updated after release.
+
 ### 2.1.4
 
  - Removed `CP._` method.
