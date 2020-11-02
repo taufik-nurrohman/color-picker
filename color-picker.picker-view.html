@@ -19,6 +19,8 @@
       float: left;
       width: 50%;
       height: 50px;
+      line-height: 50px;
+      text-align: center;
       cursor: pointer;
     }
 
@@ -30,46 +32,60 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input')),
-        box = document.createElement('span'),
-        boxLet = document.createElement('span'),
-        boxSet = document.createElement('span');
+    function insertColorView(picker) {
+        let box = document.createElement('span'),
+            boxReset = document.createElement('span'),
+            boxSubmit = document.createElement('span');
+        box.className = 'color-view';
+        box.appendChild(boxReset);
+        box.appendChild(boxSubmit);
+        boxReset.textContent = 'Reset';
+        boxSubmit.textContent = 'Submit';
+        picker.self.appendChild(box);
+        picker.on('change', function(r, g, b, a) {
+            let color = this.color(r, g, b, a);
+            boxSubmit.title = color;
+            boxSubmit.style.backgroundColor = color;
+            boxSubmit.style.color = isDark(color) ? '#fff' : '#000';
+        });
+        picker.on('enter', function(r, g, b, a) {
+            let color = this.color(r, g, b, a);
+            boxReset.title = color;
+            boxReset.style.backgroundColor = color;
+            boxReset.style.color = isDark(color) ? '#fff' : '#000';
+            boxSubmit.title = color;
+            boxSubmit.style.backgroundColor = color;
+            boxSubmit.style.color = isDark(color) ? '#fff' : '#000';
+        });
+        // Click to cancel
+        boxReset.addEventListener('click', function(e) {
+            let color = this.title;
+            boxSubmit.title = color;
+            boxSubmit.style.backgroundColor = color;
+            picker.value.apply(picker, CP.HEX(color));
+            e.stopPropagation();
+        });
+        // Click to submit
+        boxSubmit.addEventListener('click', function(e) {
+            let color = this.title;
+            picker.exit();
+            picker.source.value = color;
+            picker.source.focus();
+        });
+    }
 
-    box.className = 'color-view';
-    box.appendChild(boxLet);
-    box.appendChild(boxSet);
-    picker.self.appendChild(box);
+    // <https://stackoverflow.com/a/12043228>
+    function isDark(hex) {
+        let rgb = parseInt(hex.slice(1), 16),
+            r = (rgb >> 16) & 0xff,
+            g = (rgb >>  8) & 0xff,
+            b = (rgb >>  0) & 0xff;
+        return (.2126 * r + .7152 * g + .0722 * b) < 40;
+    }
 
-    picker.on('enter', function(r, g, b, a) {
-        var color = this.color(r, g, b, a);
-        boxLet.title = color;
-        boxSet.title = color;
-        boxLet.style.backgroundColor = color;
-        boxSet.style.backgroundColor = color;
-    });
+    const picker = new CP(document.querySelector('input'));
 
-    picker.on('change', function(r, g, b, a) {
-        var color = this.color(r, g, b, a);
-        boxSet.title = color;
-        boxSet.style.backgroundColor = color;
-    });
-
-    // Click to reset
-    boxLet.addEventListener('click', function(e) {
-        var color = this.title;
-        picker.value.apply(picker, CP.HEX(color));
-        boxSet.title = color;
-        boxSet.style.backgroundColor = color;
-        e.stopPropagation();
-    }, false);
-
-    // Click to set
-    boxSet.addEventListener('click', function(e) {
-        var color = this.title;
-        picker.exit();
-        picker.source.value = color;
-        picker.source.focus();
-    }, false);
+    insertColorView(picker);
 
     </script>
   </body>

@@ -7,8 +7,9 @@
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
 
+    /* HTML5 color input does not support alpha channel */
     .color-picker\:a {
-      display: none; /* There is no alpha channel support in HTML5 color input */
+      display: none;
     }
 
     </style>
@@ -19,17 +20,17 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var source = document.querySelector('input'),
-        picker = new CP(source);
+    function applyToColorInput(source) {
+        const picker = new CP(source);
+        // Prevent showing native color picker pane
+        source.addEventListener('click', e => e.preventDefault());
+        picker.on('change', function(r, g, b) {
+            // HTML5 color input does not support alpha channel
+            this.source.value = this.color(r, g, b, 1);
+        });
+    }
 
-    // Prevent showing native color picker panel
-    source.addEventListener('click', function(e) {
-        e.preventDefault();
-    }, false);
-
-    picker.on('change', function(r, g, b) {
-        this.source.value = this.color(r, g, b, 1); // There is no alpha channel support in HTML5 color input
-    });
+    document.querySelectorAll('input[type=color]').forEach(applyToColorInput);
 
     </script>
   </body>

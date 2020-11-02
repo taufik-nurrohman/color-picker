@@ -11,7 +11,7 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input'));
+    const picker = new CP(document.querySelector('input'));
 
     picker.on('change', function(r, g, b, a) {
         this.source.value = this.color(r, g, b, a);

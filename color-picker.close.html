@@ -12,23 +12,22 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input'));
-
-    // Disable the default blur behavior
-    picker.on('blur', function() {});
-
-    picker.on('change', function(r, g, b, a) {
-        this.source.value = this.color(r, g, b, a);
-    });
-
-    var x = document.createElement('a');
+    function closeByButton(picker) {
+        let x = document.createElement('a');
         x.href = 'javascript:;';
-        x.innerHTML = 'Close Me!';
-        x.addEventListener('click', function() {
-            picker.exit();
-        }, false);
+        x.textContent = 'Close Me!';
+        x.addEventListener('click', () => picker.exit());
+        picker.self.appendChild(x);
+        // Disable the default blur behavior
+        picker.on('blur', () => {});
+        picker.on('change', function(r, g, b, a) {
+            this.source.value = this.color(r, g, b, a);
+        });
+    }
 
-    picker.self.appendChild(x);
+    const picker = new CP(document.querySelector('input'));
+
+    closeByButton(picker);
 
     </script>
   </body>

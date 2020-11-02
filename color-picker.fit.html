@@ -33,10 +33,10 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var container = document.createDocumentFragment(),
+    let container = document.createDocumentFragment(),
         input, color;
 
-    for (var i = 0; i < 800; ++i) {
+    for (let i = 0; i < 800; ++i) {
         color = ('00000' + (Math.random() * (1 << 24) | 0).toString(16)).slice(-6); // Random HEX color
         input = document.createElement('input');
         input.type = 'text';

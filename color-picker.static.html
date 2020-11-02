@@ -20,25 +20,26 @@
   <body>
     <p><input type="text"></p>
     <p></p>
-    <p>Simple <em>hack</em> to make a static color picker panel.</p>
+    <p>Simple <em>hack</em> to make a static color picker pane.</p>
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input'));
+    function staticColorPicker(picker, container) {
+        // Disable default blur and focus behavior
+        picker.on('blur', () => {});
+        picker.on('focus', () => {});
+        picker.on('change', function(r, g, b, a) {
+            this.source.value = this.color(r, g, b, a);
+        });
+        // Add a `is-static` class to the color picker pane
+        picker.self.classList.add('is-static');
+        // Put color picker pane to `container`
+        picker.enter(container);
+    }
 
-    // Disable default blur and focus behavior
-    picker.on('blur', function() {});
-    picker.on('focus', function() {});
+    const picker = new CP(document.querySelector('input'));
 
-    picker.on('change', function(r, g, b, a) {
-        this.source.value = this.color(r, g, b, a);
-    });
-
-    // Add a `is-static` class to the color picker panel
-    picker.self.classList.add('is-static');
-
-    // Put color picker panel to the second `<p>` element
-    picker.enter(document.querySelectorAll('p')[1]);
+    staticColorPicker(picker, document.querySelectorAll('p')[1]);
 
     </script>
   </body>

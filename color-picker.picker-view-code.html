@@ -7,7 +7,7 @@
     <link href="color-picker.min.css" rel="stylesheet">
     <style>
 
-    .color-code {
+    .color-picker input {
       box-sizing: border-box;
       display: block;
       width: 100%;
@@ -21,7 +21,7 @@
       color: #000;
     }
 
-    .color-code:invalid {
+    .color-picker input:invalid {
       color: #f00;
     }
 
@@ -36,40 +36,34 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input')),
-        code = document.createElement('input');
-
-    // Prevent showing native color picker panel
-    picker.source.addEventListener('click', function(e) {
-        e.preventDefault();
-    }, false);
-
-    code.className = 'color-code';
-    code.pattern = '^#([a-fA-F\\d]{3}){1,2}$';
-    code.type = 'text';
-
-    picker.on('enter', function(r, g, b) {
-        code.value = this.color(r, g, b, 1);
-    });
-
-    picker.on('change', function(r, g, b) {
-        this.source.value = this.color(r, g, b, 1);
-        code.value = this.color(r, g, b, 1);
-    });
-
-    picker.self.appendChild(code);
-
-    function onChange() {
-        if (this.value.length) {
-            var color = CP.HEX(this.value);
-            picker.set.apply(picker, color);
-            picker.source.value = CP.HEX(color);
+    function insertColorCode(picker) {
+        let code = document.createElement('input');
+        code.pattern = '^#([a-fA-F\\d]{3}){1,2}$';
+        code.type = 'text';
+        picker.self.appendChild(code);
+        picker.source.addEventListener('click', e => e.preventDefault());
+        picker.on('change', function(r, g, b) {
+            this.source.value = this.color(r, g, b, 1);
+            code.value = this.color(r, g, b, 1);
+        });
+        picker.on('enter', function(r, g, b) {
+            code.value = this.color(r, g, b, 1);
+        });
+        function onChange() {
+            if (this.value.length) {
+                var color = CP.HEX(this.value);
+                picker.set.apply(picker, color);
+                picker.source.value = CP.HEX(color);
+            }
         }
+        ['cut', 'input', 'keyup', 'paste'].forEach(e => {
+            code.addEventListener(e, onChange);
+        });
     }
 
-    ['cut', 'paste', 'keyup', 'input'].forEach(function(name) {
-        code.addEventListener(name, onChange, false);
-    });
+    const picker = new CP(document.querySelector('input'));
+
+    insertColorCode(picker);
 
     </script>
   </body>

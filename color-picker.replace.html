@@ -27,23 +27,24 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var input = document.querySelector('input'),
-        box = document.createElement('div');
+    function replaceWithColorBox(source) {
+        let box = document.createElement('span'),
+            color = source.value;
+        box.className = 'color-box';
+        box.dataset.color = color;
+        box.style.backgroundColor = color;
+        source.parentNode.insertBefore(box, source);
+        source.type = 'hidden';
+        const picker = new CP(box);
+        picker.on('change', function(r, g, b, a) {
+            let color = this.color(r, g, b, a);
+            source.value = color;
+            this.source.dataset.color = color;
+            this.source.style.backgroundColor = color;
+        });
+    }
 
-    box.className = 'color-box';
-    box.style.backgroundColor = input.value;
-    box.setAttribute('data-color', input.value);
-    input.parentNode.insertBefore(box, input);
-    input.type = 'hidden';
-
-    var picker = new CP(box);
-
-    picker.on('change', function(r, g, b, a) {
-        var color = this.color(r, g, b, a);
-        input.value = color;
-        this.source.style.backgroundColor = color;
-        this.source.setAttribute('data-color', color);
-    });
+    replaceWithColorBox(document.querySelector('input'));
 
     </script>
   </body>

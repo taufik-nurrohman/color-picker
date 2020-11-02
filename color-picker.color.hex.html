@@ -11,12 +11,12 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var HEX = CP.HEX; // Old hex color parser
+    const apply = CP.HEX; // Old hex color parser
 
-    CP.HEX = function(x) {
-        x = HEX(x);
+    CP.HEX = x => {
+        x = apply(x);
         if ('string' === typeof x) {
-            var count = x.length;
+            let count = x.length;
             if (9 === count && x[1] === x[2] && x[3] === x[4] && x[5] === x[6] && x[7] === x[8]) {
                 // Shorten!
                 return x[0] + x[1] + x[3] + x[5] + x[7];
@@ -29,7 +29,7 @@
         return x;
     };
 
-    var picker = new CP(document.querySelector('input'));
+    const picker = new CP(document.querySelector('input'));
 
     picker.on('change', function(r, g, b, a) {
         this.source.value = this.color(r, g, b, a);

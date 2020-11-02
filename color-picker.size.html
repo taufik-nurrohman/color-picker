@@ -38,11 +38,11 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var source = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    let sources = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
 
-    for (var i = 0, j = source.length; i < j; ++i) {
-        (new CP(source[i], {
-            parent: source[i]
+    for (let i = 0, j = sources.length; i < j; ++i) {
+        (new CP(sources[i], {
+            parent: sources[i]
         })).on('change', function(r, g, b, a) {
             this.source.style.color = this.color(r, g, b, a);
         });

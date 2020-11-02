@@ -11,7 +11,7 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var HEX = CP.HEX, // Old hex color parser
+    let apply = CP.HEX, // Old hex color parser
         name2hex = {
             aliceblue: "#f0f8ff",
             antiquewhite: "#faebd7",
@@ -164,18 +164,18 @@
         hex2name = {};
 
     // Create inverse version of `name2hex`
-    for (var name in name2hex) {
+    for (let name in name2hex) {
         hex2name[name2hex[name]] = name;
     }
 
-    CP.HEX = function(x) {
+    CP.HEX = x => {
         if ('string' === typeof x) {
-            return HEX(name2hex[x] || x);
+            return apply(name2hex[x] || x);
         }
-        return hex2name[x = HEX(x)] || x;
+        return hex2name[x = apply(x)] || x;
     };
 
-    var picker = new CP(document.querySelector('input'));
+    const picker = new CP(document.querySelector('input'));
 
     picker.on('change', function(r, g, b, a) {
         this.source.value = this.color(r, g, b, a);

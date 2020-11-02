@@ -7,27 +7,42 @@
     <link href="color-picker.min.css" rel="stylesheet">
   </head>
   <body>
-    <p><input type="text"> <button>Pick a Color!</button></p>
+    <p><input type="text"></p>
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input')),
-        button = document.querySelector('button'),
-        text = button.textContent;
+    function toggleByButton(picker) {
+        let button = document.createElement('button');
+        // Disable the default blur and focus behavior
+        picker.on('blur', () => {});
+        picker.on('focus', () => {});
+        // Click to show or hide the color picker pane
+        button.addEventListener('click', () => {
+            picker[picker.visible ? 'exit' : 'enter']();
+            picker.fit([
+                button.offsetLeft,
+                button.offsetTop + button.offsetHeight + 2
+            ]);
+        });
+        button.textContent = 'Pick a Color!';
+        button.style.marginLeft = '.25em';
+        picker.on('change', function(r, g, b, a) {
+            this.source.value = this.color(r, g, b, a);
+        });
+        picker.on('enter', () => {
+            button.textContent = 'Done';
+        });
+        picker.on('exit', () => {
+            button.textContent = 'Pick a Color!';
+        });
+        // Add button next to the source element
+        let source = picker.source;
+        source.parentNode.insertBefore(button, source.nextSibling);
+    }
 
-    // Disable the default blur and focus behavior
-    picker.on('blur', function() {});
-    picker.on('focus', function() {});
+    const picker = new CP(document.querySelector('input'));
 
-    picker.on('change', function(r, g, b, a) {
-        this.source.value = this.color(r, g, b, a);
-    });
-
-    button.addEventListener('click', function() {
-        picker[picker.visible ? 'exit' : 'enter']();
-        picker.fit([button.offsetLeft, button.offsetTop + button.offsetHeight + 2]);
-        button.textContent = picker.visible ? 'Done' : text;
-    }, false);
+    toggleByButton(picker);
 
     </script>
   </body>

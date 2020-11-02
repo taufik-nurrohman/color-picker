@@ -12,24 +12,25 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input'));
+    function toggleByDoubleClickEvent(picker) {
+        // Disable the default blur and focus behavior
+        picker.on('blur', () => {});
+        picker.on('focus', () => {});
+        picker.on('change', function(r, g, b, a) {
+            this.source.value = this.color(r, g, b, a);
+        });
+        document.documentElement.addEventListener('dblclick', () => {
+            picker.exit();
+        }, false);
+        picker.source.addEventListener('dblclick', e => {
+            picker.enter();
+            e.stopPropagation();
+        }, false);
+    }
 
-    // Disable the default blur and focus behavior
-    picker.on('blur', function() {});
-    picker.on('focus', function() {});
+    const picker = new CP(document.querySelector('input'));
 
-    picker.on('change', function(r, g, b, a) {
-        this.source.value = this.color(r, g, b, a);
-    });
-
-    picker.source.addEventListener('dblclick', function(e) {
-        picker.enter();
-        e.stopPropagation();
-    }, false);
-
-    document.documentElement.addEventListener('dblclick', function() {
-        picker.exit();
-    }, false);
+    toggleByDoubleClickEvent(picker);
 
     </script>
   </body>

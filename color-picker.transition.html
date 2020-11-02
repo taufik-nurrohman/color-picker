@@ -11,29 +11,30 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input'));
+    function enableColorPickerEffect(picker, property, change, duration) {
+        picker.self.style[property] = change[0];
+        picker.self.style.transition = property + ' ' + (duration / 1000) + 's ease';
+        picker.self.addEventListener('transitionend', function() {
+            let value = +(this.style[property] || change[0]);
+            change[0] === value && picker.exit(); // Hide color picker pane on transition end
+        });
+        picker.on('focus', function() {
+            this.enter();
+            this.self.style[property] = change[1];
+        });
+        picker.on('blur', function() {
+            // this.exit();
+            this.self.style[property] = change[0];
+        });
+    }
+
+    const picker = new CP(document.querySelector('input'));
 
     picker.on('change', function(r, g, b, a) {
         this.source.value = this.color(r, g, b, a);
     });
 
-    picker.self.style.opacity = 0;
-    picker.self.style.transition = 'opacity .5s ease';
-
-    picker.self.addEventListener('transitionend', function() {
-        var opacity = +(this.style.opacity || 0);
-        0 === opacity && picker.exit(); // Hide color picker pane on transition end
-    });
-
-    picker.on('focus', function() {
-        this.enter();
-        this.self.style.opacity = 1;
-    });
-
-    picker.on('blur', function() {
-        // this.exit();
-        this.self.style.opacity = 0;
-    });
+    enableColorPickerEffect(picker, 'opacity', [0, 1], 250);
 
     </script>
   </body>

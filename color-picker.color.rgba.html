@@ -12,8 +12,8 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    CP.RGB = function(x) {
-        var r, g, b, a, rgba;
+    CP.RGB = x => {
+        let r, g, b, a, rgba;
         // Convert color string to color data
         if ('string' === typeof x) {
             x = x.trim();
@@ -41,7 +41,7 @@
         return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
     };
 
-    var picker = new CP(document.querySelector('input'), {
+    const picker = new CP(document.querySelector('input'), {
             color: 'RGB'
         });
 

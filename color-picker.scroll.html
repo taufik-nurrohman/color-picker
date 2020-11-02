@@ -56,9 +56,29 @@
     <script src="color-picker.min.js"></script>
     <script>
 
-    var input = document.querySelectorAll('input'),
-        picker_1 = new CP(input[0]),
-        picker_2 = new CP(input[1]);
+    function scrollFollowColorPicker(picker, container) {
+        picker._scrollPane = container;
+        picker.on('enter', function() {
+            this._initScrollPosition = {
+                x: this._scrollPane.scrollTop,
+                y: this._scrollPane.scrollLeft
+            };
+            this.self.style.marginTop = 0;
+            this.self.style.marginLeft = 0;
+        });
+        container.addEventListener('scroll', function() {
+            let initScrollPosition = picker._initScrollPosition;
+            if (!initScrollPosition) {
+                return;
+            }
+            picker.self.style.marginTop = (initScrollPosition.x - this.scrollTop) + 'px';
+            picker.self.style.marginLeft = (initScrollPosition.y - this.scrollLeft) + 'px';
+        });
+    }
+
+    let sources = document.querySelectorAll('input'),
+        picker_1 = new CP(sources[0]),
+        picker_2 = new CP(sources[1]);
 
     function onChange(r, g, b, a) {
         this.source.value = this.color(r, g, b, a);
@@ -67,21 +87,7 @@
     picker_1.on('change', onChange);
     picker_2.on('change', onChange);
 
-    picker_2._scrollPane = document.querySelector('#pane-2');
-    picker_2.on('enter', function() {
-        this._initScrollPosition = {
-            x: this._scrollPane.scrollTop,
-            y: this._scrollPane.scrollLeft
-        };
-        this.self.style.marginTop = '0px';
-        this.self.style.marginLeft = '0px';
-    });
-
-    document.querySelector('#pane-2').addEventListener('scroll', function() {
-        if (!picker_2._initScrollPosition) return;
-        picker_2.self.style.marginTop = (picker_2._initScrollPosition.x - this.scrollTop) + 'px';
-        picker_2.self.style.marginLeft = (picker_2._initScrollPosition.y - this.scrollLeft) + 'px';
-    }, false);
+    scrollFollowColorPicker(picker_2, document.querySelector('#pane-2'));
 
     </script>
   </body>

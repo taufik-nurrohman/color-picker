@@ -26,33 +26,45 @@
   </head>
   <body>
     <p>Set pre-defined color value in the color picker panel.</p>
-    <p><input type="text"></p>
+    <p><input type="text" value="#ffffff"></p>
     <script src="color-picker.min.js"></script>
     <script>
 
-    var picker = new CP(document.querySelector('input'));
+    function preDefineColorValues(picker, colors) {
+        let pane = document.createElement('span'), c;
+        for (let i = 0, j = colors.length; i < j; ++i) {
+            c = document.createElement('span');
+            c.title = '#' + colors[i];
+            c.style.backgroundColor = '#' + colors[i];
+            c.addEventListener('click', function(e) {
+                picker.value.apply(picker, CP.HEX(this.title));
+                e.stopPropagation();
+            });
+            pane.appendChild(c);
+        }
+        pane.className = 'color-pickers';
+        picker.self.appendChild(pane);
+    }
+
+    const picker = new CP(document.querySelector('input'));
 
     picker.on('change', function(r, g, b, a) {
         this.source.value = this.color(r, g, b, a);
         document.body.style.backgroundColor = this.color(r, g, b, a);
     });
 
-    var colors = ['012', '123', '234', '345', '456', '567', '678', '789', '89a', '9ab'],
-        pane = document.createElement('span'), c;
-
-    pane.className = 'color-pickers';
-    picker.self.appendChild(pane);
-
-    for (var i = 0, j = colors.length; i < j; ++i) {
-        c = document.createElement('span');
-        c.title = '#' + colors[i];
-        c.style.backgroundColor = '#' + colors[i];
-        c.addEventListener('click', function(e) {
-            picker.value.apply(picker, CP.HEX(this.title));
-            e.stopPropagation();
-        }, false);
-        pane.appendChild(c);
-    }
+    preDefineColorValues(picker, [
+        'e8ecfb',
+        'b997c7',
+        '824d99',
+        '4e78c4',
+        '57a2ac',
+        '7eb875',
+        'd0b541',
+        'e67f33',
+        'ce2220',
+        '521a13'
+    ]);
 
     </script>
   </body>
