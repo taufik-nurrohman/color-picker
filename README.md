@@ -46,6 +46,10 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
+### master
+
+ - Modernize syntax.
+
 ### 2.1.5
 
  - Fixed minified code does not yet updated after release.

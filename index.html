@@ -66,7 +66,7 @@
   <body>
     <p>Do you like this project? Please support my <a href="https://github.com/mecha-cms">Mecha CMS</a> project too. Thank you!</p>
     <header>
-      <h1>Color Picker v2.1.5</h1>
+      <h1>Color Picker v2.1.6</h1>
       <p>Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability.</p>
       <hr>
     </header>
@@ -165,13 +165,15 @@
         <li><var>state.parent</var> &rarr; Parent element to append the color picker element (default will be appended to the <code>&lt;body&gt;</code> element).</li>
       </ul>
       <h2>Methods and Properties</h2>
-      <h3>CP.version</h3>
-      <p>Return the color picker version.</p>
-      <pre><code>let version = CP.version,
-    major = version.split('.')[0];
-
-if (+major &lt; 2) {
-    // Has no alpha channel support
+      <h3>CP.HEX(color | [r, g, b, a])</h3>
+      <p>Hex color converter as the default color string parser. This is the only color mode that this application can parse into a series of RGBA color data. You can add your own color parser later to enhance the existing features.</p>
+      <pre><code>console.log(CP.HEX('#ff0')); // &rarr; `[255, 255, 0, 1]`
+console.log(CP.HEX([255, 255, 0, 1])); // &rarr; `'#ffff00'`</code></pre>
+      <h3>CP.instances</h3>
+      <p>Return the color picker instances.</p>
+      <pre><code>for (let key in CP.instances) {
+    console.log(key);
+    console.log(CP.instances[key]);
 }</code></pre>
       <h3>CP.state</h3>
       <p>This property stores the initial values of <code>picker.state</code>.</p>
@@ -180,47 +182,14 @@ if (+major &lt; 2) {
     });
 
 console.log([CP.state, picker.state]);</code></pre>
-      <h3>CP.instances</h3>
-      <p>Return the color picker instances.</p>
-      <pre><code>for (let key in CP.instances) {
-    console.log(key);
-    console.log(CP.instances[key]);
+      <h3>CP.version</h3>
+      <p>Return the color picker version.</p>
+      <pre><code>let version = CP.version,
+    major = version.split('.')[0];
+
+if (+major &lt; 2) {
+    // Has no alpha channel support
 }</code></pre>
-      <h3>CP.HEX(color | [r, g, b, a])</h3>
-      <p>Hex color converter as the default color string parser. This is the only color mode that this application can parse into a series of RGBA color data. You can add your own color parser later to enhance the existing features.</p>
-      <pre><code>console.log(CP.HEX('#ff0')); // &rarr; `[255, 255, 0, 1]`
-console.log(CP.HEX([255, 255, 0, 1])); // &rarr; `'#ffff00'`</code></pre>
-      <h3>picker.state</h3>
-      <p>Return the modified color picker states.</p>
-      <h3>picker.source</h3>
-      <p>Return the color picker source element that holds the initial color value. It can be any element with a <code>data-color</code> attribute, any element that has <code>value</code> attribute or any element that has color value in its content.</p>
-      <pre><code>picker.source.addEventListener('click', function() {
-    console.log(this.nodeName);
-}, false);</code></pre>
-      <h3>picker.self</h3>
-      <p>Return the color picker element.</p>
-      <pre><code>picker.self.style.borderWidth = '4px';</code></pre>
-      <h3>picker.current</h3>
-      <p>Return the active color picker control pane element.</p>
-      <pre><code>picker.on('change', function(r, g, b, a) {
-    if (this.current.classList.contains('color-picker:h')) {
-        // Is dragging the hue control
-    }
-});</code></pre>
-      <h3>picker.visible</h3>
-      <p>Check if color picker pane is visible.</p>
-      <pre><code>if (picker.visible) { &hellip; }</code></pre>
-      <h3>picker.set(r, g, b, a)</h3>
-      <p>Set color picker&rsquo;s color state based on the given color data.</p>
-      <pre><code>// Set color picker&rsquo;s color state to yellow with 50% opacity
-picker.set(255, 255, 0, .5);</code></pre>
-      <h3>picker.get()</h3>
-      <p>Get current color value as a series of RGBA color data.</p>
-      <pre><code>console.log(picker.get());</code></pre>
-      <h3>picker.value(r, g, b, a)</h3>
-      <p>Set source element value and update the color picker&rsquo;s color state.</p>
-      <pre><code>// Set color picker&rsquo;s source element value to yellow with 50% opacity
-picker.value(255, 255, 0, .5);</code></pre>
       <h3>picker.color(r, g, b, a)</h3>
       <p>Call current color parser function with a name that is defined in the <code>state.color</code> value.</p>
       <pre><code>// Convert RGB to HEX in the output
@@ -231,6 +200,13 @@ picker.on('change', function(r, g, b, a) {
 // The code above is equal to this code
 picker.on('change', function(r, g, b, a) {
     this.source.value = CP.HEX([r, g, b, a]);
+});</code></pre>
+      <h3>picker.current</h3>
+      <p>Return the active color picker control pane element.</p>
+      <pre><code>picker.on('change', function(r, g, b, a) {
+    if (this.current.classList.contains('color-picker:h')) {
+        // Is dragging the hue control
+    }
 });</code></pre>
       <h3>picker.enter(to)</h3>
       <p>Show the color picker pane.</p>
@@ -243,12 +219,36 @@ picker.enter(document.querySelector('#foo')); // Enter to a specific container</
       <p>Set color picker position measured from the window edges.</p>
       <pre><code>picker.enter();
 picker.fit([30, 30]);</code></pre>
+      <h3>picker.get()</h3>
+      <p>Get current color value as a series of RGBA color data.</p>
+      <pre><code>console.log(picker.get());</code></pre>
       <h3>picker.pop()</h3>
       <p>Remove custom color picker features from the source element.</p>
+      <h3>picker.self</h3>
+      <p>Return the color picker element.</p>
+      <pre><code>picker.self.style.borderWidth = '4px';</code></pre>
+      <h3>picker.set(r, g, b, a)</h3>
+      <p>Set color picker&rsquo;s color state based on the given color data.</p>
+      <pre><code>// Set color picker&rsquo;s color state to yellow with 50% opacity
+picker.set(255, 255, 0, .5);</code></pre>
+      <h3>picker.source</h3>
+      <p>Return the color picker source element that holds the initial color value. It can be any element with a <code>data-color</code> attribute, any element that has <code>value</code> attribute or any element that has color value in its content.</p>
+      <pre><code>picker.source.addEventListener('click', function() {
+    console.log(this.nodeName);
+}, false);</code></pre>
+      <h3>picker.state</h3>
+      <p>Return the modified color picker states.</p>
+      <h3>picker.value(r, g, b, a)</h3>
+      <p>Set source element value and update the color picker&rsquo;s color state.</p>
+      <pre><code>// Set color picker&rsquo;s source element value to yellow with 50% opacity
+picker.value(255, 255, 0, .5);</code></pre>
+      <h3>picker.visible</h3>
+      <p>Check if color picker pane is visible.</p>
+      <pre><code>if (picker.visible) { &hellip; }</code></pre>
       <h2>Color Converters</h2>
       <p>Converters are defined as static methods in the scope of <code>CP</code>. This method accepts two types of input, a color string input and an array of red, green, blue and alpha color data. Every input given to this method will return the opposite version of the input. For example, with the <code>CP.HEX()</code> method, if you put <code>'#ffff00'</code> to the method argument, it will come out as <code>[255, 255, 0, 1]</code> and if you put <code>[255, 255, 0, 1]</code> to the method argument, it will come out as <code>'#ffff00'</code>.</p>
       <p>To make a color converter, be sure to check the input types first before doing the parsing:</p>
-      <pre><code>CP.RGB = function(x) {
+      <pre><code>CP.RGB = x =&gt; {
     if ('string' === typeof x) {
         // Use regular expression here to extract color data from the string input
         // and output it as an array of red, green, blue and alpha color data
@@ -315,9 +315,16 @@ console.log(CP.RGB([255, 255, 0, 1]));</code></pre>
           </tr>
         </tbody>
       </table>
+      <h3>picker.fire(name, lot)</h3>
+      <p>Trigger hooks.</p>
+      <pre><code>picker.fire('change', [255, 255, 0, .5]);</code></pre>
       <h3>picker.hooks</h3>
       <p>Return the added hooks.</p>
       <pre><code>console.log(picker.hooks);</code></pre>
+      <h3>picker.off(name, fn)</h3>
+      <p>Remove a hook.</p>
+      <pre><code>picker.off('change');</code></pre>
+      <pre><code>picker.off('change', onChange); // With context</code></pre>
       <h3>picker.on(name, fn)</h3>
       <p>Add a new hook.</p>
       <pre><code>picker.on('change', function(r, g, b, a) {
@@ -328,13 +335,6 @@ console.log(CP.RGB([255, 255, 0, 1]));</code></pre>
 }
 
 picker.on('change', onChange); // With context</code></pre>
-      <h3>picker.off(name, fn)</h3>
-      <p>Remove a hook.</p>
-      <pre><code>picker.off('change');</code></pre>
-      <pre><code>picker.off('change', onChange); // With context</code></pre>
-      <h3>picker.fire(name, lot)</h3>
-      <p>Trigger hooks.</p>
-      <pre><code>picker.fire('change', [255, 255, 0, .5]);</code></pre>
       <h2>License</h2>
       <p>Use it for free, pay if you get paid. So, you&rsquo;ve just benefited financially after using this project? It&rsquo;s a good idea to <a href="https://paypal.me/tatautaufik" target="_blank">share a little financial support</a> with this open source project too. Your support will motivate me to do any further development, as well as to provide voluntary support to overcome problems related to this project.</p>
       <p>Thank you! ❤️</p>
@@ -345,9 +345,9 @@ picker.on('change', onChange); // With context</code></pre>
     </footer>
     <script src="color-picker.js"></script>
     <script>
-    var source = document.forms[0].color;
+    let source = document.forms[0].color;
     source.value = '#' + ('00000' + (Math.random() * (1 << 24) | 0).toString(16)).slice(-6); // Random hex color
-    var picker = new CP(source);
+    const picker = new CP(source);
     picker.on('change', function(r, g, b, a) {
         this.source.value = this.color(r, g, b, a);
         this.source.parentNode.style.backgroundColor = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';

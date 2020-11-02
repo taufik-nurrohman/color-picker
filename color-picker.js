@@ -1,15 +1,15 @@
 /*!
  * ==============================================================
- *  COLOR PICKER 2.1.5
+ *  COLOR PICKER 2.1.6
  * ==============================================================
  * Author: Taufik Nurrohman <https://github.com/taufik-nurrohman>
  * License: MIT
  * --------------------------------------------------------------
  */
 
-(function(win, doc, name) {
+((win, doc, name) => {
 
-    var html = doc.documentElement,
+    let html = doc.documentElement,
         HEX = 'HEX',
         top = 'top',
         right = 'right',
@@ -25,7 +25,7 @@
 
     // Convert cursor position to RGBA
     function P2RGB(a) {
-        var h = +a[0],
+        let h = +a[0],
             s = +a[1],
             v = +a[2],
             r, g, b, i, f, p, q, t;
@@ -62,14 +62,14 @@
 
     // Convert RGBA to HSVA
     function RGB2HSV(a) {
-        var r = +a[0] / 255,
+        let r = +a[0] / 255,
             g = +a[1] / 255,
             b = +a[2] / 255,
             max = Math.max(r, g, b),
             min = Math.min(r, g, b),
             h, s, v = max,
-            d = max - min,
-            s = max === 0 ? 0 : d / max;
+            d = max - min;
+        s = max === 0 ? 0 : d / max;
         if (max === min) {
             h = 0; // Achromatic
         } else {
@@ -90,7 +90,7 @@
     }
 
     function axixGet(el, e) {
-        var touches = 'touches',
+        let touches = 'touches',
             clientX = 'clientX',
             clientY = 'clientY',
             x = !!e[touches] ? e[touches][0][clientX] : e[clientX],
@@ -107,25 +107,20 @@
         return a;
     }
 
-    function offsetGet(el) {
-        var x, y, rect;
-        if (el === win) {
-            x = win.pageXOffset || html.scrollLeft;
-            y = win.pageYOffset || html.scrollTop;
-        } else {
-            rect = el.getBoundingClientRect();
-            x = rect.left;
-            y = rect.top;
-        }
-        return [x, y];
-    }
-
-    function sizeGet(el) {
-        return el === win ? [win.innerWidth, win.innerHeight] : [el.offsetWidth, el.offsetHeight];
-    }
-
     function doPreventDefault(e) {
         e && e.preventDefault();
+    }
+
+    function eventsLet(to, events, fn) {
+        for (let i = 0, j = events.length; i < j; ++i) {
+            to.removeEventListener(events[i], fn, false);
+        }
+    }
+
+    function eventsSet(to, events, fn) {
+        for (let i = 0, j = events.length; i < j; ++i) {
+            to.addEventListener(events[i], fn, false);
+        }
     }
 
     function isFunction(x) {
@@ -142,6 +137,27 @@
 
     function isString(x) {
         return 'string' === typeof x;
+    }
+
+    function offsetGet(el) {
+        let x, y, rect;
+        if (el === win) {
+            x = win.pageXOffset || html.scrollLeft;
+            y = win.pageYOffset || html.scrollTop;
+        } else {
+            rect = el.getBoundingClientRect();
+            x = rect.left;
+            y = rect.top;
+        }
+        return [x, y];
+    }
+
+    function sizeGet(el) {
+        return el === win ? [win.innerWidth, win.innerHeight] : [el.offsetWidth, el.offsetHeight];
+    }
+
+    function styleSet(to, prop, value) {
+        to.style[prop] = value;
     }
 
     function toEdge(a, b) {
@@ -169,38 +185,11 @@
         return a.toString(b);
     }
 
-    function eventsLet(to, events, fn) {
-        for (var i = 0, j = events.length; i < j; ++i) {
-            to.removeEventListener(events[i], fn, false);
-        }
-    }
+    ($$ => {
 
-    function eventsSet(to, events, fn) {
-        for (var i = 0, j = events.length; i < j; ++i) {
-            to.addEventListener(events[i], fn, false);
-        }
-    }
-
-    function styleSet(to, prop, value) {
-        to.style[prop] = value;
-    }
-
-    (function($$) {
-
-        $$.version = '2.1.5';
-
-        $$.state = {
-            'class': 'color-picker',
-            'color': HEX,
-            'parent': null
-        };
-
-        // Collect all instance(s)
-        $$[instances] = {};
-
-        $$[HEX] = function(x) {
+        $$[HEX] = x => {
             if (isString(x)) {
-                var count = (x = x.trim()).length;
+                let count = (x = x.trim()).length;
                 if ((4 === count || 7 === count) && '#' === x[0]) {
                     if (/^#([a-f\d]{3}){1,2}$/i.test(x)) {
                         if (4 === count) {
@@ -221,11 +210,22 @@
             return '#' + ('000000' + toString(+x[2] | (+x[1] << 8) | (+x[0] << 16), 16)).slice(-6) + (isSet(x[3]) && x[3] < 1 ? toString(toRound(x[3] * 255) + 0x10000, 16).substr(-2) : "");
         };
 
+        // Collect all instance(s)
+        $$[instances] = {};
+
+        $$.state = {
+            'class': 'color-picker',
+            'color': HEX,
+            'parent': null
+        };
+
+        $$.version = '2.1.6';
+
     })(win[name] = function(source, o) {
 
         if (!source) return;
 
-        var $ = this,
+        let $ = this,
             $$ = win[name],
             hooks = {},
             state = Object.assign({}, $$.state, isString(o) ? {
@@ -252,76 +252,7 @@
 
         $.visible = false;
 
-        function value(a) {
-            var to = $$[isFunction($$[state.color]) ? state.color : HEX],
-                color;
-            if (color = source.dataset.color) {
-                if (isSet(a)) {
-                    return (source.dataset.color = to(color));
-                }
-                return to(color);
-            }
-            if (color = source.value) {
-                if (isSet(a)) {
-                    return (source.value = to(color));
-                }
-                return to(color);
-            }
-            if (color = source.textContent) {
-                if (isSet(a)) {
-                    return (source.textContent = to(color));
-                }
-                return to(color);
-            }
-            if (isSet(a)) {
-                return; // Do nothing
-            }
-            return [0, 0, 0, 1]; // Default to black
-        }
-
-        function hookLet(name, fn) {
-            if (!isSet(name)) {
-                return (hooks = {}), $;
-            }
-            if (isSet(hooks[name])) {
-                if (isSet(fn)) {
-                    for (var i = 0, j = hooks[name].length; i < j; ++i) {
-                        if (fn === hooks[name][i]) {
-                            hooks[name].splice(i, 1);
-                        }
-                    }
-                    // Clean-up empty hook(s)
-                    if (0 === j) {
-                        delete hooks[name];
-                    }
-                } else {
-                    delete hooks[name];
-                }
-            }
-            return $;
-        }
-
-        function hookSet(name, fn) {
-            if (!isSet(hooks[name])) {
-                hooks[name] = [];
-            }
-            if (isSet(fn)) {
-                hooks[name].push(fn);
-            }
-            return $;
-        }
-
-        function hookFire(name, lot) {
-            if (!isSet(hooks[name])) {
-                return $;
-            }
-            for (var i = 0, j = hooks[name].length; i < j; ++i) {
-                hooks[name][i].apply($, lot);
-            }
-            return $;
-        }
-
-        var doEnter,
+        let doEnter,
             doExit,
             doFit,
             doFitTo,
@@ -353,24 +284,6 @@
             HDragging = 0,
             ADragging = 0;
 
-        function isVisible() {
-            return self.parentNode;
-        }
-
-        function doClick(e) {
-            if (hooks.focus) {
-                hookFire('focus', color);
-            } else {
-                var t = e.target,
-                    isSource = source === closestGet(t, source);
-                if (isSource) {
-                    !isVisible() && doEnter(state.parent);
-                } else {
-                    doExit();
-                }
-            }
-        }
-
         function doApply(isFirst, to) {
 
             // Refresh value
@@ -380,12 +293,12 @@
                 (to || state.parent || body).appendChild(self), ($.visible = true);
             }
 
-            doEnter = function(to) {
+            doEnter = to => {
                 return doApply(0, to), hookFire('enter', color), $;
             };
 
-            doExit = function() {
-                var exist = isVisible();
+            doExit = () => {
+                let exist = isVisible();
                 if (exist) {
                     exist.removeChild(self);
                     $.current = null;
@@ -400,8 +313,8 @@
                 return hookFire('exit', color), $;
             };
 
-            doFit = function(to) {
-                var winSize = sizeGet(win),
+            doFit = to => {
+                let winSize = sizeGet(win),
                     htmlSize = sizeGet(html),
                     scrollBarSizeV = winSize[0] - htmlSize[0], // Vertical scroll bar
                     scrollBarSizeH = winSize[1] - html.clientHeight, // Horizontal scroll bar
@@ -416,7 +329,7 @@
                     isSet(to[0]) && (selfOffsetLeft = to[0]);
                     isSet(to[1]) && (selfOffsetTop = to[1]);
                 } else {
-                    var minX = winOffset[0],
+                    let minX = winOffset[0],
                         minY = winOffset[1],
                         maxX = winOffset[0] + winSize[0] - selfSizeWidth - scrollBarSizeV,
                         maxY = winOffset[1] + winSize[1] - selfSizeHeight - scrollBarSizeH;
@@ -428,11 +341,9 @@
                 return hookFire('fit', color), $;
             };
 
-            doFitTo = function() {
-                return doFit();
-            };
+            doFitTo = () => doFit();
 
-            var SVSize = sizeGet(SV),
+            let SVSize = sizeGet(SV),
                 SVSizeWidth = SVSize[0],
                 SVSizeHeight = SVSize[1],
                 SVCursorSize = sizeGet(SVCursor),
@@ -445,7 +356,7 @@
 
             if (isFirst) {
                 eventsSet(source, downEvents, doClick);
-                delay(function() {
+                delay(() => {
                     hookFire('change', color);
                 }, 1);
             } else {
@@ -472,7 +383,7 @@
 
             function doStop(e) {
                 color = P2RGB(data);
-                var t = e.target,
+                let t = e.target,
                     isSource = source === closestGet(t, source),
                     isSelf = self === closestGet(t, self);
                 $.current = null;
@@ -521,17 +432,15 @@
                 isSet(x[3]) && styleSet(ACursor, top, (ASizeHeight - (ACursorSizeHeight / 2) - (ASizeHeight * +x[3])) + px);
             }
 
-            $.get = function() {
-                return value();
-            };
+            $.get = () => value();
 
-            $.set = function(r, g, b, a) {
+            $.set = (r, g, b, a) => {
                 data = RGB2HSV([r, g, b, a]);
                 return colorSet(), $;
             };
 
             function cursorSVSet(e) {
-                var SVPoint = axixGet(SV, e),
+                let SVPoint = axixGet(SV, e),
                     x = toEdge(SVPoint[0], [0, SVSizeWidth]),
                     y = toEdge(SVPoint[1], [0, SVSizeHeight]);
                 data[1] = 1 - ((SVSizeWidth - x) / SVSizeWidth);
@@ -551,7 +460,7 @@
 
             function colorSet() {
                 cursorSet(data);
-                var a = P2RGB(data),
+                let a = P2RGB(data),
                     b = P2RGB([data[0], 1, 1]);
                 styleSet(SVColor, 'backgroundColor', 'rgb(' + b[0] + ',' + b[1] + ',' + b[2] + ')');
                 styleSet(AColor, 'backgroundImage', 'linear-gradient(rgb(' + a[0] + ',' + a[1] + ',' + a[2] + '),transparent)');
@@ -559,9 +468,94 @@
 
         } doApply(1);
 
-        $.color = function(r, g, b, a) {
-            return $$[isFunction($$[state.color]) ? state.color : HEX]([r, g, b, a]);
-        };
+        function doClick(e) {
+            if (hooks.focus) {
+                hookFire('focus', color);
+            } else {
+                let t = e.target,
+                    isSource = source === closestGet(t, source);
+                if (isSource) {
+                    !isVisible() && doEnter(state.parent);
+                } else {
+                    doExit();
+                }
+            }
+        }
+
+        function hookFire(name, lot) {
+            if (!isSet(hooks[name])) {
+                return $;
+            }
+            for (let i = 0, j = hooks[name].length; i < j; ++i) {
+                hooks[name][i].apply($, lot);
+            }
+            return $;
+        }
+
+        function hookLet(name, fn) {
+            if (!isSet(name)) {
+                return (hooks = {}), $;
+            }
+            if (isSet(hooks[name])) {
+                if (isSet(fn)) {
+                    for (let i = 0, j = hooks[name].length; i < j; ++i) {
+                        if (fn === hooks[name][i]) {
+                            hooks[name].splice(i, 1);
+                        }
+                    }
+                    // Clean-up empty hook(s)
+                    if (0 === j) {
+                        delete hooks[name];
+                    }
+                } else {
+                    delete hooks[name];
+                }
+            }
+            return $;
+        }
+
+        function hookSet(name, fn) {
+            if (!isSet(hooks[name])) {
+                hooks[name] = [];
+            }
+            if (isSet(fn)) {
+                hooks[name].push(fn);
+            }
+            return $;
+        }
+
+        function isVisible() {
+            return self.parentNode;
+        }
+
+        function value(a) {
+            let to = $$[isFunction($$[state.color]) ? state.color : HEX],
+                color;
+            if (color = source.dataset.color) {
+                if (isSet(a)) {
+                    return (source.dataset.color = to(color));
+                }
+                return to(color);
+            }
+            if (color = source.value) {
+                if (isSet(a)) {
+                    return (source.value = to(color));
+                }
+                return to(color);
+            }
+            if (color = source.textContent) {
+                if (isSet(a)) {
+                    return (source.textContent = to(color));
+                }
+                return to(color);
+            }
+            if (isSet(a)) {
+                return; // Do nothing
+            }
+            return [0, 0, 0, 1]; // Default to black
+        }
+
+        $.color = (r, g, b, a) => $$[isFunction($$[state.color]) ? state.color : HEX]([r, g, b, a]);
 
         $.current = null;
         $.enter = doEnter;
@@ -572,7 +566,7 @@
         $.off = hookLet;
         $.on = hookSet;
 
-        $.pop = function() {
+        $.pop = () => {
             if (!source[name]) {
                 return $; // Already ejected
             }
@@ -581,13 +575,11 @@
             return doExit(), hookFire('pop', color);
         };
 
-        $.value = function(r, g, b, a) {
-            return $.set(r, g, b, a), hookFire('change', [r, g, b, a]);
-        };
-
         $.self = self;
         $.source = source;
         $.state = state;
+
+        $.value = (r, g, b, a) => ($.set(r, g, b, a), hookFire('change', [r, g, b, a]));
 
     });
 
