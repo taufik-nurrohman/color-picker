@@ -48,7 +48,7 @@ Release Notes
 
 ### 2.1.6
 
- - Modernize syntax.
+ - Modernized syntax.
  - Make color picker tweaks reusable by wrapping them in a function.
 
 ### 2.1.5
