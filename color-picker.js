@@ -392,7 +392,10 @@
                         hookFire('blur', color);
                     } else {
                         // Click outside the source or picker element to exit
-                        isVisible() && doExit();
+                        if (SVDragging || HDragging || ADragging) {
+                        } else {
+                            isVisible() && doExit();
+                        }
                     }
                 } else {
                     if (isSelf) {
