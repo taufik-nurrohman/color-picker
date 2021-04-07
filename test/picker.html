@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="A simple color picker application written in pure JavaScript, for modern browsers." name="description">
+    <title>Color Picker</title>
+    <link href="../index.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <main>
+      <p><input type="text" value="#f00"> <input type="text" value="#0f0"> <input type="text" value="#00f"> <input placeholder="Default" type="text"></p>
+    </main>
+    <script src="../index.min.js"></script>
+    <script>
+      let sources = document.querySelectorAll('input');
+
+      // Set hooks for each source element
+      for (let i = 0, j = sources.length; i < j; ++i) {
+          (new CP(sources[i])).on('change', function(r, g, b, a) {
+              this.source.value = this.color(r, g, b, a);
+          });
+      }
+    </script>
+  </body>
+</html>

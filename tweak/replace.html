@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="A simple color picker application written in pure JavaScript, for modern browsers." name="description">
+    <title>Color Picker</title>
+    <link href="../index.min.css" rel="stylesheet">
+    <style>
+      .color-box {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border: 1px solid;
+        cursor: pointer;
+      }
+
+      .color-picker {
+        margin-top: -1px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p>Replace text input with hidden input.</p>
+      <p><input type="text"></p>
+    </main>
+    <script src="../index.min.js"></script>
+    <script>
+      function replaceWithColorBox(source) {
+          let box = document.createElement('span'),
+              color = source.value;
+          box.className = 'color-box';
+          box.dataset.color = color;
+          box.style.backgroundColor = color;
+          source.parentNode.insertBefore(box, source);
+          source.type = 'hidden';
+          const picker = new CP(box);
+          picker.on('change', function(r, g, b, a) {
+              let color = this.color(r, g, b, a);
+              source.value = color;
+              this.source.dataset.color = color;
+              this.source.style.backgroundColor = color;
+          });
+      }
+
+      replaceWithColorBox(document.querySelector('input'));
+    </script>
+  </body>
+</html>

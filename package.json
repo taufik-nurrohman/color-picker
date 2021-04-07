@@ -1,31 +1,59 @@
 {
-  "name": "@taufik-nurrohman/color-picker",
+  "author": "Taufik Nurrohman",
+  "browser": "index.min.js",
+  "bugs": "https://github.com/taufik-nurrohman/color-picker/issues",
   "description": "A simple color picker application written in pure JavaScript, for modern browsers.",
-  "version": "2.1.6",
-  "main": "color-picker.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "opencollective-postinstall || true"
+  "devDependencies": {
+    "@taufik-nurrohman/document": "^0.1.5",
+    "@taufik-nurrohman/event": "^0.2.0",
+    "@taufik-nurrohman/factory": "^0.1.5",
+    "@taufik-nurrohman/from": "^0.0.5",
+    "@taufik-nurrohman/has": "^0.0.2",
+    "@taufik-nurrohman/hook": "^0.1.0",
+    "@taufik-nurrohman/pattern": "^0.1.4",
+    "@taufik-nurrohman/rect": "0.0.5",
+    "@taufik-nurrohman/to": "^0.0.16"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/taufik-nurrohman/color-picker.git"
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    },
+    "./element": {
+      "import": "./index/element.mjs",
+      "require": "./index/element.js"
+    }
   },
+  "files": [
+    "index/element.js",
+    "index/element.min.js",
+    "index/element.mjs",
+    "index.css",
+    "index.min.css",
+    "index.scss",
+    "index.js",
+    "index.min.js",
+    "index.mjs"
+  ],
+  "funding": {
+    "url": "https://paypal.me/tatautaufik"
+  },
+  "homepage": "https://taufik-nurrohman.js.org/color-picker",
   "keywords": [
     "color",
     "picker"
   ],
-  "author": "Taufik Nurrohman",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/taufik-nurrohman/color-picker/issues"
+  "main": "index.js",
+  "module": "index.mjs",
+  "name": "@taufik-nurrohman/color-picker",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taufik-nurrohman/color-picker.git"
   },
-  "homepage": "https://taufik-nurrohman.github.io/color-picker",
-  "dependencies": {
-    "opencollective-postinstall": "^2.0.2"
+  "scripts": {
+    "pack": "pack --clean=false --from=.github/source --js-format=umd --js-name=CP --to=."
   },
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/color-picker"
-  }
+  "type": "module",
+  "version": "2.2.0"
 }

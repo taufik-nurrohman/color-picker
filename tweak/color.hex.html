@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="A simple color picker application written in pure JavaScript, for modern browsers." name="description">
+    <title>Color Picker</title>
+    <link href="../index.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <main>
+      <p><input type="text"></p>
+    </main>
+    <script src="../index.min.js"></script>
+    <script>
+      const apply = CP.HEX; // Old hex color parser
+
+      CP.HEX = x => {
+          x = apply(x);
+          if ('string' === typeof x) {
+              let count = x.length;
+              if (9 === count && x[1] === x[2] && x[3] === x[4] && x[5] === x[6] && x[7] === x[8]) {
+                  // Shorten!
+                  return x[0] + x[1] + x[3] + x[5] + x[7];
+              }
+              if (7 === count && x[1] === x[2] && x[3] === x[4] && x[5] === x[6]) {
+                  // Shorten!
+                  return x[0] + x[1] + x[3] + x[5];
+              }
+          }
+          return x;
+      };
+
+      const picker = new CP(document.querySelector('input'));
+
+      picker.on('change', function(r, g, b, a) {
+          this.source.value = this.color(r, g, b, a);
+      });
+    </script>
+  </body>
+</html>

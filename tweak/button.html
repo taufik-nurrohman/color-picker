@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="A simple color picker application written in pure JavaScript, for modern browsers." name="description">
+    <title>Color Picker</title>
+    <link href="../index.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <main>
+      <p><input type="text"></p>
+    </main>
+    <script src="../index.min.js"></script>
+    <script>
+      function toggleByButton(picker) {
+          let button = document.createElement('button');
+          // Disable the default blur and focus behavior
+          picker.on('blur', () => {});
+          picker.on('focus', () => {});
+          // Click to show or hide the color picker pane
+          button.addEventListener('click', () => {
+              picker[picker.visible ? 'exit' : 'enter']();
+              picker.fit([
+                  button.offsetLeft,
+                  button.offsetTop + button.offsetHeight + 2
+              ]);
+          });
+          button.textContent = 'Pick a Color!';
+          button.style.marginLeft = '.25em';
+          picker.on('change', function(r, g, b, a) {
+              this.source.value = this.color(r, g, b, a);
+          });
+          picker.on('enter', () => {
+              button.textContent = 'Done';
+          });
+          picker.on('exit', () => {
+              button.textContent = 'Pick a Color!';
+          });
+          // Add button next to the source element
+          let source = picker.source;
+          source.parentNode.insertBefore(button, source.nextSibling);
+      }
+
+      const picker = new CP(document.querySelector('input'));
+
+      toggleByButton(picker);
+    </script>
+  </body>
+</html>

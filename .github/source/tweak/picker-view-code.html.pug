@@ -1,0 +1,65 @@
+extends ../_index.pug
+
+block state
+  - const scripts = ['../index.min.js']
+  - const styles = ['../index.min.css']
+  - const title = 'Color Picker'
+
+block style
+  style
+    | .color-picker input {
+    |   box-sizing: border-box;
+    |   display: block;
+    |   width: 100%;
+    |   height: 2em;
+    |   margin: 0;
+    |   padding: 0 .5em;
+    |   background: #ffa;
+    |   border: 1px solid #000;
+    |   border-top-width: 0;
+    |   font: normal normal 12px/2em sans-serif;
+    |   color: #000;
+    | }
+    |
+    | .color-picker input:invalid {
+    |   color: #f00;
+    | }
+    |
+    | .color-picker\:a {
+    |   display: none;
+    | }
+
+block script
+  script
+    | function insertColorCode(picker) {
+    |     let code = document.createElement('input');
+    |     code.pattern = '^#([a-fA-F\\d]{3}){1,2}$';
+    |     code.type = 'text';
+    |     picker.self.appendChild(code);
+    |     picker.source.addEventListener('click', e => e.preventDefault());
+    |     picker.on('change', function(r, g, b) {
+    |         this.source.value = this.color(r, g, b, 1);
+    |         code.value = this.color(r, g, b, 1);
+    |     });
+    |     picker.on('enter', function(r, g, b) {
+    |         code.value = this.color(r, g, b, 1);
+    |     });
+    |     function onChange() {
+    |         if (this.value.length) {
+    |             var color = CP.HEX(this.value);
+    |             picker.set.apply(picker, color);
+    |             picker.source.value = CP.HEX(color);
+    |         }
+    |     }
+    |     ['cut', 'input', 'keyup', 'paste'].forEach(e => {
+    |         code.addEventListener(e, onChange);
+    |     });
+    | }
+    |
+    | const picker = new CP(document.querySelector('input'));
+    |
+    | insertColorCode(picker);
+
+block content
+  main
+    p: input(type='color' value='#bada55')

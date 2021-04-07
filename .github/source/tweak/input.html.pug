@@ -1,0 +1,32 @@
+extends ../_index.pug
+
+block state
+  - const scripts = ['../index.min.js']
+  - const styles = ['../index.min.css']
+  - const title = 'Color Picker'
+
+block style
+  style
+    | /* HTML5 color input does not support alpha channel */
+    | .color-picker\:a {
+    |   display: none;
+    | }
+
+block script
+  script
+    | function applyToColorInput(source) {
+    |     const picker = new CP(source);
+    |     // Prevent showing native color picker pane
+    |     source.addEventListener('click', e => e.preventDefault());
+    |     picker.on('change', function(r, g, b) {
+    |         // HTML5 color input does not support alpha channel
+    |         this.source.value = this.color(r, g, b, 1);
+    |     });
+    | }
+    |
+    | document.querySelectorAll('input[type=color]').forEach(applyToColorInput);
+
+block content
+  main
+    p With HTML5 color input.
+    p: input(type='color')

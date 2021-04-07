@@ -1,0 +1,36 @@
+extends ../_index.pug
+
+block state
+  - const scripts = ['../index.min.js']
+  - const styles = ['../index.min.css']
+  - const title = 'Color Picker'
+
+block script
+  script
+    | const apply = CP.HEX; // Old hex color parser
+    |
+    | CP.HEX = x => {
+    |     x = apply(x);
+    |     if ('string' === typeof x) {
+    |         let count = x.length;
+    |         if (9 === count && x[1] === x[2] && x[3] === x[4] && x[5] === x[6] && x[7] === x[8]) {
+    |             // Shorten!
+    |             return x[0] + x[1] + x[3] + x[5] + x[7];
+    |         }
+    |         if (7 === count && x[1] === x[2] && x[3] === x[4] && x[5] === x[6]) {
+    |             // Shorten!
+    |             return x[0] + x[1] + x[3] + x[5];
+    |         }
+    |     }
+    |     return x;
+    | };
+    |
+    | const picker = new CP(document.querySelector('input'));
+    |
+    | picker.on('change', function(r, g, b, a) {
+    |     this.source.value = this.color(r, g, b, a);
+    | });
+
+block content
+  main
+    p: input(type='text')

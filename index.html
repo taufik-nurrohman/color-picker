@@ -4,86 +4,81 @@
     <meta charset="utf-8">
     <meta content="#000" name="theme-color">
     <meta content="width=device-width" name="viewport">
-    <meta content="Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability." name="description">
-    <title>Color Picker &middot; A simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability.</title>
-    <link href="favicon.ico" rel="icon">
-    <link href="color-picker.css" rel="stylesheet">
+    <meta content="A simple color picker application written in pure JavaScript, for modern browsers." name="description">
+    <title>Color Picker 2.2.0</title>
+    <link href="index.min.css" rel="stylesheet">
     <style>
-    * {
-      box-sizing: border-box;
-    }
-    :root {
-      background: #fff;
-      color: #000;
-      border-top: 4px solid;
-      font: normal normal 16px/1.25 serif;
-    }
-    a {
-      color: #009;
-      text-decoration: none;
-    }
-    a, code {
-      word-wrap: break-word;
-    }
-    code {
-      font-family: monospace;
-      font-size: 80%;
-    }
-    footer, header, main, nav {
-      max-width: 700px;
-      margin: 0 auto;
-    }
-    hr {
-      border: 0;
-      color: inherit;
-      border-top: 1px dashed;
-      height: 0;
-    }
-    pre {
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-    pre code {
-      display: block;
-      background: #eee;
-      padding: 1em;
-    }
-    table {
-      width: 100%;
-    }
-    td, th {
-      text-align: left;
-      vertical-align: top;
-    }
-    body > p:first-child {
-      background: #ffa;
-      border: 1px dashed;
-      margin-top: 0;
-      padding: .75em 1em;
-    }
+      * {
+        box-sizing: border-box;
+      }
+      :root {
+        background: #fff;
+        color: #000;
+        border-top: 4px solid;
+        font: normal normal 16px/1.25 serif;
+      }
+      a {
+        color: #009;
+        text-decoration: none;
+      }
+      a,
+      code {
+        word-wrap: break-word;
+      }
+      code {
+        font-family: monospace;
+        font-size: 80%;
+      }
+      footer,
+      header,
+      main,
+      nav {
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      hr {
+        border: 0;
+        color: inherit;
+        border-top: 1px dashed;
+        height: 0;
+      }
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      pre code {
+        display: block;
+        background: #eee;
+        padding: 1em;
+      }
+      table {
+        width: 100%;
+      }
+      td,
+      th {
+        text-align: left;
+        vertical-align: top;
+      }
+      body > p:first-child {
+        background: #ffa;
+        border: 1px dashed;
+        margin-top: 0;
+        padding: .75em 1em;
+      }
     </style>
   </head>
   <body>
     <p>Do you like this project? Please support my <a href="https://github.com/mecha-cms">Mecha CMS</a> project too. Thank you!</p>
     <header>
-      <h1>Color Picker v2.1.6</h1>
+      <h1>Color Picker 2.2.0</h1>
       <p>Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability.</p>
       <hr>
     </header>
     <main>
       <p>It&rsquo;s easy to set-up, has no animation effects, and no color support other than hex color code (you can add your own custom color supports yourself). My purpose in making this application is to provide a JavaScript color picker solution as simple as possible with the most minimal features without requiring any dependency on JavaScript library such as jQuery. Use the available hooks to make your own improvements without having to touch the application core.</p>
       <form method="get" target="_blank">
-        <div style="
-          background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%), linear-gradient(45deg, #eee 25%, #fff 25%, #fff 75%, #eee 75%, #eee 100%);
-          background-size: 20px 20px;
-          background-position: 0 0, 10px 10px;
-        ">
-          <p style="
-            margin: 0;
-            padding: 3em;
-          ">
-            <input name="color" type="text" value="#f00">
-          </p>
+        <div style="background-image:linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%), linear-gradient(45deg, #eee 25%, #fff 25%, #fff 75%, #eee 75%, #eee 100%);background-size:20px 20px;background-position:0 0, 10px 10px;">
+          <p style="margin:0;padding:3em;"><input name="color" type="text" value="#f00"></p>
         </div>
         <p>Set the color to <a href="javascript:void(picker.value(255, 0, 0, 1));">red</a>, <a href="javascript:void(picker.value(0, 255, 0, 1));">green</a>, <a href="javascript:void(picker.value(0, 0, 255, 1));">blue</a>, <a href="javascript:void(picker.value(0, 0, 255, .5));">blue with 50% opacity</a></p>
         <p>Get the color as <a href="javascript:void(alert(JSON.stringify(picker.get())));">raw</a>, <a href="javascript:void(alert(CP.HEX(picker.get())));">hex string</a></p>
@@ -102,11 +97,11 @@
 &lt;html dir="ltr"&gt;
   &lt;head&gt;
     &lt;meta charset="utf-8"&gt;
-    &lt;link href="<a href="color-picker.min.css" target="_blank">color-picker.min.css</a>" rel="stylesheet"&gt;
+    &lt;link href="<a href="index.min.css" target="_blank">./index.min.css</a>" rel="stylesheet"&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;p&gt;&lt;input type="text"&gt;&lt;/p&gt;
-    &lt;script src="<a href="color-picker.min.js" target="_blank">color-picker.min.js</a>"&gt;&lt;/script&gt;
+    &lt;script src="<a href="index.min.js" target="_blank">./index.min.js</a>"&gt;&lt;/script&gt;
     &lt;script&gt;
     let picker = new CP(document.querySelector('input'));
     picker.on('change', function(r, g, b, a) {
@@ -121,49 +116,72 @@
 &lt;/html&gt;</code></pre>
       <h2>Examples</h2>
       <ul>
-        <li><a href="color-picker.html" target="_blank">No Idea?</a></li>
-        <li><a href="color-picker.picker.html" target="_blank">Multiple Instances</a></li>
-        <li><a href="color-picker.color.html" target="_blank">Pre-Defined Value</a></li>
-        <li><a href="color-picker.picker-color.html" target="_blank">Pre-Defined Color</a></li>
-        <li><a href="color-picker.live.html" target="_blank">Update Color Picker&rsquo;s Color State on Value Changes</a></li>
+        <li><a href="test.html" target="_blank">No Idea?</a></li>
+        <li><a href="test/picker.html" target="_blank">Multiple Instances</a></li>
+        <li><a href="test/color.html" target="_blank">Pre-Defined Value</a></li>
+        <li><a href="tweak/picker-color.html" target="_blank">Pre-Defined Color</a></li>
+        <li><a href="tweak/live.html" target="_blank">Update Color Picker&rsquo;s Color State on Value Changes</a></li>
         <li>Add Support for CMYK Color Value</li>
-        <li><a href="color-picker.color.rgba.html" target="_blank">Add Support for RGBA Color Value</a></li>
+        <li><a href="tweak/color.rgba.html" target="_blank">Add Support for RGBA Color Value</a></li>
         <li>Add Support for HSLA Color Value</li>
         <li>Add Support for HWB Color Value</li>
         <li>Add Support for LAB Color Value</li>
         <li>Add Support for LCH Color Value</li>
-        <li><a href="color-picker.color.name.html" target="_blank">Add Support for &ldquo;Named&rdquo; Color Value</a></li>
-        <li><a href="color-picker.color.hex.html" target="_blank">Add Support for Short Hex Color Value (e.g. <code>#000</code> instead of <code>#000000</code>)</a></li>
+        <li><a href="tweak/color.name.html" target="_blank">Add Support for &ldquo;Named&rdquo; Color Value</a></li>
+        <li><a href="tweak/color.hex.html" target="_blank">Add Support for Short Hex Color Value (e.g. <code>#000</code> instead of <code>#000000</code>)</a></li>
         <li>Automatic Color Mode Detection</li>
-        <li><a href="color-picker.alpha.html" target="_blank">Disable Alpha Channel Support</a></li>
-        <li><a href="color-picker.input.html" target="_blank">Disable Native HTML5 Color Picker</a></li>
-        <li><a href="color-picker.button.html" target="_blank">Show and Hide Color Picker with Buttons</a></li>
-        <li><a href="color-picker.events.html" target="_blank">Show and Hide Color Picker with Double Click</a></li>
-        <li><a href="color-picker.close.html" target="_blank">Add Close Button to the Color Picker</a></li>
-        <li><a href="color-picker.static.html" target="_blank">Static Color Picker</a></li>
-        <li><a href="color-picker.transition.html" target="_blank">Transition Effects</a></li>
-        <li><a href="color-picker.replace.html" target="_blank">Replace Text Input with Hidden Input</a></li>
-        <li><a href="color-picker.pop.html" target="_blank">Destroy Color Picker</a></li>
-        <li><a href="color-picker.fit.html" target="_blank">Auto-Positioned to the Reachable Area in the Document</a></li>
-        <li><a href="color-picker.picker-view.html" target="_blank">Color Preview in Color Picker</a></li>
-        <li><a href="color-picker.picker-view-code.html" target="_blank">Color Code to Copy in Color Picker</a></li>
-        <li><a href="color-picker.scroll.html" target="_blank">Scroll Follow Color Picker</a></li>
-        <li><a href="color-picker.size.html" target="_blank">Custom Color Picker Size</a></li>
-        <li><a href="color-picker.element.html" target="_blank">Native HTML5 Custom <code>&lt;color-picker&gt;</code> Element</a></li>
+        <li><a href="tweak/alpha.html" target="_blank">Disable Alpha Channel Support</a></li>
+        <li><a href="tweak/input.html" target="_blank">Disable Native HTML5 Color Picker</a></li>
+        <li><a href="tweak/button.html" target="_blank">Show and Hide Color Picker with Buttons</a></li>
+        <li><a href="tweak/events.html" target="_blank">Show and Hide Color Picker with Double Click</a></li>
+        <li><a href="tweak/close.html" target="_blank">Add Close Button to the Color Picker</a></li>
+        <li><a href="tweak/static.html" target="_blank">Static Color Picker</a></li>
+        <li><a href="tweak/transition.html" target="_blank">Transition Effects</a></li>
+        <li><a href="tweak/replace.html" target="_blank">Replace Text Input with Hidden Input</a></li>
+        <li><a href="test/pop.html" target="_blank">Destroy Color Picker</a></li>
+        <li><a href="test/fit.html" target="_blank">Auto-Positioned to the Reachable Area in the Document</a></li>
+        <li><a href="tweak/picker-view.html" target="_blank">Color Preview in Color Picker</a></li>
+        <li><a href="tweak/picker-view-code.html" target="_blank">Color Code to Copy in Color Picker</a></li>
+        <li><a href="tweak/scroll.html" target="_blank">Scroll Follow Color Picker</a></li>
+        <li><a href="test/size.html" target="_blank">Custom Color Picker Size</a></li>
+        <li><a href="index/element.html" target="_blank">Native HTML5 Custom <code>&lt;color-picker&gt;</code> Element</a></li>
       </ul>
       <h2>Settings</h2>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>source</code></td>
+            <td>The source element that holds the initial color data.</td>
+          </tr>
+          <tr>
+            <td><code>color</code></td>
+            <td>Name of the color parser defined in the <code>CP</code> object.</td>
+          </tr>
+          <tr>
+            <td><code>state</code></td>
+            <td>The configuration data.</td>
+          </tr>
+          <tr>
+            <td><code>state.color</code></td>
+            <td>Name of the color parser defined in the <code>CP</code> object.</td>
+          </tr>
+          <tr>
+            <td><code>state.parent</code></td>
+            <td>Parent element to append the color picker element (default will be appended to the <code>&lt;body&gt;</code> element).</td>
+          </tr>
+        </tbody>
+      </table>
       <pre><code>let picker = new CP(<var>source</var>, <var>color</var>);</code></pre>
       <pre><code>let picker = new CP(<var>source</var>, <var>state</var> = {
         color: 'HEX',
         parent: null
     });</code></pre>
-      <ul>
-        <li><var>source</var> &rarr; The source element that holds the initial color data.</li>
-        <li><var>color</var> &rarr; Name of the color parser defined in the <code>CP</code> object.</li>
-        <li><var>state</var> &rarr; The configuration data.</li>
-        <li><var>state.color</var> &rarr; Name of the color parser defined in the <code>CP</code> object.</li>
-        <li><var>state.parent</var> &rarr; Parent element to append the color picker element (default will be appended to the <code>&lt;body&gt;</code> element).</li>
-      </ul>
       <h2>Methods and Properties</h2>
       <h3>CP.HEX(color | [r, g, b, a])</h3>
       <p>Hex color converter as the default color string parser. This is the only color mode that this application can parse into a series of RGBA color data. You can add your own color parser later to enhance the existing features.</p>
@@ -260,7 +278,7 @@ picker.value(255, 255, 0, .5);</code></pre>
 
 console.log(CP.RGB('rgba(255, 255, 0, 1)'));
 console.log(CP.RGB([255, 255, 0, 1]));</code></pre>
-      <p>To apply it to the application so that the application can <a href="color-picker.color.rgba.html" target="_blank">detect RGB color input through the string representation of RGB color</a> given to the input element, set the <code>color</code> state value to <code>'RGB'</code>:</p>
+      <p>To apply it to the application so that the application can <a href="test/color.rgba.html" target="_blank">detect RGB color input through the string representation of RGB color</a> given to the input element, set the <code>color</code> state value to <code>'RGB'</code>:</p>
       <pre><code>let picker = new CP(document.querySelector('input'), {
         color: 'RGB'
     });</code></pre>
@@ -315,17 +333,17 @@ console.log(CP.RGB([255, 255, 0, 1]));</code></pre>
           </tr>
         </tbody>
       </table>
-      <h3>picker.fire(name, lot)</h3>
-      <p>Trigger hooks.</p>
+      <h3>picker.fire(event, data)</h3>
+      <p>Trigger a hook.</p>
       <pre><code>picker.fire('change', [255, 255, 0, .5]);</code></pre>
       <h3>picker.hooks</h3>
       <p>Return the added hooks.</p>
       <pre><code>console.log(picker.hooks);</code></pre>
-      <h3>picker.off(name, fn)</h3>
+      <h3>picker.off(event, then)</h3>
       <p>Remove a hook.</p>
       <pre><code>picker.off('change');</code></pre>
       <pre><code>picker.off('change', onChange); // With context</code></pre>
-      <h3>picker.on(name, fn)</h3>
+      <h3>picker.on(event, then)</h3>
       <p>Add a new hook.</p>
       <pre><code>picker.on('change', function(r, g, b, a) {
     console.log(this.color(r, g, b, a));
@@ -341,17 +359,17 @@ picker.on('change', onChange); // With context</code></pre>
     </main>
     <footer>
       <hr>
-      <p>&copy; 2020 <a href="/">Taufik Nurrohman</a></p>
+      <p>&copy; 2021 <a href="/">Taufik Nurrohman</a></p>
     </footer>
-    <script src="color-picker.js"></script>
+    <script src="index.min.js"></script>
     <script>
-    let source = document.forms[0].color;
-    source.value = '#' + ('00000' + (Math.random() * (1 << 24) | 0).toString(16)).slice(-6); // Random hex color
-    const picker = new CP(source);
-    picker.on('change', function(r, g, b, a) {
-        this.source.value = this.color(r, g, b, a);
-        this.source.parentNode.style.backgroundColor = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
-    });
+      let source = document.forms[0].color;
+      source.value = '#' + ('00000' + (Math.random() * (1 << 24) | 0).toString(16)).slice(-6); // Random hex color
+      const picker = new CP(source);
+      picker.on('change', function(r, g, b, a) {
+          this.source.value = this.color(r, g, b, a);
+          this.source.parentNode.style.backgroundColor = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+      });
     </script>
   </body>
 </html>
