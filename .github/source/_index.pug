@@ -1,0 +1,21 @@
+block state
+html(dir='ltr')
+  head
+    meta(charset='utf-8')
+    if theme
+      meta(content=theme name='theme-color')
+    meta(content='width=device-width' name='viewport')
+    if description
+      meta(content=description name='description')
+    title!= title
+    if styles
+      each style in styles
+        link(href=style rel='stylesheet')
+    block data
+    block style
+  body
+    block content
+    if scripts
+      each script in scripts
+        script(src=script)
+      block script

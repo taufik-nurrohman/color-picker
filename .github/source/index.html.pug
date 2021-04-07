@@ -1,0 +1,363 @@
+extends _index.pug
+
+block state
+  - const title = 'Color Picker ' + version
+  - const theme = '#000'
+  - const scripts = ['index.min.js']
+  - const styles = ['index.min.css']
+
+block script
+  script
+    | let source = document.forms[0].color;
+    | source.value = '#' + ('00000' + (Math.random() * (1 << 24) | 0).toString(16)).slice(-6); // Random hex color
+    | const picker = new CP(source);
+    | picker.on('change', function(r, g, b, a) {
+    |     this.source.value = this.color(r, g, b, a);
+    |     this.source.parentNode.style.backgroundColor = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+    | });
+
+block style
+  style
+    | * {
+    |   box-sizing: border-box;
+    | }
+    | :root {
+    |   background: #fff;
+    |   color: #000;
+    |   border-top: 4px solid;
+    |   font: normal normal 16px/1.25 serif;
+    | }
+    | a {
+    |   color: #009;
+    |   text-decoration: none;
+    | }
+    | a, code {
+    |   word-wrap: break-word;
+    | }
+    | code {
+    |   font-family: monospace;
+    |   font-size: 80%;
+    | }
+    | footer, header, main, nav {
+    |   max-width: 700px;
+    |   margin: 0 auto;
+    | }
+    | hr {
+    |   border: 0;
+    |   color: inherit;
+    |   border-top: 1px dashed;
+    |   height: 0;
+    | }
+    | pre {
+    |   white-space: pre-wrap;
+    |   word-wrap: break-word;
+    | }
+    | pre code {
+    |   display: block;
+    |   background: #eee;
+    |   padding: 1em;
+    | }
+    | table {
+    |   width: 100%;
+    | }
+    | td, th {
+    |   text-align: left;
+    |   vertical-align: top;
+    | }
+    | body > p:first-child {
+    |   background: #ffa;
+    |   border: 1px dashed;
+    |   margin-top: 0;
+    |   padding: .75em 1em;
+    | }
+
+block content
+  p Do you like this project? Please support my #[a(href='https://github.com/mecha-cms') Mecha CMS] project too. Thank you!
+  header
+    h1= title
+    p Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability.
+    hr
+  main
+    p It&rsquo;s easy to set-up, has no animation effects, and no color support other than hex color code (you can add your own custom color supports yourself). My purpose in making this application is to provide a JavaScript color picker solution as simple as possible with the most minimal features without requiring any dependency on JavaScript library such as jQuery. Use the available hooks to make your own improvements without having to touch the application core.
+    form(method='get' target='_blank')
+      div(style={
+        'background-image': 'linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%), linear-gradient(45deg, #eee 25%, #fff 25%, #fff 75%, #eee 75%, #eee 100%)',
+        'background-size': '20px 20px',
+        'background-position': '0 0, 10px 10px'
+      })
+        p(style={
+          'margin': '0',
+          'padding': '3em'
+        }): input(name='color' type='text' value='#f00')
+      p Set the color to #[a(href='javascript:void(picker.value(255, 0, 0, 1));') red], #[a(href='javascript:void(picker.value(0, 255, 0, 1));') green], #[a(href='javascript:void(picker.value(0, 0, 255, 1));') blue], #[a(href='javascript:void(picker.value(0, 0, 255, .5));') blue with 50% opacity]
+      p Get the color as #[a(href='javascript:void(alert(JSON.stringify(picker.get())));') raw], #[a(href='javascript:void(alert(CP.HEX(picker.get())));') hex string]
+      p: button(type='submit') Submit
+    h2 Features
+    ul
+      li Light-weight, no dependencies. It uses vanilla JavaScript.
+      li Simple #[abbr(title='Application Programming Interface') API]. Easy to master.
+      li Responsive. It tries to place itself inside an area that is visible within the browser window.
+      li Has alpha channel support by default.
+      li Its value has been standardized to the RGBA color model. You can convert those data into other color models by creating your own color parser.
+    h2 Usage
+    pre: code
+      | &lt;!DOCTYPE html&gt;
+      | &lt;html dir="ltr"&gt;
+      |   &lt;head&gt;
+      |     &lt;meta charset="utf-8"&gt;
+      |     &lt;link href="#[a(href='index.min.css' target='_blank') ./index.min.css]" rel="stylesheet"&gt;
+      |   &lt;/head&gt;
+      |   &lt;body&gt;
+      |     &lt;p&gt;&lt;input type="text"&gt;&lt;/p&gt;
+      |     &lt;script src="#[a(href='index.min.js' target='_blank') ./index.min.js]"&gt;&lt;/script&gt;
+      |     &lt;script&gt;
+      |     let picker = new CP(document.querySelector('input'));
+      |     picker.on('change', function(r, g, b, a) {
+      |         if (1 === a) {
+      |             this.source.value = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+      |         } else {
+      |             this.source.value = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+      |         }
+      |     });
+      |     &lt;/script&gt;
+      |   &lt;/body&gt;
+      | &lt;/html&gt;
+    h2 Examples
+    ul
+      li: a(href='test.html' target='_blank') No Idea?
+      li: a(href='test/picker.html' target='_blank') Multiple Instances
+      li: a(href='test/color.html' target='_blank') Pre-Defined Value
+      li: a(href='tweak/picker-color.html' target='_blank') Pre-Defined Color
+      li: a(href='tweak/live.html' target='_blank') Update Color Picker&rsquo;s Color State on Value Changes
+      li Add Support for CMYK Color Value
+      li: a(href='tweak/color.rgba.html' target='_blank') Add Support for RGBA Color Value
+      li Add Support for HSLA Color Value
+      li Add Support for HWB Color Value
+      li Add Support for LAB Color Value
+      li Add Support for LCH Color Value
+      li: a(href='tweak/color.name.html' target='_blank') Add Support for &ldquo;Named&rdquo; Color Value
+      li: a(href='tweak/color.hex.html' target='_blank') Add Support for Short Hex Color Value (e.g. #[code #000] instead of #[code #000000])
+      li Automatic Color Mode Detection
+      li: a(href='tweak/alpha.html' target='_blank') Disable Alpha Channel Support
+      li: a(href='tweak/input.html' target='_blank') Disable Native HTML5 Color Picker
+      li: a(href='tweak/button.html' target='_blank') Show and Hide Color Picker with Buttons
+      li: a(href='tweak/events.html' target='_blank') Show and Hide Color Picker with Double Click
+      li: a(href='tweak/close.html' target='_blank') Add Close Button to the Color Picker
+      li: a(href='tweak/static.html' target='_blank') Static Color Picker
+      li: a(href='tweak/transition.html' target='_blank') Transition Effects
+      li: a(href='tweak/replace.html' target='_blank') Replace Text Input with Hidden Input
+      li: a(href='test/pop.html' target='_blank') Destroy Color Picker
+      li: a(href='test/fit.html' target='_blank') Auto-Positioned to the Reachable Area in the Document
+      li: a(href='tweak/picker-view.html' target='_blank') Color Preview in Color Picker
+      li: a(href='tweak/picker-view-code.html' target='_blank') Color Code to Copy in Color Picker
+      li: a(href='tweak/scroll.html' target='_blank') Scroll Follow Color Picker
+      li: a(href='test/size.html' target='_blank') Custom Color Picker Size
+      li: a(href='index/element.html' target='_blank') Native HTML5 Custom #[code &lt;color-picker&gt;] Element
+    h2 Settings
+    table(border='1')
+      thead
+        tr
+          th Name
+          th Description
+      tbody
+        tr
+          td: code source
+          td The source element that holds the initial color data.
+        tr
+          td: code color
+          td Name of the color parser defined in the #[code CP] object.
+        tr
+          td: code state
+          td The configuration data.
+        tr
+          td: code state.color
+          td Name of the color parser defined in the #[code CP] object.
+        tr
+          td: code state.parent
+          td Parent element to append the color picker element (default will be appended to the #[code &lt;body&gt;] element).
+    pre: code let picker = new CP(#[var source], #[var color]);
+    pre: code
+      | let picker = new CP(#[var source], #[var state] = {
+      |         color: 'HEX',
+      |         parent: null
+      |     });
+    h2 Methods and Properties
+    h3 CP.HEX(color | [r, g, b, a])
+    p Hex color converter as the default color string parser. This is the only color mode that this application can parse into a series of RGBA color data. You can add your own color parser later to enhance the existing features.
+    pre: code
+      | console.log(CP.HEX('#ff0')); // &rarr; `[255, 255, 0, 1]`
+      | console.log(CP.HEX([255, 255, 0, 1])); // &rarr; `'#ffff00'`
+    h3 CP.instances
+    p Return the color picker instances.
+    pre: code
+      | for (let key in CP.instances) {
+      |     console.log(key);
+      |     console.log(CP.instances[key]);
+      | }
+    h3 CP.state
+    p This property stores the initial values of #[code picker.state].
+    pre: code
+      | let picker = new CP(source, {
+      |         foo: ['bar', 'baz', 'qux']
+      |     });
+      |
+      | console.log([CP.state, picker.state]);
+    h3 CP.version
+    p Return the color picker version.
+    pre: code
+      | let version = CP.version,
+      |     major = version.split('.')[0];
+      |
+      | if (+major &lt; 2) {
+      |     // Has no alpha channel support
+      | }
+    h3 picker.color(r, g, b, a)
+    p Call current color parser function with a name that is defined in the #[code state.color] value.
+    pre: code
+      | // Convert RGB to HEX in the output
+      | picker.on('change', function(r, g, b, a) {
+      |     this.source.value = this.color(r, g, b, a);
+      | });
+      |
+      | // The code above is equal to this code
+      | picker.on('change', function(r, g, b, a) {
+      |     this.source.value = CP.HEX([r, g, b, a]);
+      | });
+    h3 picker.current
+    p Return the active color picker control pane element.
+    pre: code
+      | picker.on('change', function(r, g, b, a) {
+      |     if (this.current.classList.contains('color-picker:h')) {
+      |         // Is dragging the hue control
+      |     }
+      | });
+    h3 picker.enter(to)
+    p Show the color picker pane.
+    pre: code
+      | picker.enter(); // Enter to the `&lt;body&gt;` element
+      | picker.enter(document.querySelector('#foo')); // Enter to a specific container
+    h3 picker.exit()
+    p Hide the color picker pane.
+    pre: code picker.exit();
+    h3 picker.fit([x, y])
+    p Set color picker position measured from the window edges.
+    pre: code
+      | picker.enter();
+      | picker.fit([30, 30]);
+    h3 picker.get()
+    p Get current color value as a series of RGBA color data.
+    pre: code console.log(picker.get());
+    h3 picker.pop()
+    p Remove custom color picker features from the source element.
+    h3 picker.self
+    p Return the color picker element.
+    pre: code picker.self.style.borderWidth = '4px';
+    h3 picker.set(r, g, b, a)
+    p Set color picker&rsquo;s color state based on the given color data.
+    pre: code
+      | // Set color picker&rsquo;s color state to yellow with 50% opacity
+      | picker.set(255, 255, 0, .5);
+    h3 picker.source
+    p Return the color picker source element that holds the initial color value. It can be any element with a #[code data-color] attribute, any element that has #[code value] attribute or any element that has color value in its content.
+    pre: code
+      | picker.source.addEventListener('click', function() {
+      |     console.log(this.nodeName);
+      | }, false);
+    h3 picker.state
+    p Return the modified color picker states.
+    h3 picker.value(r, g, b, a)
+    p Set source element value and update the color picker&rsquo;s color state.
+    pre: code
+      | // Set color picker&rsquo;s source element value to yellow with 50% opacity
+      | picker.value(255, 255, 0, .5);
+    h3 picker.visible
+    p Check if color picker pane is visible.
+    pre: code if (picker.visible) { &hellip; }
+    h2 Color Converters
+    p Converters are defined as static methods in the scope of #[code CP]. This method accepts two types of input, a color string input and an array of red, green, blue and alpha color data. Every input given to this method will return the opposite version of the input. For example, with the #[code CP.HEX()] method, if you put #[code '#ffff00'] to the method argument, it will come out as #[code= '[255, 255, 0, 1]'] and if you put #[code= '[255, 255, 0, 1]'] to the method argument, it will come out as #[code '#ffff00'].
+    p To make a color converter, be sure to check the input types first before doing the parsing:
+    pre: code
+      | CP.RGB = x =&gt; {
+      |     if ('string' === typeof x) {
+      |         // Use regular expression here to extract color data from the string input
+      |         // and output it as an array of red, green, blue and alpha color data
+      |         return [r, g, b, a];
+      |     }
+      |     // Return the string representation of color if input is an array of color data
+      |     return 'rgba(' + x[0] + ', ' + x[1] + ', ' + x[2] + ', ' + x[3] + ')';
+      | };
+      |
+      | console.log(CP.RGB('rgba(255, 255, 0, 1)'));
+      | console.log(CP.RGB([255, 255, 0, 1]));
+    p To apply it to the application so that the application can #[a(href='test/color.rgba.html' target='_blank') detect RGB color input through the string representation of RGB color] given to the input element, set the #[code color] state value to #[code 'RGB']:
+    pre: code
+      | let picker = new CP(document.querySelector('input'), {
+      |         color: 'RGB'
+      |     });
+    h2 Hooks
+    table(border='1')
+      thead
+        tr
+          th Name
+          th Description
+      tbody
+        tr
+          td: code blur
+          td Adding a #[code blur] hook will disable the default blur behavior, that is, to hide the color picker pane.
+        tr
+          td: code change
+          td Will be triggered on every color change.
+        tr
+          td: code drag
+          td Will be triggered when the color picker control is dragging.
+        tr
+          td: code enter
+          td Will be triggered when color picker pane is visible.
+        tr
+          td: code exit
+          td Will be triggered when color picker pane is hidden.
+        tr
+          td: code fit
+          td Will be triggered when color picker pane is positioned.
+        tr
+          td: code focus
+          td Adding a #[code focus] hook will disable the default focus behavior, that is, to show the color picker pane.
+        tr
+          td: code pop
+          td Will be triggered after #[code picker.pop()].
+        tr
+          td: code start
+          td Will be triggered when the color picker control starts dragging.
+        tr
+          td: code stop
+          td Will be triggered when the color picker control stops dragging.
+    h3 picker.fire(event, data)
+    p Trigger a hook.
+    pre: code picker.fire('change', [255, 255, 0, .5]);
+    h3 picker.hooks
+    p Return the added hooks.
+    pre: code console.log(picker.hooks);
+    h3 picker.off(event, then)
+    p Remove a hook.
+    pre: code picker.off('change');
+    pre: code picker.off('change', onChange); // With context
+    h3 picker.on(event, then)
+    p Add a new hook.
+    pre: code
+      | picker.on('change', function(r, g, b, a) {
+      |     console.log(this.color(r, g, b, a));
+      | });
+    pre: code
+      | function onChange(r, g, b, a) {
+      |     console.log(this.color(r, g, b, a));
+      | }
+      |
+      | picker.on('change', onChange); // With context
+    h2 License
+    p Use it for free, pay if you get paid. So, you&rsquo;ve just benefited financially after using this project? It&rsquo;s a good idea to #[a(href='https://paypal.me/tatautaufik' target='_blank') share a little financial support] with this open source project too. Your support will motivate me to do any further development, as well as to provide voluntary support to overcome problems related to this project.
+    p Thank you! ❤️
+  footer
+    hr
+    p
+      != '&copy; ' + year + ' '
+      a(href='/') Taufik Nurrohman

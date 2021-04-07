@@ -1,0 +1,23 @@
+extends ../_index.pug
+
+block state
+  - const scripts = ['../index.min.js', 'element.min.js']
+  - const styles = ['../index.min.css']
+  - const title = 'Color Picker'
+
+block content
+  main
+    p Test native HTML5 custom element. View the page source!
+    form(method='get' target='_blank')
+      p
+        color-picker(name='color-0' value='#e8ecfb')
+        color-picker(name='color-1' value='#b997c7')
+        color-picker(name='color-2' value='#824d99')
+        color-picker(name='color-3' value='#4e78c4')
+        color-picker(name='color-4' value='#57a2ac')
+        color-picker(name='color-5' value='#7eb875')
+        color-picker(name='color-6' value='#d0b541')
+        color-picker(name='color-7' value='#e67f33')
+        color-picker(name='color-8' value='#ce2220')
+        color-picker(name='color-9' value='#521a13')
+      p: button(type='submit') Check Values

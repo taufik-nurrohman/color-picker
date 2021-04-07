@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="A simple color picker application written in pure JavaScript, for modern browsers." name="description">
+    <title>Color Picker</title>
+    <link href="../index.min.css" rel="stylesheet">
+    <style>
+      .color-view {
+        display: block;
+        border: 1px solid #000;
+        border-top-width: 0;
+        overflow: hidden;
+      }
+
+      .color-view span {
+        display: block;
+        float: left;
+        width: 50%;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p>Add color preview in the color picker panel. Click on the first preview box to reset color to the previous state, click on the second preview box to set color value on the source element.</p>
+      <p><input readonly type="text"></p>
+    </main>
+    <script src="../index.min.js"></script>
+    <script>
+      function insertColorView(picker) {
+          let box = document.createElement('span'),
+              boxReset = document.createElement('span'),
+              boxSubmit = document.createElement('span');
+          box.className = 'color-view';
+          box.appendChild(boxReset);
+          box.appendChild(boxSubmit);
+          boxReset.textContent = 'Reset';
+          boxSubmit.textContent = 'Submit';
+          picker.self.appendChild(box);
+          picker.on('change', function(r, g, b, a) {
+              let color = this.color(r, g, b, a);
+              boxSubmit.title = color;
+              boxSubmit.style.backgroundColor = color;
+              boxSubmit.style.color = isDark(color) ? '#fff' : '#000';
+          });
+          picker.on('enter', function(r, g, b, a) {
+              let color = this.color(r, g, b, a);
+              boxReset.title = color;
+              boxReset.style.backgroundColor = color;
+              boxReset.style.color = isDark(color) ? '#fff' : '#000';
+              boxSubmit.title = color;
+              boxSubmit.style.backgroundColor = color;
+              boxSubmit.style.color = isDark(color) ? '#fff' : '#000';
+          });
+          // Click to cancel
+          boxReset.addEventListener('click', function(e) {
+              let color = this.title;
+              boxSubmit.title = color;
+              boxSubmit.style.backgroundColor = color;
+              picker.value.apply(picker, CP.HEX(color));
+              e.stopPropagation();
+          });
+          // Click to submit
+          boxSubmit.addEventListener('click', function(e) {
+              let color = this.title;
+              picker.exit();
+              picker.source.value = color;
+              picker.source.focus();
+          });
+      }
+
+      // <https://stackoverflow.com/a/12043228>
+      function isDark(hex) {
+          let rgb = parseInt(hex.slice(1), 16),
+              r = (rgb >> 16) & 0xff,
+              g = (rgb >> 8) & 0xff,
+              b = (rgb >> 0) & 0xff;
+          return (.2126 * r + .7152 * g + .0722 * b) < 40;
+      }
+
+      const picker = new CP(document.querySelector('input'));
+
+      insertColorView(picker);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+extends ../_index.pug
+
+block state
+  - const scripts = ['../index.min.js']
+  - const styles = ['../index.min.css']
+  - const title = 'Color Picker'
+
+block script
+  script
+    | function closeByButton(picker) {
+    |     let x = document.createElement('a');
+    |     x.href = 'javascript:;';
+    |     x.textContent = 'Close Me!';
+    |     x.addEventListener('click', () => picker.exit());
+    |     picker.self.appendChild(x);
+    |     // Disable the default blur behavior
+    |     picker.on('blur', () => {});
+    |     picker.on('change', function(r, g, b, a) {
+    |         this.source.value = this.color(r, g, b, a);
+    |     });
+    | }
+    |
+    | const picker = new CP(document.querySelector('input'));
+    |
+    | closeByButton(picker);
+
+block content
+  main
+    p Add a close button to the color picker panel.
+    p: input(type='text')

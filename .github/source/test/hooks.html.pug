@@ -1,0 +1,26 @@
+extends ../_index.pug
+
+block state
+  - const scripts = ['../index.min.js']
+  - const styles = ['../index.min.css']
+  - const title = 'Color Picker'
+
+block script
+  script
+    | const picker = new CP(document.querySelector('input'));
+    |
+    | picker.on('change', function(r, g, b, a) {
+    |     this.source.value = this.color(r, g, b, a);
+    | });
+    |
+    | ['enter', 'exit', 'fit', 'change', 'start', 'drag', 'stop', 'pop'].forEach(function(name) {
+    |     picker.on(name, function(r, g, b, a) {
+    |         console.log([name, r, g, b, a, this.current]);
+    |     });
+    | });
+
+block content
+  main
+    p Open your web console.
+    p: input(type='text')
+    p: button(onclick='picker.pop();') Destroy

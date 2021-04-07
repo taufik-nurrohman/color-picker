@@ -1,0 +1,46 @@
+extends ../_index.pug
+
+block state
+  - const scripts = ['../index.min.js']
+  - const styles = ['../index.min.css']
+  - const title = 'Color Picker'
+
+block style
+  style
+    | .color-box {
+    |   display: inline-block;
+    |   width: 30px;
+    |   height: 30px;
+    |   border: 1px solid;
+    |   cursor: pointer;
+    | }
+    |
+    | .color-picker {
+    |   margin-top: -1px;
+    | }
+
+block script
+  script
+    | function replaceWithColorBox(source) {
+    |     let box = document.createElement('span'),
+    |         color = source.value;
+    |     box.className = 'color-box';
+    |     box.dataset.color = color;
+    |     box.style.backgroundColor = color;
+    |     source.parentNode.insertBefore(box, source);
+    |     source.type = 'hidden';
+    |     const picker = new CP(box);
+    |     picker.on('change', function(r, g, b, a) {
+    |         let color = this.color(r, g, b, a);
+    |         source.value = color;
+    |         this.source.dataset.color = color;
+    |         this.source.style.backgroundColor = color;
+    |     });
+    | }
+    |
+    | replaceWithColorBox(document.querySelector('input'));
+
+block content
+  main
+    p Replace text input with hidden input.
+    p: input(type='text')

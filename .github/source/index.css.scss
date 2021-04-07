@@ -1,0 +1,133 @@
+$color: #000;
+$size: 12px;
+
+.color-picker {
+  &,
+  &::before,
+  &::after,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+}
+
+.color-picker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  box-shadow: 1px 3px 6px rgba(0, 0, 0, .5);
+  > div {
+    display: flex;
+    height: 10em;
+    border: 1px solid $color;
+    color: $color;
+    * {
+      border-color: inherit;
+      color: inherit;
+    }
+  }
+  i {
+    font: inherit;
+    font-size: $size; /* Measure the color picker control size by measuring the text size */
+  }
+  &\:a,
+  &\:h,
+  &\:sv {
+    background-size: 100% 100%;
+    position: relative;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+    div {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  }
+  &\:a,
+  &\:h {
+    width: 1.5em;
+    border-left: 1px solid;
+    cursor: ns-resize;
+    overflow: hidden;
+    i {
+      display: block;
+      height: .5em;
+      position: absolute;
+      top: -.25em;
+      right: 0;
+      left: 0;
+      z-index: 2;
+      &::before {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        border:.25em solid;
+        border-top-color: transparent;
+        border-bottom-color: transparent;
+      }
+    }
+  }
+  &\:a {
+    div {
+      z-index: 2;
+      + div {
+        background-image: linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd 100%), linear-gradient(45deg, #ddd 25%, #fff 25%, #fff 75%, #ddd 75%, #ddd 100%);
+        background-size: .5em .5em;
+        background-position: 0 0, .25em .25em;
+        z-index: 1;
+      }
+    }
+  }
+  &\:h {
+    div {
+      background-image: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
+    }
+  }
+  &\:sv {
+    width: 10em;
+    cursor: crosshair;
+    overflow: hidden;
+    div {
+      + div {
+        background-image: linear-gradient(to right, #fff, rgba(255, 255, 255, 0));
+        + div {
+          background-image: linear-gradient(to top, #000, rgba(0, 0, 0, 0));
+        }
+      }
+    }
+    i {
+      display: block;
+      width: .75em;
+      height: .75em;
+      position: absolute;
+      top: -.375em;
+      right: -.375em;
+      z-index: 2;
+      &::before {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        border: 1px solid #fff;
+        border-radius: 100%;
+        box-shadow: 0 0 2px #000;
+      }
+    }
+  }
+}

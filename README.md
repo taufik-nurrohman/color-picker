@@ -9,6 +9,16 @@ Has support for touch events. Touchy… touchy…
 
 [Demo and Documentation](https://taufik-nurrohman.github.io/color-picker "View Demo")
 
+Contribute
+----------
+
+ - **Please do not make pull requests by editing the files that are in the root of the project. They are generated automatically by the build tool.**
+ - Install [Git](https://en.wikipedia.org/wiki/Git) and [Node.js](https://en.wikipedia.org/wiki/Node.js)
+ - Run `git clone https://github.com/taufik-nurrohman/color-picker.git`
+ - Run `cd color-picker && npm install --save-dev`
+ - Edit the files in the `.github/source` folder.
+ - Run `npm run pack` to generate the production ready files.
+
 Contributors
 ------------
 
@@ -46,10 +56,15 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
+### main
+
+ - [x] Prioritized maintainability over file size. Say hello to Node.js and ES6! :wave:
+ - [x] Restructured the test files.
+
 ### 2.1.6
 
- - Modernized syntax.
  - Make color picker tweaks reusable by wrapping them in a function.
+ - Modernized syntax.
 
 ### 2.1.5
 
@@ -76,8 +91,8 @@ Release Notes
 
 ### 2.1.0
 
- - Added ability to clear the hook storage object if it’s empty.
  - Added `blur` and `focus` hook that removed `state.e` option.
+ - Added ability to clear the hook storage object if it’s empty.
 
 ### 2.0.3
 
@@ -94,19 +109,19 @@ Release Notes
 
 ### 2.0.0
 
- - Removed `change:sv`, `change:h`, `start:sv`, `start:h`, `drag:sv`, `drag:h`, `stop:sv`, `stop:h` hooks.
  - Hooks function arguments is now contains red, green, blue and alpha color value instead of static hex color string value.
  - Reduced file size by removing all color supports other than hex.
+ - Removed `change:sv`, `change:h`, `start:sv`, `start:h`, `drag:sv`, `drag:h`, `stop:sv`, `stop:h` hooks.
 
 ### 1.4.2
 
- - Fixed #48
  - Changed to CSS flexbox for layout.
+ - Fixed #48
 
 ### 1.4.1
 
- - Trigger `enter` and `exit` hooks on `enter` and `exit` method call.
  - Removed the instance parameter in the first function argument of the hook and move the `this` scope in the function body to the current color picker instance.
+ - Trigger `enter` and `exit` hooks on `enter` and `exit` method call.
 
 ### 1.4.0
 

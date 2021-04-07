@@ -1,0 +1,45 @@
+extends ../_index.pug
+
+block state
+  - const scripts = ['../index.min.js']
+  - const styles = ['../index.min.css']
+  - const title = 'Color Picker'
+
+block style
+  style
+    | h1, h2, h3, h4, h5, h6 {
+    |   display: inline-block;
+    |   cursor: pointer;
+    | }
+    |
+    | h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
+    |   text-decoration: underline;
+    | }
+
+block script
+  script
+    | let sources = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    |
+    | for (let i = 0, j = sources.length; i < j; ++i) {
+    |     (new CP(sources[i], {
+    |         parent: sources[i]
+    |     })).on('change', function(r, g, b, a) {
+    |         this.source.style.color = this.color(r, g, b, a);
+    |     });
+    | }
+
+block content
+  main
+    each i in [1, 2, 3, 4, 5, 6]
+      #{'h' + i}= 'Size ' + i
+    p By default, color picker size will follow the container&rsquo;s text size; the container that bounds to the color picker pane.
+    pre: code
+      | /* To change the color picker size */
+      | .color-picker {
+      |   font-size: 20px;
+      | }
+      |
+      | /* To change the color picker control&rsquo;s size */
+      | .color-picker i {
+      |   font-size: 15px;
+      | }

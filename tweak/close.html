@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="A simple color picker application written in pure JavaScript, for modern browsers." name="description">
+    <title>Color Picker</title>
+    <link href="../index.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <main>
+      <p>Add a close button to the color picker panel.</p>
+      <p><input type="text"></p>
+    </main>
+    <script src="../index.min.js"></script>
+    <script>
+      function closeByButton(picker) {
+          let x = document.createElement('a');
+          x.href = 'javascript:;';
+          x.textContent = 'Close Me!';
+          x.addEventListener('click', () => picker.exit());
+          picker.self.appendChild(x);
+          // Disable the default blur behavior
+          picker.on('blur', () => {});
+          picker.on('change', function(r, g, b, a) {
+              this.source.value = this.color(r, g, b, a);
+          });
+      }
+
+      const picker = new CP(document.querySelector('input'));
+
+      closeByButton(picker);
+    </script>
+  </body>
+</html>

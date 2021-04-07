@@ -1,0 +1,18 @@
+extends _index.pug
+
+block state
+  - const scripts = ['index.min.js']
+  - const styles = ['index.min.css']
+  - const title = 'Color Picker'
+
+block script
+  script
+    | const picker = new CP(document.querySelector('input'));
+    |
+    | picker.on('change', function(r, g, b, a) {
+    |     this.source.value = this.color(r, g, b, a);
+    | });
+
+block content
+  main
+    p: input(type='text')
