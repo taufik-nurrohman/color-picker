@@ -58,8 +58,8 @@ Release Notes
 
 ### main
 
- - [x] Prioritized maintainability over file size. Say hello to Node.js and ES6! :wave:
- - [x] Restructured the test files.
+ - Prioritized maintainability over file size. Say hello to Node.js and ES6! :wave:
+ - Restructured the test files.
 
 ### 2.1.6
 
