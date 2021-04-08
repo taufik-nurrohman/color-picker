@@ -100,6 +100,7 @@ block content
       li Has alpha channel support by default.
       li Its value has been standardized to the RGBA color model. You can convert those data into other color models by creating your own color parser.
     h2 Usage
+    h3 Browser
     pre: code
       | &lt;!DOCTYPE html&gt;
       | &lt;html dir="ltr"&gt;
@@ -122,6 +123,26 @@ block content
       |     &lt;/script&gt;
       |   &lt;/body&gt;
       | &lt;/html&gt;
+    h3 Node.js
+    p Functions and methods in this application are mostly native JavaScript and are intended for use by the browser. Node.js doesn&rsquo;t know about the DOM, so this kind of practice will probably be used more often to build new browser packages than to be used directly in the Node.js server.
+    h4 CommonJS
+    pre: code
+      | const CP = require('@taufik-nurrohman/color-picker');
+      |
+      | const picker = new CP(document.querySelector('input'));
+      |
+      | picker.on('change', function(r, g, b, a) {
+      |     this.source.value = this.color(r, g, b, a);
+      | });
+    h4 ECMAScript
+    pre: code
+      | import CP from '@taufik-nurrohman/color-picker';
+      |
+      | const picker = new CP(document.querySelector('input'));
+      |
+      | picker.on('change', function(r, g, b, a) {
+      |     this.source.value = this.color(r, g, b, a);
+      | });
     h2 Examples
     ul
       li: a(href='test.html' target='_blank') No Idea?
@@ -289,7 +310,7 @@ block content
       |
       | console.log(CP.RGB('rgba(255, 255, 0, 1)'));
       | console.log(CP.RGB([255, 255, 0, 1]));
-    p To apply it to the application so that the application can #[a(href='test/color.rgba.html' target='_blank') detect RGB color input through the string representation of RGB color] given to the input element, set the #[code color] state value to #[code 'RGB']:
+    p To apply it to the application so that the application can #[a(href='tweak/color.rgba.html' target='_blank') detect RGB color input through the string representation of RGB color] given to the input element, set the #[code color] state value to #[code 'RGB']:
     pre: code
       | let picker = new CP(document.querySelector('input'), {
       |         color: 'RGB'

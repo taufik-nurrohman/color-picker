@@ -93,6 +93,7 @@
         <li>Its value has been standardized to the RGBA color model. You can convert those data into other color models by creating your own color parser.</li>
       </ul>
       <h2>Usage</h2>
+      <h3>Browser</h3>
       <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html dir="ltr"&gt;
   &lt;head&gt;
@@ -114,6 +115,24 @@
     &lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;</code></pre>
+      <h3>Node.js</h3>
+      <p>Functions and methods in this application are mostly native JavaScript and are intended for use by the browser. Node.js doesn&rsquo;t know about the DOM, so this kind of practice will probably be used more often to build new browser packages than to be used directly in the Node.js server.</p>
+      <h4>CommonJS</h4>
+      <pre><code>const CP = require('@taufik-nurrohman/color-picker');
+
+const picker = new CP(document.querySelector('input'));
+
+picker.on('change', function(r, g, b, a) {
+    this.source.value = this.color(r, g, b, a);
+});</code></pre>
+      <h4>ECMAScript</h4>
+      <pre><code>import CP from '@taufik-nurrohman/color-picker';
+
+const picker = new CP(document.querySelector('input'));
+
+picker.on('change', function(r, g, b, a) {
+    this.source.value = this.color(r, g, b, a);
+});</code></pre>
       <h2>Examples</h2>
       <ul>
         <li><a href="test.html" target="_blank">No Idea?</a></li>
@@ -278,7 +297,7 @@ picker.value(255, 255, 0, .5);</code></pre>
 
 console.log(CP.RGB('rgba(255, 255, 0, 1)'));
 console.log(CP.RGB([255, 255, 0, 1]));</code></pre>
-      <p>To apply it to the application so that the application can <a href="test/color.rgba.html" target="_blank">detect RGB color input through the string representation of RGB color</a> given to the input element, set the <code>color</code> state value to <code>'RGB'</code>:</p>
+      <p>To apply it to the application so that the application can <a href="tweak/color.rgba.html" target="_blank">detect RGB color input through the string representation of RGB color</a> given to the input element, set the <code>color</code> state value to <code>'RGB'</code>:</p>
       <pre><code>let picker = new CP(document.querySelector('input'), {
         color: 'RGB'
     });</code></pre>
