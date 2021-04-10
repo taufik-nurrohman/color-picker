@@ -56,8 +56,9 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
-### 2.2.0
+### 2.2.1
 
+ - Maintenance.
  - Prioritized maintainability over file size. Say hello to Node.js and ES6! :wave:
  - Restructured the test files.
 
