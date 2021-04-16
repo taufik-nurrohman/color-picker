@@ -60,6 +60,7 @@ Release Notes
 
  - Maintenance.
  - Prioritized maintainability over file size. Say hello to Node.js and ES6! :wave:
+ - Removed custom element example.
  - Restructured the test files.
 
 ### 2.1.6

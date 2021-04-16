@@ -6,28 +6,20 @@
   "devDependencies": {
     "@taufik-nurrohman/document": "^0.1.5",
     "@taufik-nurrohman/event": "^0.2.0",
-    "@taufik-nurrohman/factory": "^0.1.8",
+    "@taufik-nurrohman/factory": "^0.1.11",
     "@taufik-nurrohman/from": "^0.0.5",
     "@taufik-nurrohman/has": "^0.0.2",
     "@taufik-nurrohman/hook": "^0.1.0",
-    "@taufik-nurrohman/pattern": "^0.1.4",
+    "@taufik-nurrohman/is": "^0.1.0",
+    "@taufik-nurrohman/pattern": "^0.1.5",
     "@taufik-nurrohman/rect": "0.0.5",
     "@taufik-nurrohman/to": "^0.0.16"
   },
   "exports": {
-    ".": {
-      "import": "./index.mjs",
-      "require": "./index.js"
-    },
-    "./element": {
-      "import": "./index/element.mjs",
-      "require": "./index/element.js"
-    }
+    "import": "./index.mjs",
+    "require": "./index.js"
   },
   "files": [
-    "index/element.js",
-    "index/element.min.js",
-    "index/element.mjs",
     "index.css",
     "index.min.css",
     "index.scss",
@@ -52,7 +44,7 @@
     "url": "git+https://github.com/taufik-nurrohman/color-picker.git"
   },
   "scripts": {
-    "pack": "pack --clean=false --from=.github/source --js-format=umd --js-name=CP --mjs=true --scss=true --to=."
+    "pack": "pack --clean=false --from=.github/source --js-format=umd --js-name=CP --js-top='%(js.license)' --mjs=true --scss=true --to=."
   },
   "type": "module",
   "version": "2.2.2"
