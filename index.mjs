@@ -472,6 +472,6 @@ CP.state = {
     'parent': null
 };
 
-CP.version = '2.2.2';
+CP.version = '2.2.3';
 
 export default CP;
