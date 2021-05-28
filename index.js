@@ -2,9 +2,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright © 2021 Taufik Nurrohman
- *
- * <https://github.com/taufik-nurrohman/color-picker>
+ * Copyright © 2021 Taufik Nurrohman <https://github.com/taufik-nurrohman>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the “Software”), to deal
@@ -828,6 +826,6 @@
         'color': hex,
         'parent': null
     };
-    CP.version = '2.2.4';
+    CP.version = '2.2.5';
     return CP;
 });
