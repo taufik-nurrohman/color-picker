@@ -826,6 +826,6 @@
         'color': hex,
         'parent': null
     };
-    CP.version = '2.2.5';
+    CP.version = '2.2.6';
     return CP;
 });
