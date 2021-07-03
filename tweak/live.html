@@ -20,7 +20,7 @@
           });
 
           function onChange() {
-              picker.set.apply(picker, CP.HEX(this.value)).enter();
+              picker._set.apply(picker, CP.HEX(this.value)).enter();
           }
           ['cut', 'input', 'keyup', 'paste'].forEach(e => {
               picker.source.addEventListener(e, onChange);

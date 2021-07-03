@@ -56,7 +56,7 @@ block script
     |         let color = this.title;
     |         boxSubmit.title = color;
     |         boxSubmit.style.backgroundColor = color;
-    |         picker.value.apply(picker, CP.HEX(color));
+    |         picker._set.apply(picker, CP.HEX(color));
     |         e.stopPropagation();
     |     });
     |     // Click to submit

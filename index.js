@@ -45,9 +45,6 @@
     var isNumber = function isNumber(x) {
         return 'number' === typeof x;
     };
-    var isNumeric = function isNumeric(x) {
-        return /^-?(?:\d*.)?\d+$/.test(x + "");
-    };
     var isObject = function isObject(x, isPlain) {
         if (isPlain === void 0) {
             isPlain = true;
@@ -62,13 +59,6 @@
     };
     var isString = function isString(x) {
         return 'string' === typeof x;
-    };
-    var fromJSON = function fromJSON(x) {
-        var value = null;
-        try {
-            value = JSON.parse(x);
-        } catch (e) {}
-        return value;
     };
     var fromStates = function fromStates() {
         for (var _len = arguments.length, lot = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -119,9 +109,6 @@
         }
         return x;
     };
-    var toJSON = function toJSON(x) {
-        return JSON.stringify(x);
-    };
     var toNumber = function toNumber(x, base) {
         if (base === void 0) {
             base = 10;
@@ -143,77 +130,12 @@
         }
         return isNumber(x) ? x.toString(base) : "" + x;
     };
-    var toValue = function toValue(x) {
-        if (isArray(x)) {
-            return x.map(function(v) {
-                return toValue(v);
-            });
-        }
-        if (isNumeric(x)) {
-            return toNumber(x);
-        }
-        if (isObject(x)) {
-            for (var k in x) {
-                x[k] = toValue(x[k]);
-            }
-            return x;
-        }
-        if ('false' === x) {
-            return false;
-        }
-        if ('null' === x) {
-            return null;
-        }
-        if ('true' === x) {
-            return true;
-        }
-        return x;
-    };
     var D = document;
     var W = window;
     var B = D.body;
     var R = D.documentElement;
-    var getAttribute = function getAttribute(node, attribute, parseValue) {
-        if (parseValue === void 0) {
-            parseValue = true;
-        }
-        if (!hasAttribute(node, attribute)) {
-            return null;
-        }
-        var value = node.getAttribute(attribute);
-        return parseValue ? toValue(value) : value;
-    };
-    var getDatum = function getDatum(node, datum, parseValue) {
-        if (parseValue === void 0) {
-            parseValue = true;
-        }
-        var value = getAttribute(node, 'data-' + datum, parseValue),
-            v = (value + "").trim();
-        if (parseValue && v && ('[' === v[0] && ']' === v.slice(-1) || '{' === v[0] && '}' === v.slice(-1)) && null !== (v = fromJSON(value))) {
-            return v;
-        }
-        return value;
-    };
     var getParent = function getParent(node) {
         return node.parentNode || null;
-    };
-    var getState = function getState(node, state) {
-        return hasState(node, state) && node[state] || null;
-    };
-    var getText = function getText(node, trim) {
-        if (trim === void 0) {
-            trim = true;
-        }
-        var state = 'textContent';
-        if (!hasState(node, state)) {
-            return false;
-        }
-        var content = node[state];
-        content = trim ? content.trim() : content;
-        return "" !== content ? content : null;
-    };
-    var hasAttribute = function hasAttribute(node, attribute) {
-        return node.hasAttribute(attribute);
     };
     var hasState = function hasState(node, state) {
         return state in node;
@@ -249,12 +171,6 @@
     var setChildLast = function setChildLast(parent, node) {
         return parent.append(node), node;
     };
-    var setDatum = function setDatum(node, datum, value) {
-        if (isArray(value) || isObject(value)) {
-            value = toJSON(value);
-        }
-        return setAttribute(node, 'data-' + datum, value);
-    };
     var setElement = function setElement(node, content, attributes) {
         node = isString(node) ? D.createElement(node) : node;
         if (isObject(content)) {
@@ -279,24 +195,11 @@
         var state = 'innerHTML';
         return hasState(node, state) && (node[state] = trim ? content.trim() : content), node;
     };
-    var setState = function setState(node, key, value) {
-        return node[key] = value, node;
-    };
     var setStyle = function setStyle(node, style, value) {
         if (isNumber(value)) {
             value += 'px';
         }
         return node.style[toCaseCamel(style)] = fromValue(value), node;
-    };
-    var setText = function setText(node, content, trim) {
-        if (trim === void 0) {
-            trim = true;
-        }
-        if (null === content) {
-            return node;
-        }
-        var state = 'textContent';
-        return hasState(node, state) && (node[state] = trim ? content.trim() : content), node;
     };
     var offEvent = function offEvent(name, node, then) {
         node.removeEventListener(name, then);
@@ -402,9 +305,13 @@
         }
         return [x, y, w, h, X, Y];
     };
+    const COLOR_TYPE = 'HEX';
+    const EVENTS_DOWN = ['touchstart', 'mousedown'];
+    const EVENTS_MOVE = ['touchmove', 'mousemove'];
+    const EVENTS_RESIZE = ['orientationchange', 'resize'];
+    const EVENTS_UP = ['touchend', 'mouseup'];
     let name = 'CP',
-        delay = W.setTimeout,
-        hex = 'HEX';
+        delay = W.setTimeout;
 
     function getClosest(a, b) {
         if (a === b) {
@@ -484,10 +391,6 @@
         }
         return [h, s, v, isSet(a[3]) ? +a[3] : 1];
     }
-    const EVENTS_DOWN = ['touchstart', 'mousedown'];
-    const EVENTS_MOVE = ['touchmove', 'mousemove'];
-    const EVENTS_RESIZE = ['orientationchange', 'resize'];
-    const EVENTS_UP = ['touchend', 'mouseup'];
 
     function CP(source, state = {}) {
         if (!source) return;
@@ -505,43 +408,26 @@
         $.state = state = fromStates(CP.state, isString(state) ? {
             color: state
         } : state || {});
-        $.source = source;
-        $.visible = false; // Store current instance to `CP.instances`
-        CP.instances[source.id || source.name || toObjectCount(CP.instances)] = $; // Mark current DOM as active color picker to prevent duplicate instance
-        source[name] = 1;
 
-        function theValue(from) {
-            let to = CP[isFunction(CP[state.color]) ? state.color : hex],
-                theColor; // Get value from `data-color` attribute
-            if (theColor = getDatum(source, 'color')) {
-                if (isSet(from)) {
-                    return setDatum(source, 'color', to(from));
-                }
-                return to(theColor);
-            } // Get value from `value` attribute
-            if (theColor = getState(source, 'value')) {
-                if (isSet(from)) {
-                    return setState(source, 'value', to(from));
-                }
-                return to(theColor);
-            } // Get value from content
-            if (theColor = getText(source)) {
-                if (isSet(from)) {
-                    return setText(source, to(from));
-                }
-                return to(theColor);
-            }
-            if (isSet(from)) {
-                return; // Do nothing
+        function getValue() {
+            if (source.value) {
+                return CP[isFunction(CP[state.color]) ? state.color : COLOR_TYPE](source.value || "");
             }
             return [0, 0, 0, 1]; // Default to black
         }
+        $.source = source;
+        $.value = getValue();
+        $.visible = false; // Store current instance to `CP.instances`
+        CP.instances[source.id || source.name || toObjectCount(CP.instances)] = $; // Mark current DOM as active color picker to prevent duplicate instance
+        source[name] = 1;
         let className = state['class'],
             doEnter,
             doExit,
             doFit,
             doResize,
-            theColor = theValue(),
+            isDisabled = () => source.disabled,
+            isReadOnly = () => source.readOnly,
+            theColor = getValue(),
             theData = RGB2HSV(theColor),
             self = setElement('div', {
                 'class': className
@@ -587,15 +473,21 @@
 
         function doApply(isFirst, toParent) {
             // Refresh data
-            theData = RGB2HSV(theColor = theValue());
+            theData = RGB2HSV(theColor = getValue());
             if (!isFirst) {
                 setChildLast(toParent || state.parent || B, self);
                 $.visible = true;
             }
             doEnter = toParent => {
+                if (isDisabled() || isReadOnly()) {
+                    return $;
+                }
                 return doApply(0, toParent), fire('enter', theColor), $;
             };
             doExit = () => {
+                if (isDisabled() || isReadOnly()) {
+                    return $;
+                }
                 if (getParent(self)) {
                     letElement(self);
                     $.current = null;
@@ -760,12 +652,12 @@
                 doFit();
             }
             doSetColor();
-            $.color = (r, g, b, a) => CP[isFunction(CP[state.color]) ? state.color : hex]([r, g, b, a]);
+            $.color = (r, g, b, a) => CP[isFunction(CP[state.color]) ? state.color : COLOR_TYPE]([r, g, b, a]);
             $.current = null;
             $.enter = doEnter;
             $.exit = doExit;
             $.fit = doFit;
-            $.get = () => theValue();
+            $.get = () => getValue();
             $.pop = () => {
                 if (!source[name]) {
                     return $; // Already ejected
@@ -775,11 +667,13 @@
                 return doExit(), fire('pop', theColor);
             };
             $.set = (r, g, b, a) => {
+                return $._set(r, g, b, a), fire('change', [r, g, b, a]);
+            };
+            $.self = self;
+            $._set = (r, g, b, a) => {
                 theData = RGB2HSV([r, g, b, a]);
                 return doSetColor(), $;
             };
-            $.self = self;
-            $.value = (r, g, b, a) => ($.set(r, g, b, a), fire('change', [r, g, b, a]));
         }
         doApply(1);
 
@@ -798,9 +692,9 @@
         }
         return $;
     }
-    CP[hex] = x => {
+    CP[COLOR_TYPE] = x => {
         if (isString(x)) {
-            let count = (x = x.trim()).length;
+            let count = toCount(x = x.trim());
             if ((4 === count || 7 === count) && '#' === x[0]) {
                 if (/^#([a-f\d]{3}){1,2}$/i.test(x)) {
                     if (4 === count) {
@@ -823,9 +717,9 @@
     CP.instances = {};
     CP.state = {
         'class': 'color-picker',
-        'color': hex,
+        'color': COLOR_TYPE,
         'parent': null
     };
-    CP.version = '2.2.6';
+    CP.version = '2.3.0';
     return CP;
 });

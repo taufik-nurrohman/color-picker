@@ -17,7 +17,7 @@ block style
     |   background: #ffa;
     |   border: 1px solid #000;
     |   border-top-width: 0;
-    |   font: normal normal 12px/2em sans-serif;
+    |   font: normal normal 10px/2em sans-serif;
     |   color: #000;
     | }
     |
@@ -46,8 +46,8 @@ block script
     |     });
     |     function onChange() {
     |         if (this.value.length) {
-    |             var color = CP.HEX(this.value);
-    |             picker.set.apply(picker, color);
+    |             let color = CP.HEX(this.value);
+    |             picker._set.apply(picker, color);
     |             picker.source.value = CP.HEX(color);
     |         }
     |     }

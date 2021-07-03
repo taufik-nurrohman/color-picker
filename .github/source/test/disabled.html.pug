@@ -1,0 +1,44 @@
+extends ../_index.pug
+
+block state
+  - const scripts = ['../index.min.js']
+  - const styles = ['../index.min.css']
+  - const title = 'Color Picker'
+
+block script
+  script
+    | let sources = document.querySelectorAll('input');
+    |
+    | // Set hooks for each source element
+    | for (let i = 0, j = sources.length; i < j; ++i) {
+    |     (new CP(sources[i])).on('change', function(r, g, b, a) {
+    |         this.source.value = this.color(r, g, b, a);
+    |     });
+    | }
+    |
+    | function disable() {
+    |     sources.forEach(source => (source.disabled = true));
+    | }
+    |
+    | function enable() {
+    |     sources.forEach(source => ((source.disabled = false), (source.readOnly = false)));
+    | }
+    |
+    | function freeze() {
+    |     sources.forEach(source => (source.readOnly = true));
+    | }
+
+block content
+  main
+    p
+      input(type='text' value='#f00')
+      = ' '
+      input(disabled type='text' value='#f00')
+      = ' '
+      input(readonly type='text' value='#f00')
+    p
+      button(onclick='disable();') Disable All
+      = ' '
+      button(onclick='enable();') Enable All
+      = ' '
+      button(onclick='freeze();') Freeze All

@@ -4,12 +4,17 @@ import {fromStates} from '@taufik-nurrohman/from';
 import {hook} from '@taufik-nurrohman/hook';
 import {isFunction, isInstance, isObject, isSet, isString} from '@taufik-nurrohman/is';
 import {getAxis, getRect} from '@taufik-nurrohman/rect';
-import {toEdge, toNumber, toObjectCount, toRound, toString} from '@taufik-nurrohman/to';
+import {toCount, toEdge, toNumber, toObjectCount, toRound, toString} from '@taufik-nurrohman/to';
+
+const COLOR_TYPE = 'HEX';
+
+const EVENTS_DOWN = ['touchstart', 'mousedown'];
+const EVENTS_MOVE = ['touchmove', 'mousemove'];
+const EVENTS_RESIZE = ['orientationchange', 'resize'];
+const EVENTS_UP = ['touchend', 'mouseup'];
 
 let name = '%(js.name)',
-
-    delay = W.setTimeout,
-    hex = 'HEX';
+    delay = W.setTimeout;
 
 function getClosest(a, b) {
     if (a === b) {
@@ -85,11 +90,6 @@ function RGB2HSV(a) {
     return [h, s, v, isSet(a[3]) ? +a[3] : 1];
 }
 
-const EVENTS_DOWN = ['touchstart', 'mousedown'];
-const EVENTS_MOVE = ['touchmove', 'mousemove'];
-const EVENTS_RESIZE = ['orientationchange', 'resize'];
-const EVENTS_UP = ['touchend', 'mouseup'];
-
 function CP(source, state = {}) {
 
     if (!source) return;
@@ -112,7 +112,15 @@ function CP(source, state = {}) {
         color: state
     } : (state || {}));
 
+    function getValue() {
+        if (source.value) {
+            return CP[isFunction(CP[state.color]) ? state.color : COLOR_TYPE](source.value || "");
+        }
+        return [0, 0, 0, 1]; // Default to black
+    }
+
     $.source = source;
+    $.value = getValue();
     $.visible = false;
 
     // Store current instance to `CP.instances`
@@ -121,42 +129,16 @@ function CP(source, state = {}) {
     // Mark current DOM as active color picker to prevent duplicate instance
     source[name] = 1;
 
-    function theValue(from) {
-        let to = CP[isFunction(CP[state.color]) ? state.color : hex], theColor;
-        // Get value from `data-color` attribute
-        if (theColor = getDatum(source, 'color')) {
-            if (isSet(from)) {
-                return setDatum(source, 'color', to(from));
-            }
-            return to(theColor);
-        }
-        // Get value from `value` attribute
-        if (theColor = getState(source, 'value')) {
-            if (isSet(from)) {
-                return setState(source, 'value', to(from));
-            }
-            return to(theColor);
-        }
-        // Get value from content
-        if (theColor = getText(source)) {
-            if (isSet(from)) {
-                return setText(source, to(from));
-            }
-            return to(theColor);
-        }
-        if (isSet(from)) {
-            return; // Do nothing
-        }
-        return [0, 0, 0, 1]; // Default to black
-    }
-
     let className = state['class'],
         doEnter,
         doExit,
         doFit,
         doResize,
 
-        theColor = theValue(),
+        isDisabled = () => source.disabled,
+        isReadOnly = () => source.readOnly,
+
+        theColor = getValue(),
         theData = RGB2HSV(theColor),
 
         self = setElement('div', {
@@ -214,7 +196,7 @@ function CP(source, state = {}) {
     function doApply(isFirst, toParent) {
 
         // Refresh data
-        theData = RGB2HSV(theColor = theValue());
+        theData = RGB2HSV(theColor = getValue());
 
         if (!isFirst) {
             setChildLast(toParent || state.parent || B, self);
@@ -222,10 +204,16 @@ function CP(source, state = {}) {
         }
 
         doEnter = toParent => {
+            if (isDisabled() || isReadOnly()) {
+                return $;
+            }
             return doApply(0, toParent), fire('enter', theColor), $;
         };
 
         doExit = () => {
+            if (isDisabled() || isReadOnly()) {
+                return $;
+            }
             if (getParent(self)) {
                 letElement(self);
                 $.current = null;
@@ -394,14 +382,14 @@ function CP(source, state = {}) {
 
         doSetColor();
 
-        $.color = (r, g, b, a) => CP[isFunction(CP[state.color]) ? state.color : hex]([r, g, b, a]);
+        $.color = (r, g, b, a) => CP[isFunction(CP[state.color]) ? state.color : COLOR_TYPE]([r, g, b, a]);
 
         $.current = null;
         $.enter = doEnter;
         $.exit = doExit;
         $.fit = doFit;
 
-        $.get = () => theValue();
+        $.get = () => getValue();
 
         $.pop = () => {
             if (!source[name]) {
@@ -413,13 +401,15 @@ function CP(source, state = {}) {
         };
 
         $.set = (r, g, b, a) => {
-            theData = RGB2HSV([r, g, b, a]);
-            return doSetColor(), $;
+            return $._set(r, g, b, a), fire('change', [r, g, b, a]);
         };
 
         $.self = self;
 
-        $.value = (r, g, b, a) => ($.set(r, g, b, a), fire('change', [r, g, b, a]));
+        $._set = (r, g, b, a) => {
+            theData = RGB2HSV([r, g, b, a]);
+            return doSetColor(), $;
+        };
 
     } doApply(1);
 
@@ -441,9 +431,9 @@ function CP(source, state = {}) {
 
 }
 
-CP[hex] = x => {
+CP[COLOR_TYPE] = x => {
     if (isString(x)) {
-        let count = (x = x.trim()).length;
+        let count = toCount(x = x.trim());
         if ((4 === count || 7 === count) && '#' === x[0]) {
             if (/^#([a-f\d]{3}){1,2}$/i.test(x)) {
                 if (4 === count) {
@@ -468,7 +458,7 @@ CP.instances = {};
 
 CP.state = {
     'class': 'color-picker',
-    'color': hex,
+    'color': COLOR_TYPE,
     'parent': null
 };
 

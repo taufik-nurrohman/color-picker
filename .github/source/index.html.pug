@@ -89,7 +89,7 @@ block content
           'margin': '0',
           'padding': '3em'
         }): input(name='color' type='text' value='#f00')
-      p Set the color to #[a(href='javascript:void(picker.value(255, 0, 0, 1));') red], #[a(href='javascript:void(picker.value(0, 255, 0, 1));') green], #[a(href='javascript:void(picker.value(0, 0, 255, 1));') blue], #[a(href='javascript:void(picker.value(0, 0, 255, .5));') blue with 50% opacity]
+      p Set the color to #[a(href='javascript:void(picker.set(255, 0, 0, 1));') red], #[a(href='javascript:void(picker.set(0, 255, 0, 1));') green], #[a(href='javascript:void(picker.set(0, 0, 255, 1));') blue], #[a(href='javascript:void(picker.set(0, 0, 255, .5));') blue with 50% opacity]
       p Get the color as #[a(href='javascript:void(alert(JSON.stringify(picker.get())));') raw], #[a(href='javascript:void(alert(CP.HEX(picker.get())));') hex string]
       p: button(type='submit') Submit
     h2 Features
@@ -147,7 +147,6 @@ block content
     ul
       li: a(href='test.html' target='_blank') No Idea?
       li: a(href='test/picker.html' target='_blank') Multiple Instances
-      li: a(href='test/color.html' target='_blank') Pre-Defined Value
       li: a(href='tweak/picker-color.html' target='_blank') Pre-Defined Color
       li: a(href='tweak/live.html' target='_blank') Update Color Picker&rsquo;s Color State on Value Changes
       li Add Support for CMYK Color Value
@@ -273,23 +272,20 @@ block content
     p Return the color picker element.
     pre: code picker.self.style.borderWidth = '4px';
     h3 picker.set(r, g, b, a)
-    p Set color picker&rsquo;s color state based on the given color data.
+    p Set source element value and update the color picker&rsquo;s color state.
     pre: code
-      | // Set color picker&rsquo;s color state to yellow with 50% opacity
+      | // Set color picker&rsquo;s source element value to yellow with 50% opacity
       | picker.set(255, 255, 0, .5);
     h3 picker.source
-    p Return the color picker source element that holds the initial color value. It can be any element with a #[code data-color] attribute, any element that has #[code value] attribute or any element that has color value in its content.
+    p Return the color picker source element that holds the initial color value.
     pre: code
       | picker.source.addEventListener('click', function() {
       |     console.log(this.nodeName);
       | }, false);
     h3 picker.state
     p Return the modified color picker states.
-    h3 picker.value(r, g, b, a)
-    p Set source element value and update the color picker&rsquo;s color state.
-    pre: code
-      | // Set color picker&rsquo;s source element value to yellow with 50% opacity
-      | picker.value(255, 255, 0, .5);
+    h3 picker.value
+    p Return the initial color value.
     h3 picker.visible
     p Check if color picker pane is visible.
     pre: code if (picker.visible) { &hellip; }

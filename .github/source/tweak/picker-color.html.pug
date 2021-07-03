@@ -31,7 +31,7 @@ block script
     |         c.title = '#' + colors[i];
     |         c.style.backgroundColor = '#' + colors[i];
     |         c.addEventListener('click', function(e) {
-    |             picker.value.apply(picker, CP.HEX(this.title));
+    |             picker.data.apply(picker, CP.HEX(this.title));
     |             e.stopPropagation();
     |         });
     |         pane.appendChild(c);
