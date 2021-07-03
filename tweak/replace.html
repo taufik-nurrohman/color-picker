@@ -23,7 +23,7 @@
   <body>
     <main>
       <p>Replace text input with hidden input.</p>
-      <p><input type="text"></p>
+      <p><input type="text" value="#f00"></p>
     </main>
     <script src="../index.min.js"></script>
     <script>
@@ -31,7 +31,7 @@
           let box = document.createElement('span'),
               color = source.value;
           box.className = 'color-box';
-          box.dataset.color = color;
+          box.value = color; // Hacky :(
           box.style.backgroundColor = color;
           source.parentNode.insertBefore(box, source);
           source.type = 'hidden';
@@ -39,7 +39,7 @@
           picker.on('change', function(r, g, b, a) {
               let color = this.color(r, g, b, a);
               source.value = color;
-              this.source.dataset.color = color;
+              this.source.value = color; // Hacky :(
               this.source.style.backgroundColor = color;
           });
       }
