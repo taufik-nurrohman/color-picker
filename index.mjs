@@ -1,4 +1,4 @@
-import {B, D, R, W, getDatum, getParent, getState, getText, letElement, setChildLast, setDatum, setElement, setState, setStyle, setText} from '@taufik-nurrohman/document';
+import {B, D, R, W, getDatum, getParent, getState, getText, letClass, letElement, setChildLast, setClass, setDatum, setElement, setState, setStyle, setText} from '@taufik-nurrohman/document';
 import {offEvent, offEventDefault, offEvents, onEvent, onEvents} from '@taufik-nurrohman/event';
 import {fromStates} from '@taufik-nurrohman/from';
 import {hook} from '@taufik-nurrohman/hook';
@@ -120,7 +120,6 @@ function CP(source, state = {}) {
     }
 
     $.source = source;
-    $.value = getValue();
     $.visible = false;
 
     // Store current instance to `CP.instances`
@@ -396,6 +395,7 @@ function CP(source, state = {}) {
                 return $; // Already ejected
             }
             delete source[name];
+            letClass(source, className + '-source');
             offEvents(EVENTS_DOWN, source, doClick);
             return doExit(), fire('pop', theColor);
         };
@@ -410,6 +410,8 @@ function CP(source, state = {}) {
             theData = RGB2HSV([r, g, b, a]);
             return doSetColor(), $;
         };
+
+        setClass(source, className + '-source');
 
     } doApply(1);
 
@@ -462,6 +464,6 @@ CP.state = {
     'parent': null
 };
 
-CP.version = '2.3.0';
+CP.version = '2.3.1';
 
 export default CP;

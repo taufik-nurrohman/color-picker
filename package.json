@@ -49,5 +49,5 @@
     "pack": "pack --clean=false --from=.github/source --js-format=umd --js-name=CP --js-top='%(js.license)' --mjs=true --scss=true --to=."
   },
   "type": "module",
-  "version": "2.3.0"
+  "version": "2.3.1"
 }

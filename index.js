@@ -146,6 +146,9 @@
     var letAttribute = function letAttribute(node, attribute) {
         return node.removeAttribute(attribute), node;
     };
+    var letClass = function letClass(node, value) {
+        return node.classList.remove(value), node;
+    };
     var letElement = function letElement(node) {
         var parent = getParent(node);
         return node.remove(), parent;
@@ -170,6 +173,9 @@
     };
     var setChildLast = function setChildLast(parent, node) {
         return parent.append(node), node;
+    };
+    var setClass = function setClass(node, value) {
+        return node.classList.add(value), node;
     };
     var setElement = function setElement(node, content, attributes) {
         node = isString(node) ? D.createElement(node) : node;
@@ -416,7 +422,6 @@
             return [0, 0, 0, 1]; // Default to black
         }
         $.source = source;
-        $.value = getValue();
         $.visible = false; // Store current instance to `CP.instances`
         CP.instances[source.id || source.name || toObjectCount(CP.instances)] = $; // Mark current DOM as active color picker to prevent duplicate instance
         source[name] = 1;
@@ -663,6 +668,7 @@
                     return $; // Already ejected
                 }
                 delete source[name];
+                letClass(source, className + '-source');
                 offEvents(EVENTS_DOWN, source, doClick);
                 return doExit(), fire('pop', theColor);
             };
@@ -674,6 +680,7 @@
                 theData = RGB2HSV([r, g, b, a]);
                 return doSetColor(), $;
             };
+            setClass(source, className + '-source');
         }
         doApply(1);
 
@@ -720,6 +727,6 @@
         'color': COLOR_TYPE,
         'parent': null
     };
-    CP.version = '2.3.0';
+    CP.version = '2.3.1';
     return CP;
 });

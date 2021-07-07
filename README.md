@@ -56,9 +56,13 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
+### 2.3.1
+
+ - Removed `picker.value` property. Initial color data can be stored manually before initialization.
+
 ### 2.3.0
 
-Starting from this version, you need to have a form element to store the color data. It doesn&rsquo;t have to be visible. You can use `<input type="hidden">` if you want. We no longer support storing color data via `data-color` attribute and element content.
+Starting from this version, you need to have a form element to store the color data. We no longer support storing color data via `data-color` attribute and element content.
 
  - Added `picker._set()` method.
  - Added `picker.value` property to store the initial color data.
