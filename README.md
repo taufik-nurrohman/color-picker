@@ -60,6 +60,7 @@ Release Notes
 
  - Added keyboard controls example [#71](https://github.com/taufik-nurrohman/color-picker/issues/71).
  - Removed `picker.value` property. Initial color data can be stored manually before initialization.
+ - Removed `state.parent` option. Use `picker.enter(parent)` to append the color picker panel to `parent`.
 
 ### 2.3.0
 

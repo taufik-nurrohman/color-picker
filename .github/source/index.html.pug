@@ -192,14 +192,10 @@ block content
         tr
           td: code state.color
           td Name of the color parser defined in the #[code CP] object.
-        tr
-          td: code state.parent
-          td Parent element to append the color picker element (default will be appended to the #[code &lt;body&gt;] element).
     pre: code let picker = new CP(#[var source], #[var color]);
     pre: code
       | let picker = new CP(#[var source], #[var state] = {
-      |         color: 'HEX',
-      |         parent: null
+      |         color: 'HEX'
       |     });
     h2 Methods and Properties
     h3 CP.HEX(color | [r, g, b, a])

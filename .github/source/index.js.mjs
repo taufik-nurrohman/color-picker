@@ -198,7 +198,7 @@ function CP(source, state = {}) {
         theData = RGB2HSV(theColor = getValue());
 
         if (!isFirst) {
-            setChildLast(toParent || state.parent || B, self);
+            setChildLast(toParent || B, self);
             $.visible = true;
         }
 
@@ -422,7 +422,7 @@ function CP(source, state = {}) {
             let t = e.target,
                 isSource = source === getClosest(t, source);
             if (isSource) {
-                !getParent(self) && doEnter(state.parent);
+                !getParent(self) && doEnter();
             } else {
                 doExit();
             }
@@ -460,8 +460,7 @@ CP.instances = {};
 
 CP.state = {
     'class': 'color-picker',
-    'color': COLOR_TYPE,
-    'parent': null
+    'color': COLOR_TYPE
 };
 
 CP.version = '%(version)';

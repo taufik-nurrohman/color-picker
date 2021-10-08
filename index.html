@@ -189,16 +189,11 @@ picker.on('change', function(r, g, b, a) {
             <td><code>state.color</code></td>
             <td>Name of the color parser defined in the <code>CP</code> object.</td>
           </tr>
-          <tr>
-            <td><code>state.parent</code></td>
-            <td>Parent element to append the color picker element (default will be appended to the <code>&lt;body&gt;</code> element).</td>
-          </tr>
         </tbody>
       </table>
       <pre><code>let picker = new CP(<var>source</var>, <var>color</var>);</code></pre>
       <pre><code>let picker = new CP(<var>source</var>, <var>state</var> = {
-        color: 'HEX',
-        parent: null
+        color: 'HEX'
     });</code></pre>
       <h2>Methods and Properties</h2>
       <h3>CP.HEX(color | [r, g, b, a])</h3>

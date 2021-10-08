@@ -7,16 +7,6 @@
     <title>Color Picker</title>
     <link href="../index.min.css" rel="stylesheet">
     <style>
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        display: inline-block;
-        cursor: pointer;
-      }
-
       h1 input,
       h2 input,
       h3 input,
@@ -48,17 +38,20 @@
     </main>
     <script src="../index.min.js"></script>
     <script>
-      let sources = document.querySelectorAll('h1 input, h2 input, h3 input, h4 input, h5 input, h6 input');
+      let parents = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
 
-      for (let i = 0, j = sources.length; i < j; ++i) {
-          (source => {
-              (new CP(source, {
-                  parent: source.parentNode || null
-              })).on('change', function(r, g, b, a) {
-                  this.source.value = this.color(r, g, b, a);
-                  this.source.parentNode.style.color = this.color(r, g, b, a);
+      for (let i = 0, j = parents.length; i < j; ++i) {
+          (parent => {
+              let picker = new CP(parent.querySelector('input'));
+              picker.on('change', (r, g, b, a) => {
+                  let value = picker.color(r, g, b, a);
+                  picker.source.value = value;
+                  picker.source.parentNode.style.color = value;
               });
-          })(sources[i]);
+              picker.on('focus', () => {
+                  picker.enter(picker.source.parentNode);
+              });
+          })(parents[i]);
       }
     </script>
   </body>
