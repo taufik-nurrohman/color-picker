@@ -206,9 +206,9 @@ block script
     |             }
     |         }
     |         stop && e.preventDefault();
-    |         let [r, g, b] = P2RGB([(hh - hy) / hh, (sw - sx) / sw, (vh - vy) / vh]),
-    |             color = 'rgb(' + P2RGB([(hh - hy) / hh, 1, 1]).join(',') + ')'; // Solid RGB for preview only
     |         if (update) {
+    |             let [r, g, b] = P2RGB([(hh - hy) / hh, (sw - sx) / sw, (vh - vy) / vh]),
+    |                 color = 'rgb(' + P2RGB([(hh - hy) / hh, 1, 1]).join(',') + ')'; // Solid RGB for preview only
     |             picker.fire('change', [r, g, b, 1 - (ay / ah)]);
     |             // Update internal color preview
     |             aPallete.style.backgroundImage = 'linear-gradient(' + color + ',transparent)';
