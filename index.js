@@ -27,6 +27,9 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() : typeof define === 'function' && define.amd ? define(factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.CP = factory());
 })(this, function() {
     'use strict';
+    var hasValue = function hasValue(x, data) {
+        return -1 !== data.indexOf(x);
+    };
     var isArray = function isArray(x) {
         return Array.isArray(x);
     };
@@ -59,35 +62,6 @@
     };
     var isString = function isString(x) {
         return 'string' === typeof x;
-    };
-    var fromStates = function fromStates() {
-        for (var _len = arguments.length, lot = new Array(_len), _key = 0; _key < _len; _key++) {
-            lot[_key] = arguments[_key];
-        }
-        return Object.assign.apply(Object, [{}].concat(lot));
-    };
-    var fromValue = function fromValue(x) {
-        if (isArray(x)) {
-            return x.map(function(v) {
-                return fromValue(x);
-            });
-        }
-        if (isObject(x)) {
-            for (var k in x) {
-                x[k] = fromValue(x[k]);
-            }
-            return x;
-        }
-        if (false === x) {
-            return 'false';
-        }
-        if (null === x) {
-            return 'null';
-        }
-        if (true === x) {
-            return 'true';
-        }
-        return "" + x;
     };
     var toCaseCamel = function toCaseCamel(x) {
         return x.replace(/[-_.](\w)/g, function(m0, m1) {
@@ -129,6 +103,61 @@
             base = 10;
         }
         return isNumber(x) ? x.toString(base) : "" + x;
+    };
+    var fromStates = function fromStates() {
+        for (var _len = arguments.length, lot = new Array(_len), _key = 0; _key < _len; _key++) {
+            lot[_key] = arguments[_key];
+        }
+        var out = lot.shift();
+        for (var i = 0, j = toCount(lot); i < j; ++i) {
+            for (var k in lot[i]) {
+                // Assign value
+                if (!isSet(out[k])) {
+                    out[k] = lot[i][k];
+                    continue;
+                } // Merge array
+                if (isArray(out[k]) && isArray(lot[i][k])) {
+                    out[k] = [
+                        /* Clone! */
+                    ].concat(out[k]);
+                    for (var ii = 0, jj = toCount(lot[i][k]); ii < jj; ++ii) {
+                        if (!hasValue(lot[i][k][ii], out[k])) {
+                            out[k].push(lot[i][k][ii]);
+                        }
+                    } // Merge object recursive
+                } else if (isObject(out[k]) && isObject(lot[i][k])) {
+                    out[k] = fromStates({
+                        /* Clone! */
+                    }, out[k], lot[i][k]); // Replace value
+                } else {
+                    out[k] = lot[i][k];
+                }
+            }
+        }
+        return out;
+    };
+    var fromValue = function fromValue(x) {
+        if (isArray(x)) {
+            return x.map(function(v) {
+                return fromValue(x);
+            });
+        }
+        if (isObject(x)) {
+            for (var k in x) {
+                x[k] = fromValue(x[k]);
+            }
+            return x;
+        }
+        if (false === x) {
+            return 'false';
+        }
+        if (null === x) {
+            return 'null';
+        }
+        if (true === x) {
+            return 'true';
+        }
+        return "" + x;
     };
     var D = document;
     var W = window;
@@ -727,6 +756,6 @@
         'color': COLOR_TYPE,
         'parent': null
     };
-    CP.version = '2.3.1';
+    CP.version = '2.3.2';
     return CP;
 });

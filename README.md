@@ -56,8 +56,9 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
-### 2.3.1
+### 2.3.2
 
+ - Added keyboard controls example [#71](https://github.com/taufik-nurrohman/color-picker/issues/71).
  - Removed `picker.value` property. Initial color data can be stored manually before initialization.
 
 ### 2.3.0

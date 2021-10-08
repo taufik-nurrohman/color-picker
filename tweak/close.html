@@ -14,7 +14,7 @@
     </main>
     <script src="../index.min.js"></script>
     <script>
-      function closeByButton(picker) {
+      function enableCloseByButton(picker) {
           let x = document.createElement('a');
           x.href = 'javascript:;';
           x.textContent = 'Close Me!';
@@ -29,7 +29,7 @@
 
       const picker = new CP(document.querySelector('input'));
 
-      closeByButton(picker);
+      enableCloseByButton(picker);
     </script>
   </body>
 </html>

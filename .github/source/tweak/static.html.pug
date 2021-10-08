@@ -17,25 +17,25 @@ block style
 
 block script
   script
-    | function staticColorPicker(picker, container) {
+    | function enableStaticColorPicker(picker, container) {
     |     // Disable default blur and focus behavior
     |     picker.on('blur', () => {});
     |     picker.on('focus', () => {});
     |     picker.on('change', function(r, g, b, a) {
     |         this.source.value = this.color(r, g, b, a);
     |     });
-    |     // Add a `is-static` class to the color picker pane
+    |     // Add a `is-static` class to the color picker panel
     |     picker.self.classList.add('is-static');
-    |     // Put color picker pane to `container`
+    |     // Put color picker panel to `container`
     |     picker.enter(container);
     | }
     |
     | const picker = new CP(document.querySelector('input'));
     |
-    | staticColorPicker(picker, document.querySelectorAll('p')[1]);
+    | enableStaticColorPicker(picker, document.querySelectorAll('p')[1]);
 
 block content
   main
     p: input(type="text")
     p= ""
-    p Simple #[em hack] to make a static color picker pane.
+    p Simple #[em hack] to make a static color picker panel.

@@ -23,8 +23,8 @@ block style
     | }
     | :root {
     |   background: #fff;
-    |   color: #000;
     |   border-top: 4px solid;
+    |   color: #000;
     |   font: normal normal 16px/1.25 serif;
     | }
     | a {
@@ -39,13 +39,13 @@ block style
     |   font-size: 80%;
     | }
     | footer, header, main, nav {
-    |   max-width: 700px;
     |   margin: 0 auto;
+    |   max-width: 700px;
     | }
     | hr {
     |   border: 0;
-    |   color: inherit;
     |   border-top: 1px dashed;
+    |   color: inherit;
     |   height: 0;
     | }
     | pre {
@@ -53,8 +53,8 @@ block style
     |   word-wrap: break-word;
     | }
     | pre code {
-    |   display: block;
     |   background: #eee;
+    |   display: block;
     |   padding: 1em;
     | }
     | table {
@@ -94,7 +94,7 @@ block content
       p: button(type='submit') Submit
     h2 Features
     ul
-      li Light-weight, no dependencies. It uses vanilla JavaScript.
+      li Light-weight, no dependencies.
       li Simple #[abbr(title='Application Programming Interface') API]. Easy to master.
       li Responsive. It tries to place itself inside an area that is visible within the browser window.
       li Has alpha channel support by default.
@@ -112,14 +112,14 @@ block content
       |     &lt;p&gt;&lt;input type="text"&gt;&lt;/p&gt;
       |     &lt;script src="#[a(href='index.min.js' target='_blank') ./index.min.js]"&gt;&lt;/script&gt;
       |     &lt;script&gt;
-      |     let picker = new CP(document.querySelector('input'));
-      |     picker.on('change', function(r, g, b, a) {
-      |         if (1 === a) {
-      |             this.source.value = 'rgb(' + r + ', ' + g + ', ' + b + ')';
-      |         } else {
-      |             this.source.value = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
-      |         }
-      |     });
+      |       const picker = new CP(document.querySelector('input'));
+      |       picker.on('change', function(r, g, b, a) {
+      |           if (1 === a) {
+      |               this.source.value = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+      |           } else {
+      |               this.source.value = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+      |           }
+      |       });
       |     &lt;/script&gt;
       |   &lt;/body&gt;
       | &lt;/html&gt;
@@ -172,6 +172,7 @@ block content
       li: a(href='tweak/picker-view-code.html' target='_blank') Color Code to Copy in Color Picker
       li: a(href='tweak/scroll.html' target='_blank') Scroll Follow Color Picker
       li: a(href='test/size.html' target='_blank') Custom Color Picker Size
+      li: a(href='tweak/keyboard.html' target='_blank') Add Support for Keyboard Controls
     h2 Settings
     table(border='1')
       thead
@@ -243,7 +244,7 @@ block content
       |     this.source.value = CP.HEX([r, g, b, a]);
       | });
     h3 picker.current
-    p Return the active color picker control pane element.
+    p Return the active color picker control panel element.
     pre: code
       | picker.on('change', function(r, g, b, a) {
       |     if (this.current.classList.contains('color-picker:h')) {
@@ -251,12 +252,12 @@ block content
       |     }
       | });
     h3 picker.enter(to)
-    p Show the color picker pane.
+    p Show the color picker panel.
     pre: code
       | picker.enter(); // Enter to the `&lt;body&gt;` element
       | picker.enter(document.querySelector('#foo')); // Enter to a specific container
     h3 picker.exit()
-    p Hide the color picker pane.
+    p Hide the color picker panel.
     pre: code picker.exit();
     h3 picker.fit([x, y])
     p Set color picker position measured from the window edges.
@@ -285,7 +286,7 @@ block content
     h3 picker.state
     p Return the modified color picker states.
     h3 picker.visible
-    p Check if color picker pane is visible.
+    p Check if color picker panel is visible.
     pre: code if (picker.visible) { &hellip; }
     h2 Color Converters
     p Converters are defined as static methods in the scope of #[code CP]. This method accepts two types of input, a color string input and an array of red, green, blue and alpha color data. Every input given to this method will return the opposite version of the input. For example, with the #[code CP.HEX()] method, if you put #[code '#ffff00'] to the method argument, it will come out as #[code= '[255, 255, 0, 1]'] and if you put #[code= '[255, 255, 0, 1]'] to the method argument, it will come out as #[code '#ffff00'].
@@ -317,7 +318,7 @@ block content
       tbody
         tr
           td: code blur
-          td Adding a #[code blur] hook will disable the default blur behavior, that is, to hide the color picker pane.
+          td Adding a #[code blur] hook will disable the default blur behavior, that is, to hide the color picker panel.
         tr
           td: code change
           td Will be triggered on every color change.
@@ -326,16 +327,16 @@ block content
           td Will be triggered when the color picker control is dragging.
         tr
           td: code enter
-          td Will be triggered when color picker pane is visible.
+          td Will be triggered when color picker panel is visible.
         tr
           td: code exit
-          td Will be triggered when color picker pane is hidden.
+          td Will be triggered when color picker panel is hidden.
         tr
           td: code fit
-          td Will be triggered when color picker pane is positioned.
+          td Will be triggered when color picker panel is positioned.
         tr
           td: code focus
-          td Adding a #[code focus] hook will disable the default focus behavior, that is, to show the color picker pane.
+          td Adding a #[code focus] hook will disable the default focus behavior, that is, to show the color picker panel.
         tr
           td: code pop
           td Will be triggered after #[code picker.pop()].

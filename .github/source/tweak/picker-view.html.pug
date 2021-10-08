@@ -26,7 +26,7 @@ block style
 
 block script
   script
-    | function insertColorView(picker) {
+    | function enableColorView(picker) {
     |     let box = document.createElement('span'),
     |         boxReset = document.createElement('span'),
     |         boxSubmit = document.createElement('span');
@@ -79,7 +79,7 @@ block script
     |
     | const picker = new CP(document.querySelector('input'));
     |
-    | insertColorView(picker);
+    | enableColorView(picker);
 
 block content
   main

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="A simple color picker application written in pure JavaScript, for modern browsers." name="description">
+    <title>Color Picker</title>
+    <link href="../index.min.css" rel="stylesheet">
+    <style>
+      /* Fake focus state */
+      .color-picker.focus\:a .color-picker\:a div,
+      .color-picker.focus\:h .color-picker\:h div,
+      .color-picker.focus\:sv .color-picker\:sv div {
+        outline: 2px solid rgba(0, 0, 255, .5);
+        outline-offset: -2px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p><input type="text" value="#ff0"></p>
+      <ul>
+        <li>Use <kbd>Tab</kbd> or <kbd>Shift</kbd>+<kbd>Tab</kbd> key to switch between controls when color picker panel is visible.</li>
+        <li>Use <kbd>ArrowDown</kbd>, <kbd>ArrowLeft</kbd>, <kbd>ArrowRight</kbd>, and <kbd>ArrowUp</kbd> key to move the current control&rsquo;s cursor.</li>
+        <li>Use <kbd>Escape</kbd> to hide the color picker to be able to use the <kbd>Tab</kbd> key normally.</li>
+      </ul>
+    </main>
+    <script src="../index.min.js"></script>
+    <script>
+      const picker = new CP(document.querySelector('input'));
+
+      function P2RGB(a) {
+          let h = +a[0],
+              s = +a[1],
+              v = +a[2],
+              r, g, b, i, f, p, q, t;
+          i = Math.floor(h * 6);
+          f = h * 6 - i;
+          p = v * (1 - s);
+          q = v * (1 - f * s);
+          t = v * (1 - (1 - f) * s);
+          i = i || 0;
+          q = q || 0;
+          t = t || 0;
+          switch (i % 6) {
+              case 0:
+                  r = v, g = t, b = p;
+                  break;
+              case 1:
+                  r = q, g = v, b = p;
+                  break;
+              case 2:
+                  r = p, g = v, b = t;
+                  break;
+              case 3:
+                  r = p, g = q, b = v;
+                  break;
+              case 4:
+                  r = t, g = p, b = v;
+                  break;
+              case 5:
+                  r = v, g = p, b = q;
+                  break;
+          }
+          return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+      }
+
+      picker.on('change', function(r, g, b, a) {
+          let value = this.color(r, g, b, a);
+          this.source.value = value;
+          document.documentElement.style.background = value;
+      });
+
+      function enableKeyboardControls(picker, step) {
+          if (picker.keyboardControls) {
+              return;
+          }
+          picker.keyboardControls = true;
+          let ah, ay, hh, hy, sw, sx, vh, vy,
+              ch, cw,
+              // 0: sv
+              // 1: h
+              // 2: a
+              tabIndex = 0;
+          let source = picker.source,
+              self = picker.self,
+              controls = self.firstChild.children,
+              a = controls[2];
+          aCursor = a.children[2],
+              aPallete = a.children[0],
+              h = controls[1],
+              hCursor = h.children[1],
+              sv = controls[0],
+              svCursor = sv.children[3],
+              svPallete = sv.children[0];
+          let hFocus = () => {
+                  tabIndex = 1;
+                  hh = h.offsetHeight;
+                  hy = parseFloat(hCursor.style.top) + (ch = hCursor.offsetHeight / 2);
+                  self.classList.add('focus:h');
+                  self.classList.remove('focus:a');
+                  self.classList.remove('focus:sv');
+              },
+              svFocus = () => {
+                  tabIndex = 0;
+                  sw = sv.offsetWidth;
+                  sx = parseFloat(svCursor.style.right) + (cw = svCursor.offsetWidth / 2);
+                  vh = sv.offsetHeight;
+                  vy = parseFloat(svCursor.style.top) + (ch = svCursor.offsetHeight / 2);
+                  self.classList.add('focus:sv');
+                  self.classList.remove('focus:a');
+                  self.classList.remove('focus:h');
+              },
+              aFocus = () => {
+                  tabIndex = 2;
+                  ah = a.offsetHeight;
+                  ay = parseFloat(aCursor.style.top) + (ch = aCursor.offsetHeight / 2);
+                  self.classList.add('focus:a');
+                  self.classList.remove('focus:h');
+                  self.classList.remove('focus:sv');
+              };
+          picker.on('enter', () => {
+              a.addEventListener('click', aFocus, false);
+              h.addEventListener('click', hFocus, false);
+              sv.addEventListener('click', svFocus, false);
+              aFocus(), hFocus(), svFocus(); // Focus to `sv` control by default!
+          });
+          picker.on('exit', () => {
+              a.removeEventListener('click', aFocus);
+              h.removeEventListener('click', hFocus);
+              sv.removeEventListener('click', svFocus);
+          });
+          source.addEventListener('focus', function() {
+              picker.enter(); // Show!
+          });
+          source.addEventListener('keydown', function(e) {
+              let key = e.key,
+                  stop = false,
+                  update = false;
+              if (picker.visible) {
+                  // Press `Escape` to close the color picker!
+                  if ('Escape' === key) {
+                      picker.exit();
+                      source.focus();
+                      source.select();
+                      stop = true;
+                      // Press `Tab` or `Shift+Tab` to cycle between color picker control(s)!
+                  } else if ('Tab' === key) {
+                      if (e.shiftKey) {
+                          tabIndex = tabIndex < 1 ? 2 : tabIndex - 1;
+                      } else {
+                          tabIndex = tabIndex > 1 ? 0 : tabIndex + 1;
+                      }
+                      if (0 === tabIndex) {
+                          svFocus();
+                      } else if (1 === tabIndex) {
+                          hFocus();
+                      } else if (2 === tabIndex) {
+                          aFocus();
+                      }
+                      stop = true;
+                  }
+                  if (stop) {
+                      e.preventDefault();
+                      return;
+                  }
+              }
+              // Saturation/Value
+              if (0 === tabIndex) {
+                  if ('ArrowDown' === key) {
+                      vy += step;
+                      vy = vy > vh ? vh : vy;
+                      svCursor.style.top = (vy - ch) + 'px';
+                      stop = update = true;
+                  } else if ('ArrowLeft' === key) {
+                      sx += step;
+                      sx = sx > sw ? sw : sx;
+                      svCursor.style.right = (sx - cw) + 'px';
+                      stop = update = true;
+                  } else if ('ArrowRight' === key) {
+                      sx -= step;
+                      sx = sx < 0 ? 0 : sx;
+                      svCursor.style.right = (sx - cw) + 'px';
+                      stop = update = true;
+                  } else if ('ArrowUp' === key) {
+                      vy -= step;
+                      vy = vy < 0 ? 0 : vy;
+                      svCursor.style.top = (vy - ch) + 'px';
+                      stop = update = true;
+                  }
+                  // Hue
+              } else if (1 === tabIndex) {
+                  if ('ArrowDown' === key) {
+                      hy += step;
+                      hy = hy > hh ? hh : hy;
+                      hCursor.style.top = (hy - ch) + 'px';
+                      stop = update = true;
+                  } else if ('ArrowUp' === key) {
+                      hy -= step;
+                      hy = hy < 0 ? 0 : hy;
+                      hCursor.style.top = (hy - ch) + 'px';
+                      stop = update = true;
+                  }
+                  // Alpha
+              } else if (2 === tabIndex) {
+                  if ('ArrowDown' === key) {
+                      ay += step;
+                      ay = ay > ah ? ah : ay;
+                      aCursor.style.top = (ay - ch) + 'px';
+                      stop = update = true;
+                  } else if ('ArrowUp' === key) {
+                      ay -= step;
+                      ay = ay < 0 ? 0 : ay;
+                      aCursor.style.top = (ay - ch) + 'px';
+                      stop = update = true;
+                  }
+              }
+              stop && e.preventDefault();
+              let [r, g, b] = P2RGB([(hh - hy) / hh, (sw - sx) / sw, (vh - vy) / vh]),
+                  color = 'rgb(' + P2RGB([(hh - hy) / hh, 1, 1]).join(',') + ')'; // Solid RGB for preview only
+              if (update) {
+                  picker.fire('change', [r, g, b, 1 - (ay / ah)]);
+                  // Update internal color preview
+                  aPallete.style.backgroundImage = 'linear-gradient(' + color + ',transparent)';
+                  svPallete.style.backgroundColor = color;
+              }
+          }, false);
+      }
+
+      enableKeyboardControls(picker, 5);
+    </script>
+  </body>
+</html>

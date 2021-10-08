@@ -7,7 +7,7 @@ block state
 
 block script
   script
-    | function liveColorPickerState(picker) {
+    | function enableLiveColorPickerValue(picker) {
     |     picker.on('change', function(r, g, b, a) {
     |         this.source.value = this.color(r, g, b, a);
     |     });
@@ -21,7 +21,7 @@ block script
     |
     | const picker = new CP(document.querySelector('input'));
     |
-    | liveColorPickerState(picker);
+    | enableLiveColorPickerValue(picker);
 
 block content
   main

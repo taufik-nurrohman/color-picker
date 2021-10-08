@@ -17,25 +17,25 @@
         cursor: pointer;
       }
 
-      h1:hover,
-      h2:hover,
-      h3:hover,
-      h4:hover,
-      h5:hover,
-      h6:hover {
-        text-decoration: underline;
+      h1 input,
+      h2 input,
+      h3 input,
+      h4 input,
+      h5 input,
+      h6 input {
+        font-size: 100%;
       }
     </style>
   </head>
   <body>
     <main>
-      <h1>Size 1</h1>
-      <h2>Size 2</h2>
-      <h3>Size 3</h3>
-      <h4>Size 4</h4>
-      <h5>Size 5</h5>
-      <h6>Size 6</h6>
-      <p>By default, color picker size will follow the container&rsquo;s text size; the container that bounds to the color picker pane.</p>
+      <h1>Size 1: <input type="text"></h1>
+      <h2>Size 2: <input type="text"></h2>
+      <h3>Size 3: <input type="text"></h3>
+      <h4>Size 4: <input type="text"></h4>
+      <h5>Size 5: <input type="text"></h5>
+      <h6>Size 6: <input type="text"></h6>
+      <p>By default, color picker size will follow the container&rsquo;s text size; the container that bounds to the color picker panel.</p>
       <pre><code>/* To change the color picker size */
 .color-picker {
   font-size: 20px;
@@ -48,14 +48,17 @@
     </main>
     <script src="../index.min.js"></script>
     <script>
-      let sources = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+      let sources = document.querySelectorAll('h1 input, h2 input, h3 input, h4 input, h5 input, h6 input');
 
       for (let i = 0, j = sources.length; i < j; ++i) {
-          (new CP(sources[i], {
-              parent: sources[i]
-          })).on('change', function(r, g, b, a) {
-              this.source.style.color = this.color(r, g, b, a);
-          });
+          (source => {
+              (new CP(source, {
+                  parent: source.parentNode || null
+              })).on('change', function(r, g, b, a) {
+                  this.source.value = this.color(r, g, b, a);
+                  this.source.parentNode.style.color = this.color(r, g, b, a);
+              });
+          })(sources[i]);
       }
     </script>
   </body>

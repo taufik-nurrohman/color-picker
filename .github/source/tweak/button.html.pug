@@ -7,12 +7,12 @@ block state
 
 block script
   script
-    | function toggleByButton(picker) {
+    | function enableToggleByButton(picker) {
     |     let button = document.createElement('button');
     |     // Disable the default blur and focus behavior
     |     picker.on('blur', () => {});
     |     picker.on('focus', () => {});
-    |     // Click to show or hide the color picker pane
+    |     // Click to show or hide the color picker panel
     |     button.addEventListener('click', () => {
     |         picker[picker.visible ? 'exit' : 'enter']();
     |         picker.fit([
@@ -38,7 +38,7 @@ block script
     |
     | const picker = new CP(document.querySelector('input'));
     |
-    | toggleByButton(picker);
+    | enableToggleByButton(picker);
 
 block content
   main

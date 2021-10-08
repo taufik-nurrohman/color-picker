@@ -7,7 +7,7 @@ block state
 
 block script
   script
-    | function toggleByDoubleClickEvent(picker) {
+    | function enableToggleByDoubleClick(picker) {
     |     // Disable the default blur and focus behavior
     |     picker.on('blur', () => {});
     |     picker.on('focus', () => {});
@@ -25,7 +25,7 @@ block script
     |
     | const picker = new CP(document.querySelector('input'));
     |
-    | toggleByDoubleClickEvent(picker);
+    | enableToggleByDoubleClick(picker);
 
 block content
   main

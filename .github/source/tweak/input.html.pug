@@ -16,7 +16,7 @@ block script
   script
     | function applyToColorInput(source) {
     |     const picker = new CP(source);
-    |     // Prevent showing native color picker pane
+    |     // Prevent showing native color picker panel
     |     source.addEventListener('click', e => e.preventDefault());
     |     picker.on('change', function(r, g, b) {
     |         // HTML5 color input does not support alpha channel

@@ -7,7 +7,7 @@ block state
 
 block script
   script
-    | function closeByButton(picker) {
+    | function enableCloseByButton(picker) {
     |     let x = document.createElement('a');
     |     x.href = 'javascript:;';
     |     x.textContent = 'Close Me!';
@@ -22,7 +22,7 @@ block script
     |
     | const picker = new CP(document.querySelector('input'));
     |
-    | closeByButton(picker);
+    | enableCloseByButton(picker);
 
 block content
   main

@@ -12,27 +12,35 @@ block style
     |   cursor: pointer;
     | }
     |
-    | h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
-    |   text-decoration: underline;
+    | h1 input,
+    | h2 input,
+    | h3 input,
+    | h4 input,
+    | h5 input,
+    | h6 input {
+    |   font-size: 100%;
     | }
 
 block script
   script
-    | let sources = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    | let sources = document.querySelectorAll('h1 input, h2 input, h3 input, h4 input, h5 input, h6 input');
     |
     | for (let i = 0, j = sources.length; i < j; ++i) {
-    |     (new CP(sources[i], {
-    |         parent: sources[i]
-    |     })).on('change', function(r, g, b, a) {
-    |         this.source.style.color = this.color(r, g, b, a);
-    |     });
+    |     (source => {
+    |         (new CP(source, {
+    |             parent: source.parentNode || null
+    |         })).on('change', function(r, g, b, a) {
+    |             this.source.value = this.color(r, g, b, a);
+    |             this.source.parentNode.style.color = this.color(r, g, b, a);
+    |         });
+    |     })(sources[i]);
     | }
 
 block content
   main
     each i in [1, 2, 3, 4, 5, 6]
-      #{'h' + i}= 'Size ' + i
-    p By default, color picker size will follow the container&rsquo;s text size; the container that bounds to the color picker pane.
+      #{'h' + i}!= 'Size ' + i + ': <input type="text">'
+    p By default, color picker size will follow the container&rsquo;s text size; the container that bounds to the color picker panel.
     pre: code
       | /* To change the color picker size */
       | .color-picker {
