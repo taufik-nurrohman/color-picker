@@ -136,10 +136,17 @@ block script
     |                 stop = true;
     |             // Press `Tab` or `Shift+Tab` to cycle between color picker control(s)!
     |             } else if ('Tab' === key) {
+    |                 let tabsCount = controls.length - 1;
+    |                 // Exclude hidden control(s)
+    |                 for (let i = 0, j = tabsCount + 1; i < j; ++i) {
+    |                     if (controls[i] && controls[i].offsetHeight <= 0 && controls[i].offsetWidth <= 0) {
+    |                         --tabsCount;
+    |                     }
+    |                 }
     |                 if (e.shiftKey) {
-    |                     tabIndex = tabIndex < 1 ? 2 : tabIndex - 1;
+    |                     tabIndex = tabIndex < 1 ? tabsCount : tabIndex - 1;
     |                 } else {
-    |                     tabIndex = tabIndex > 1 ? 0 : tabIndex + 1;
+    |                     tabIndex = tabIndex > tabsCount - 1 ? 0 : tabIndex + 1;
     |                 }
     |                 if (0 === tabIndex) {
     |                     svFocus();
