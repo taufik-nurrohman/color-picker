@@ -215,6 +215,9 @@ block script
     |             svPallete.style.backgroundColor = color;
     |         }
     |     }, false);
+    |     source.addEventListener('keyup', function(e) {
+    |         picker.set.apply(picker, picker.get());
+    |     }, false);
     | }
     |
     | enableKeyboardControls(picker, 5);
