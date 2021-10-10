@@ -29,42 +29,6 @@
     <script>
       const picker = new CP(document.querySelector('input'));
 
-      function P2RGB(a) {
-          let h = +a[0],
-              s = +a[1],
-              v = +a[2],
-              r, g, b, i, f, p, q, t;
-          i = Math.floor(h * 6);
-          f = h * 6 - i;
-          p = v * (1 - s);
-          q = v * (1 - f * s);
-          t = v * (1 - (1 - f) * s);
-          i = i || 0;
-          q = q || 0;
-          t = t || 0;
-          switch (i % 6) {
-              case 0:
-                  r = v, g = t, b = p;
-                  break;
-              case 1:
-                  r = q, g = v, b = p;
-                  break;
-              case 2:
-                  r = p, g = v, b = t;
-                  break;
-              case 3:
-                  r = p, g = q, b = v;
-                  break;
-              case 4:
-                  r = t, g = p, b = v;
-                  break;
-              case 5:
-                  r = v, g = p, b = q;
-                  break;
-          }
-          return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-      }
-
       picker.on('change', function(r, g, b, a) {
           let value = this.color(r, g, b, a);
           this.source.value = value;
@@ -76,6 +40,42 @@
               return;
           }
           picker.canUseKeyboard = true;
+
+          function toRGB(a) {
+              let h = +a[0],
+                  s = +a[1],
+                  v = +a[2],
+                  r, g, b, i, f, p, q, t;
+              i = Math.floor(h * 6);
+              f = h * 6 - i;
+              p = v * (1 - s);
+              q = v * (1 - f * s);
+              t = v * (1 - (1 - f) * s);
+              i = i || 0;
+              q = q || 0;
+              t = t || 0;
+              switch (i % 6) {
+                  case 0:
+                      r = v, g = t, b = p;
+                      break;
+                  case 1:
+                      r = q, g = v, b = p;
+                      break;
+                  case 2:
+                      r = p, g = v, b = t;
+                      break;
+                  case 3:
+                      r = p, g = q, b = v;
+                      break;
+                  case 4:
+                      r = t, g = p, b = v;
+                      break;
+                  case 5:
+                      r = v, g = p, b = q;
+                      break;
+              }
+              return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+          }
           let ah, ay, hh, hy, sw, sx, vh, vy,
               ch, cw,
               // 0: sv
@@ -92,8 +92,8 @@
               hCursor = h.children[1],
               sv = controls[0],
               svCursor = sv.children[3],
-              svPallete = sv.children[0];
-          let hFocus = () => {
+              svPallete = sv.children[0],
+              hFocus = () => {
                   tabIndex = 1;
                   hh = h.offsetHeight;
                   hy = parseFloat(hCursor.style.top) + (ch = hCursor.offsetHeight / 2);
@@ -120,15 +120,19 @@
                   self.classList.remove('focus:sv');
               };
           picker.on('enter', () => {
-              a.addEventListener('click', aFocus, false);
-              h.addEventListener('click', hFocus, false);
-              sv.addEventListener('click', svFocus, false);
+              ['touchstart', 'mousedown'].forEach(e => {
+                  a.addEventListener(e, aFocus, false);
+                  h.addEventListener(e, hFocus, false);
+                  sv.addEventListener(e, svFocus, false);
+              });
               aFocus(), hFocus(), svFocus(); // Focus to `sv` control by default!
           });
           picker.on('exit', () => {
-              a.removeEventListener('click', aFocus);
-              h.removeEventListener('click', hFocus);
-              sv.removeEventListener('click', svFocus);
+              ['touchstart', 'mousedown'].forEach(e => {
+                  a.removeEventListener(e, aFocus);
+                  h.removeEventListener(e, hFocus);
+                  sv.removeEventListener(e, svFocus);
+              });
           });
           source.addEventListener('focus', function() {
               picker.enter(); // Show!
@@ -136,44 +140,42 @@
           source.addEventListener('keydown', function(e) {
               let key = e.key,
                   stop = false,
-                  update = false;
-              if (picker.visible) {
-                  // Press `Escape` to close the color picker!
-                  if ('Escape' === key) {
-                      picker.exit();
-                      source.focus();
-                      source.select();
-                      stop = true;
-                      // Press `Tab` or `Shift+Tab` to cycle between color picker control(s)!
-                  } else if ('Tab' === key) {
-                      let tabsCount = controls.length - 1;
-                      // Exclude hidden control(s)
-                      for (let i = 0, j = tabsCount + 1; i < j; ++i) {
-                          if (controls[i] && controls[i].offsetHeight <= 0 && controls[i].offsetWidth <= 0) {
-                              --tabsCount;
-                          }
+                  tabs = controls.length - 1,
+                  update = false,
+                  visible = picker.visible;
+              // Press `Escape` to close the color picker!
+              if ('Escape' === key && visible) {
+                  picker.exit();
+                  source.focus();
+                  source.select();
+                  stop = true;
+                  // Press `Tab` or `Shift+Tab` to cycle between color picker control(s)!
+              } else if ('Tab' === key && visible) {
+                  // Exclude hidden control(s)
+                  for (let i = 0, j = tabs + 1; i < j; ++i) {
+                      if (controls[i] && controls[i].offsetHeight <= 0 && controls[i].offsetWidth <= 0) {
+                          --tabs;
                       }
-                      if (e.shiftKey) {
-                          tabIndex = tabIndex < 1 ? tabsCount : tabIndex - 1;
-                      } else {
-                          tabIndex = tabIndex > tabsCount - 1 ? 0 : tabIndex + 1;
-                      }
-                      if (0 === tabIndex) {
-                          svFocus();
-                      } else if (1 === tabIndex) {
-                          hFocus();
-                      } else if (2 === tabIndex) {
-                          aFocus();
-                      }
-                      stop = true;
                   }
-                  if (stop) {
-                      e.preventDefault();
-                      return;
+                  if (e.shiftKey) {
+                      tabIndex = tabIndex < 1 ? tabs : tabIndex - 1;
+                  } else {
+                      tabIndex = tabIndex > tabs - 1 ? 0 : tabIndex + 1;
                   }
+                  if (0 === tabIndex) {
+                      svFocus();
+                  } else if (1 === tabIndex) {
+                      hFocus();
+                  } else if (2 === tabIndex) {
+                      aFocus();
+                  }
+                  stop = true;
+              } else if ('ArrowDown' === key && !visible) {
+                  picker.enter();
+                  stop = true;
               }
               // Saturation/Value
-              if (0 === tabIndex) {
+              if (0 === tabIndex && visible) {
                   if ('ArrowDown' === key) {
                       vy += step;
                       vy = vy > vh ? vh : vy;
@@ -196,7 +198,7 @@
                       stop = update = true;
                   }
                   // Hue
-              } else if (1 === tabIndex) {
+              } else if (1 === tabIndex && visible) {
                   if ('ArrowDown' === key) {
                       hy += step;
                       hy = hy > hh ? hh : hy;
@@ -209,7 +211,7 @@
                       stop = update = true;
                   }
                   // Alpha
-              } else if (2 === tabIndex) {
+              } else if (2 === tabIndex && visible) {
                   if ('ArrowDown' === key) {
                       ay += step;
                       ay = ay > ah ? ah : ay;
@@ -224,16 +226,22 @@
               }
               stop && e.preventDefault();
               if (update) {
-                  let [r, g, b] = P2RGB([(hh - hy) / hh, (sw - sx) / sw, (vh - vy) / vh]);
-                  picker.fire('change', [r, g, b, 1 - (ay / ah)]);
-                  // Update internal color preview
+                  let [r, g, b] = toRGB([(hh - hy) / hh, (sw - sx) / sw, (vh - vy) / vh]);
+                  // Save current state!
+                  let aTop = aCursor.style.top,
+                      hTop = hCursor.style.top,
+                      svRight = svCursor.style.right,
+                      svTop = svCursor.style.top;
+                  // Update color value!
+                  picker.set(r, g, b, 1 - (ay / ah));
+                  // Restore current state!
+                  aCursor.style.top = aTop;
+                  hCursor.style.top = hTop;
+                  svCursor.style.right = svRight;
+                  svCursor.style.top = svTop;
                   aPallete.style.backgroundImage = 'linear-gradient(rgb(' + r + ',' + g + ',' + b + '),transparent)';
-                  svPallete.style.backgroundColor = 'rgb(' + P2RGB([(hh - hy) / hh, 1, 1]).join(',') + ')'; // Solid RGB
+                  svPallete.style.backgroundColor = 'rgb(' + toRGB([(hh - hy) / hh, 1, 1]).join(',') + ')'; // Solid RGB
               }
-          }, false);
-          source.addEventListener('keyup', function(e) {
-              // Update internal color data on key-up!
-              picker.set.apply(picker, picker.get());
           }, false);
       }
 
