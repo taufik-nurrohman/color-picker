@@ -8,6 +8,10 @@ block state
 block script
   script
     | function enableColorPickerEffect(picker, property, change, duration) {
+    |     if (picker.hasEffect) {
+    |         return;
+    |     }
+    |     picker.hasEffect = true;
     |     picker.self.style[property] = change[0];
     |     picker.self.style.transition = property + ' ' + (duration / 1000) + 's ease';
     |     picker.self.addEventListener('transitionend', function() {

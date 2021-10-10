@@ -31,6 +31,10 @@
     <script src="../index.min.js"></script>
     <script>
       function preDefineColorValues(picker, colors) {
+          if (picker.hasColorPallete) {
+              return;
+          }
+          picker.hasColorPallete = true;
           let pane = document.createElement('span'),
               c;
           for (let i = 0, j = colors.length; i < j; ++i) {

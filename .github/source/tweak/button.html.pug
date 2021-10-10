@@ -8,6 +8,10 @@ block state
 block script
   script
     | function enableToggleByButton(picker) {
+    |     if (picker.toggleByButton) {
+    |         return;
+    |     }
+    |     picker.toggleByButton = true;
     |     let button = document.createElement('button');
     |     // Disable the default blur and focus behavior
     |     picker.on('blur', () => {});

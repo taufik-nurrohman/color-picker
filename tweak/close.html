@@ -15,6 +15,10 @@
     <script src="../index.min.js"></script>
     <script>
       function enableCloseByButton(picker) {
+          if (picker.hasCloseButton) {
+              return;
+          }
+          picker.hasCloseButton = true;
           let x = document.createElement('a');
           x.href = 'javascript:;';
           x.textContent = 'Close Me!';

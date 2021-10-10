@@ -15,6 +15,10 @@ block style
 block script
   script
     | function applyToColorInput(source) {
+    |     if (source.noNativeColorPicker) {
+    |         return;
+    |     }
+    |     source.noNativeColorPicker = true;
     |     const picker = new CP(source);
     |     // Prevent showing native color picker panel
     |     source.addEventListener('click', e => e.preventDefault());

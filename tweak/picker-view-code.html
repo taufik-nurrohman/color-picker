@@ -37,6 +37,10 @@
     <script src="../index.min.js"></script>
     <script>
       function enableColorInput(picker) {
+          if (picker.hasColorInput) {
+              return;
+          }
+          picker.hasColorInput = true;
           let code = document.createElement('input');
           code.pattern = '^#([a-fA-F\\d]{3}){1,2}$';
           code.type = 'text';

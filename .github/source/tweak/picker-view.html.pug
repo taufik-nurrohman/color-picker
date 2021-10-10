@@ -27,6 +27,10 @@ block style
 block script
   script
     | function enableColorView(picker) {
+    |     if (picker.hasColorView) {
+    |         return;
+    |     }
+    |     picker.hasColorView = true;
     |     let box = document.createElement('span'),
     |         boxReset = document.createElement('span'),
     |         boxSubmit = document.createElement('span');

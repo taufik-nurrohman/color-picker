@@ -62,10 +62,10 @@ block script
     | });
     |
     | function enableKeyboardControls(picker, step) {
-    |     if (picker.keyboardControls) {
+    |     if (picker.canUseKeyboard) {
     |         return;
     |     }
-    |     picker.keyboardControls = true;
+    |     picker.canUseKeyboard = true;
     |     let ah, ay, hh, hy, sw, sx, vh, vy,
     |         ch, cw,
     |         // 0: sv

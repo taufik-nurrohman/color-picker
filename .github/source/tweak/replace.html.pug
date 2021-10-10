@@ -22,6 +22,10 @@ block style
 block script
   script
     | function replaceWithColorBox(source) {
+    |     if (source.hasColorBox) {
+    |         return;
+    |     }
+    |     source.hasColorBox = true;
     |     let box = document.createElement('span'),
     |         color = source.value;
     |     box.className = 'color-box';

@@ -18,6 +18,10 @@ block style
 block script
   script
     | function enableStaticColorPicker(picker, container) {
+    |     if (picker.isStatic) {
+    |         return;
+    |     }
+    |     picker.isStatic = true;
     |     // Disable default blur and focus behavior
     |     picker.on('blur', () => {});
     |     picker.on('focus', () => {});
