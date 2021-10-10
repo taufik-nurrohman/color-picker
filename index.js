@@ -428,21 +428,23 @@
     }
 
     function CP(source, state = {}) {
-        if (!source) return;
+        if (!source) return; // Already instantiated, skip!
+        if (source[name]) {
+            return source[name];
+        }
         const $ = this; // Return new instance if `CP` was called without the `new` operator
         if (!isInstance($, CP)) {
             return new CP(source, state);
-        } // Already instantiated, skip!
-        if (source[name]) {
-            return;
         }
+        $.state = state = fromStates(CP.state, isString(state) ? {
+            color: state
+        } : state || {}); // Store current instance to `CP.instances`
+        CP.instances[source.id || source.name || toObjectCount(CP.instances)] = $; // Mark current DOM as active color picker to prevent duplicate instance
+        source[name] = $;
         let {
             fire,
             hooks
         } = hook($);
-        $.state = state = fromStates(CP.state, isString(state) ? {
-            color: state
-        } : state || {});
 
         function getValue() {
             if (source.value) {
@@ -450,10 +452,6 @@
             }
             return [0, 0, 0, 1]; // Default to black
         }
-        $.source = source;
-        $.visible = false; // Store current instance to `CP.instances`
-        CP.instances[source.id || source.name || toObjectCount(CP.instances)] = $; // Mark current DOM as active color picker to prevent duplicate instance
-        source[name] = 1;
         let className = state['class'],
             doEnter,
             doExit,
@@ -726,6 +724,8 @@
                 }
             }
         }
+        $.source = source;
+        $.visible = false;
         return $;
     }
     CP[COLOR_TYPE] = x => {

@@ -94,6 +94,11 @@ function CP(source, state = {}) {
 
     if (!source) return;
 
+    // Already instantiated, skip!
+    if (source[name]) {
+        return source[name];
+    }
+
     const $ = this;
 
     // Return new instance if `CP` was called without the `new` operator
@@ -101,16 +106,17 @@ function CP(source, state = {}) {
         return new CP(source, state);
     }
 
-    // Already instantiated, skip!
-    if (source[name]) {
-        return;
-    }
-
-    let {fire, hooks} = hook($);
-
     $.state = state = fromStates(CP.state, isString(state) ? {
         color: state
     } : (state || {}));
+
+    // Store current instance to `CP.instances`
+    CP.instances[source.id || source.name || toObjectCount(CP.instances)] = $;
+
+    // Mark current DOM as active color picker to prevent duplicate instance
+    source[name] = $;
+
+    let {fire, hooks} = hook($);
 
     function getValue() {
         if (source.value) {
@@ -118,15 +124,6 @@ function CP(source, state = {}) {
         }
         return [0, 0, 0, 1]; // Default to black
     }
-
-    $.source = source;
-    $.visible = false;
-
-    // Store current instance to `CP.instances`
-    CP.instances[source.id || source.name || toObjectCount(CP.instances)] = $;
-
-    // Mark current DOM as active color picker to prevent duplicate instance
-    source[name] = 1;
 
     let className = state['class'],
         doEnter,
@@ -175,22 +172,22 @@ function CP(source, state = {}) {
         HDragging = 0,
         ADragging = 0;
 
-        setChildLast(self, C);
-        setChildLast(C, SV);
-        setChildLast(C, H);
-        setChildLast(C, A);
+    setChildLast(self, C);
+    setChildLast(C, SV);
+    setChildLast(C, H);
+    setChildLast(C, A);
 
-        setChildLast(SV, SVColor);
-        setChildLast(SV, SVSaturation);
-        setChildLast(SV, SVValue);
-        setChildLast(SV, SVCursor);
+    setChildLast(SV, SVColor);
+    setChildLast(SV, SVSaturation);
+    setChildLast(SV, SVValue);
+    setChildLast(SV, SVCursor);
 
-        setChildLast(H, HColor);
-        setChildLast(H, HCursor);
+    setChildLast(H, HColor);
+    setChildLast(H, HCursor);
 
-        setChildLast(A, AColor);
-        setChildLast(A, APattern);
-        setChildLast(A, ACursor);
+    setChildLast(A, AColor);
+    setChildLast(A, APattern);
+    setChildLast(A, ACursor);
 
     function doApply(isFirst, toParent) {
 
@@ -428,6 +425,9 @@ function CP(source, state = {}) {
             }
         }
     }
+
+    $.source = source;
+    $.visible = false;
 
     return $;
 
