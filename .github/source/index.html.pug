@@ -176,6 +176,11 @@ block content
       li: a(href='test/size.html' target='_blank') Custom Color Picker Size
       li: a(href='tweak/keyboard.html' target='_blank') Add Support for Keyboard Controls
     h2 Settings
+    pre: code let picker = new CP(#[var source], #[var color] = 'HEX');
+    pre: code
+      | let picker = new CP(#[var source], #[var state] = {
+      |         color: 'HEX'
+      |     });
     table(border='1')
       thead
         tr
@@ -194,11 +199,6 @@ block content
         tr
           td: code state.color
           td Name of the color parser defined in the #[code CP] object.
-    pre: code let picker = new CP(#[var source], #[var color]);
-    pre: code
-      | let picker = new CP(#[var source], #[var state] = {
-      |         color: 'HEX'
-      |     });
     h2 Methods and Properties
     h3 CP.HEX(color | [r, g, b, a])
     p Hex color converter as the default color string parser. This is the only color mode that this application can parse into a series of RGBA color data. You can add your own color parser later to enhance the existing features.

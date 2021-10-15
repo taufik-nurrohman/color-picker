@@ -167,6 +167,10 @@ picker.on('change', function(r, g, b, a) {
         <li><a href="tweak/keyboard.html" target="_blank">Add Support for Keyboard Controls</a></li>
       </ul>
       <h2>Settings</h2>
+      <pre><code>let picker = new CP(<var>source</var>, <var>color</var> = 'HEX');</code></pre>
+      <pre><code>let picker = new CP(<var>source</var>, <var>state</var> = {
+        color: 'HEX'
+    });</code></pre>
       <table border="1">
         <thead>
           <tr>
@@ -193,10 +197,6 @@ picker.on('change', function(r, g, b, a) {
           </tr>
         </tbody>
       </table>
-      <pre><code>let picker = new CP(<var>source</var>, <var>color</var>);</code></pre>
-      <pre><code>let picker = new CP(<var>source</var>, <var>state</var> = {
-        color: 'HEX'
-    });</code></pre>
       <h2>Methods and Properties</h2>
       <h3>CP.HEX(color | [r, g, b, a])</h3>
       <p>Hex color converter as the default color string parser. This is the only color mode that this application can parse into a series of RGBA color data. You can add your own color parser later to enhance the existing features.</p>
