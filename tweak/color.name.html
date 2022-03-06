@@ -164,21 +164,17 @@
               yellowgreen: "#9acd32"
           },
           hex2name = {};
-
       // Create inverse version of `name2hex`
       for (let name in name2hex) {
           hex2name[name2hex[name]] = name;
       }
-
       CP.HEX = x => {
           if ('string' === typeof x) {
               return apply(name2hex[x] || x);
           }
           return hex2name[x = apply(x)] || x;
       };
-
       const picker = new CP(document.querySelector('input'));
-
       picker.on('change', function(r, g, b, a) {
           this.source.value = this.color(r, g, b, a);
       });

@@ -7,21 +7,22 @@
     <title>Color Picker</title>
     <link href="../index.min.css" rel="stylesheet">
     <style>
-      .color-view {
-        display: block;
-        border: 1px solid #000;
-        border-top-width: 0;
-        overflow: hidden;
-      }
-
-      .color-view span {
+      .color-picker--view {
+        cursor: pointer;
         display: block;
         float: left;
-        width: 50%;
         height: 50px;
         line-height: 50px;
         text-align: center;
-        cursor: pointer;
+        width: 50%;
+      }
+
+      .color-picker--views {
+        border: 1px solid;
+        border-color: var(--stroke-color-picker__controls);
+        border-top-width: 0;
+        display: block;
+        overflow: hidden;
       }
     </style>
   </head>
@@ -40,7 +41,9 @@
           let box = document.createElement('span'),
               boxReset = document.createElement('span'),
               boxSubmit = document.createElement('span');
-          box.className = 'color-view';
+          box.className = picker.state.class + '--views';
+          boxReset.className = picker.state.class + '--view';
+          boxSubmit.className = picker.state.class + '--view';
           box.appendChild(boxReset);
           box.appendChild(boxSubmit);
           boxReset.textContent = 'Reset';
@@ -77,7 +80,6 @@
               picker.source.focus();
           });
       }
-
       // <https://stackoverflow.com/a/12043228>
       function isDark(hex) {
           let rgb = parseInt(hex.slice(1), 16),
@@ -86,9 +88,7 @@
               b = (rgb >> 0) & 0xff;
           return (.2126 * r + .7152 * g + .0722 * b) < 40;
       }
-
       const picker = new CP(document.querySelector('input'));
-
       enableColorView(picker);
     </script>
   </body>

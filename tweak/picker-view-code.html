@@ -7,7 +7,11 @@
     <title>Color Picker</title>
     <link href="../index.min.css" rel="stylesheet">
     <style>
-      .color-picker input {
+      .color-picker__control--a {
+        display: none;
+      }
+
+      .color-picker__input {
         box-sizing: border-box;
         display: block;
         width: 100%;
@@ -21,12 +25,8 @@
         color: #000;
       }
 
-      .color-picker input:invalid {
+      .color-picker__input:invalid {
         color: #f00;
-      }
-
-      .color-picker\:a {
-        display: none;
       }
     </style>
   </head>
@@ -42,6 +42,7 @@
           }
           picker.hasColorInput = true;
           let code = document.createElement('input');
+          code.className = picker.state.class + '__input';
           code.pattern = '^#([a-fA-F\\d]{3}){1,2}$';
           code.type = 'text';
           picker.self.appendChild(code);
@@ -65,9 +66,7 @@
               code.addEventListener(e, onChange);
           });
       }
-
       const picker = new CP(document.querySelector('input'));
-
       enableColorInput(picker);
     </script>
   </body>

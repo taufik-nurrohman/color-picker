@@ -8,7 +8,7 @@
     <link href="../index.min.css" rel="stylesheet">
     <style>
       /* HTML5 color input does not support alpha channel */
-      .color-picker\:a {
+      .color-picker__control--a {
         display: none;
       }
     </style>
@@ -33,7 +33,6 @@
               this.source.value = this.color(r, g, b, 1);
           });
       }
-
       document.querySelectorAll('input[type=color]').forEach(applyToColorInput);
     </script>
   </body>

@@ -7,21 +7,22 @@ block state
 
 block style
   style
-    | .color-view {
-    |   display: block;
-    |   border: 1px solid #000;
-    |   border-top-width: 0;
-    |   overflow: hidden;
-    | }
-    |
-    | .color-view span {
+    | .color-picker--view {
+    |   cursor: pointer;
     |   display: block;
     |   float: left;
-    |   width: 50%;
     |   height: 50px;
     |   line-height: 50px;
     |   text-align: center;
-    |   cursor: pointer;
+    |   width: 50%;
+    | }
+    |
+    | .color-picker--views {
+    |   border: 1px solid;
+    |   border-color: var(--stroke-color-picker__controls);
+    |   border-top-width: 0;
+    |   display: block;
+    |   overflow: hidden;
     | }
 
 block script
@@ -34,7 +35,9 @@ block script
     |     let box = document.createElement('span'),
     |         boxReset = document.createElement('span'),
     |         boxSubmit = document.createElement('span');
-    |     box.className = 'color-view';
+    |     box.className = picker.state.class + '--views';
+    |     boxReset.className = picker.state.class + '--view';
+    |     boxSubmit.className = picker.state.class + '--view';
     |     box.appendChild(boxReset);
     |     box.appendChild(boxSubmit);
     |     boxReset.textContent = 'Reset';

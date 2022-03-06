@@ -16,11 +16,9 @@
     <script src="../index.min.js"></script>
     <script>
       const picker = new CP(document.querySelector('input'));
-
       picker.on('change', function(r, g, b, a) {
           this.source.value = this.color(r, g, b, a);
       });
-
       ['enter', 'exit', 'fit', 'change', 'start', 'drag', 'stop', 'pop'].forEach(function(name) {
           picker.on(name, function(r, g, b, a) {
               console.log([name, r, g, b, a, this.current]);

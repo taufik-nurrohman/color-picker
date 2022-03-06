@@ -21,9 +21,7 @@
           this.source.value = this.color(r, g, b, a);
           document.body.style.backgroundColor = this.color(r, g, b, a);
       }
-
       picker.on('change', onChange);
-
       buttons[0].addEventListener('click', function(e) {
           picker = new CP(picker.source);
           picker.on('change', onChange);
@@ -31,7 +29,6 @@
           this.nextElementSibling.disabled = false;
           e.stopPropagation();
       });
-
       buttons[1].addEventListener('click', function(e) {
           picker.pop();
           this.disabled = true;

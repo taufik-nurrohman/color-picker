@@ -7,41 +7,42 @@ block state
 
 block style
   style
-    | .color-pickers {
-    |   display: block;
-    |   border: 1px solid #000;
-    |   border-top-width: 0;
-    |   overflow: hidden;
-    | }
-    |
-    | .color-pickers span {
+    | .color-picker__color {
     |   display: block;
     |   float: left;
     |   width: 10%;
     |   height: 1.25em;
     |   cursor: pointer;
     | }
+    |
+    | .color-picker__colors {
+    |   display: block;
+    |   border: 1px solid #000;
+    |   border-top-width: 0;
+    |   overflow: hidden;
+    | }
 
 block script
   script
-    | function preDefineColorValues(picker, colors) {
+    | function preDefineColorValues(picker, pickers) {
     |     if (picker.hasColorPallete) {
     |         return;
     |     }
     |     picker.hasColorPallete = true;
-    |     let pane = document.createElement('span'), c;
-    |     for (let i = 0, j = colors.length; i < j; ++i) {
-    |         c = document.createElement('span');
-    |         c.title = '#' + colors[i];
-    |         c.style.backgroundColor = '#' + colors[i];
-    |         c.addEventListener('click', function(e) {
+    |     let color, colors = document.createElement('span');
+    |     for (let i = 0, j = pickers.length; i < j; ++i) {
+    |         color = document.createElement('span');
+    |         color.className = picker.state.class + '__color';
+    |         color.style.backgroundColor = '#' + pickers[i];
+    |         color.title = '#' + pickers[i];
+    |         color.addEventListener('click', function(e) {
     |             picker.set.apply(picker, CP.HEX(this.title));
     |             e.stopPropagation();
     |         });
-    |         pane.appendChild(c);
+    |         colors.appendChild(color);
     |     }
-    |     pane.className = 'color-pickers';
-    |     picker.self.appendChild(pane);
+    |     colors.className = picker.state.class + '__colors';
+    |     picker.self.appendChild(colors);
     | }
     |
     | const picker = new CP(document.querySelector('input'));

@@ -7,15 +7,16 @@ block state
 
 block style
   style
-    | .color-box {
-    |   display: inline-block;
-    |   width: 30px;
-    |   height: 30px;
+    | .color-picker {
     |   border: 1px solid;
+    |   border-color: var(--stroke-color-picker__controls);
     |   cursor: pointer;
+    |   display: inline-block;
+    |   height: 30px;
+    |   width: 30px;
     | }
     |
-    | .color-picker {
+    | .color-picker__dialog {
     |   margin-top: -1px;
     | }
 
@@ -28,12 +29,12 @@ block script
     |     source.hasColorBox = true;
     |     let box = document.createElement('span'),
     |         color = source.value;
-    |     box.className = 'color-box';
     |     box.value = color; // Hacky :(
     |     box.style.backgroundColor = color;
     |     source.parentNode.insertBefore(box, source);
     |     source.type = 'hidden';
     |     const picker = new CP(box);
+    |     box.className = picker.state.class;
     |     picker.on('change', function(r, g, b, a) {
     |         let color = this.color(r, g, b, a);
     |         source.value = color;

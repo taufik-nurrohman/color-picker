@@ -7,7 +7,7 @@
     <title>Color Picker</title>
     <link href="../index.min.css" rel="stylesheet">
     <style>
-      .color-picker.no-alpha .color-picker\:a {
+      .color-picker__dialog--no-alpha .color-picker__control--a {
         display: none;
       }
     </style>
@@ -24,14 +24,12 @@
               return;
           }
           picker.noAlpha = true;
-          picker.self.classList.add('no-alpha');
+          picker.self.classList.add(picker.state.class + '__dialog--no-alpha');
           picker.on('change', function(r, g, b) {
               this.source.value = this.color(r, g, b, 1);
           });
       }
-
       const picker = new CP(document.querySelector('input'));
-
       disableAlphaControl(picker);
     </script>
   </body>

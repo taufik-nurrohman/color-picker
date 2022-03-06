@@ -125,7 +125,9 @@ function CP(source, state = {}) {
         return [0, 0, 0, 1]; // Default to black
     }
 
-    let className = state['class'],
+    let classNameB = state['class'],
+        classNameE = classNameB + '__',
+        classNameM = classNameB + '--',
         doEnter,
         doExit,
         doFit,
@@ -138,31 +140,43 @@ function CP(source, state = {}) {
         theData = RGB2HSV(theColor),
 
         self = setElement('div', {
-            'class': className
+            'class': classNameE + 'dialog',
+            'role': 'dialog'
         }),
 
-        C = setElement('div'),
+        C = setElement('div', {
+            'class': classNameE + 'controls'
+        }),
+        classNameControl = classNameE + 'control',
+        classNameCursor = classNameE + 'cursor',
+
         SV = setElement('div', {
-            'class': className + ':sv'
+            'class': classNameControl + ' ' + classNameControl + '--s/v'
         }),
         H = setElement('div', {
-            'class': className + ':h'
+            'class': classNameControl + ' ' + classNameControl + '--h'
         }),
         A = setElement('div', {
-            'class': className + ':a'
+            'class': classNameControl + ' ' + classNameControl + '--a'
         }),
 
         SVColor = setElement('div'),
         SVSaturation = setElement('div'),
         SVValue = setElement('div'),
-        SVCursor = setElement('i'),
+        SVCursor = setElement('i', {
+            'class': classNameCursor + ' ' + classNameCursor + '--s/v'
+        }),
 
         HColor = setElement('div'),
-        HCursor = setElement('i'),
+        HCursor = setElement('i', {
+            'class': classNameCursor + ' ' + classNameCursor + '--h'
+        }),
 
         AColor = setElement('div'),
         APattern = setElement('div'),
-        ACursor = setElement('i'),
+        ACursor = setElement('i', {
+            'class': classNameCursor + ' ' + classNameCursor + '--a'
+        }),
 
         SVStarting = 0,
         HStarting = 0,
@@ -392,7 +406,7 @@ function CP(source, state = {}) {
                 return $; // Already ejected
             }
             delete source[name];
-            letClass(source, className + '-source');
+            letClass(source, classNameE + 'source');
             offEvents(EVENTS_DOWN, source, doClick);
             return doExit(), fire('pop', theColor);
         };
@@ -408,7 +422,7 @@ function CP(source, state = {}) {
             return doSetColor(), $;
         };
 
-        setClass(source, className + '-source');
+        setClass(source, classNameE + 'source');
 
     } doApply(1);
 

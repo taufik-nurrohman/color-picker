@@ -1,6 +1,7 @@
 Color Picker
 ============
 
+![Code Size](https://img.shields.io/github/languages/code-size/taufik-nurrohman/color-picker?color=%23444&style=for-the-badge) ![License](https://img.shields.io/github/license/taufik-nurrohman/color-picker?color=%23444&style=for-the-badge)
 > A simple color picker application written in pure JavaScript, for modern browsers.
 
 Has support for touch events. Touchy… touchy…
@@ -55,6 +56,11 @@ This project exists thanks to all the people who contribute.
 
 Release Notes
 -------------
+
+### 2.4.0
+
+ - Added CSS variables for easy integration with third-party applications.
+ - Changed CSS classes to follow the [BEM](http://getbem.com) approach.
 
 ### 2.3.2
 

@@ -42,11 +42,9 @@
           // Transparent, return as RGBA color string
           return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
       };
-
       const picker = new CP(document.querySelector('input'), {
           color: 'RGB'
       });
-
       picker.on('change', function(r, g, b, a) {
           this.source.value = this.color(r, g, b, a);
       });

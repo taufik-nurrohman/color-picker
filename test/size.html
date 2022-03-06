@@ -27,19 +27,18 @@
       <h6>Size 6: <input type="text"></h6>
       <p>By default, color picker size will follow the container&rsquo;s text size; the container that bounds to the color picker panel.</p>
       <pre><code>/* To change the color picker size */
-.color-picker {
+.color-picker__controls {
   font-size: 20px;
 }
 
-/* To change the color picker control&rsquo;s size */
-.color-picker i {
-  font-size: 15px;
+/* To change the color picker cursor&rsquo;s size */
+.color-picker__cursor {
+  font-size: 20px;
 }</code></pre>
     </main>
     <script src="../index.min.js"></script>
     <script>
       let parents = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
       for (let i = 0, j = parents.length; i < j; ++i) {
           (parent => {
               let picker = new CP(parent.querySelector('input'));

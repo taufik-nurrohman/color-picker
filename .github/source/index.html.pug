@@ -64,7 +64,7 @@ block style
     |   text-align: left;
     |   vertical-align: top;
     | }
-    | body > p:first-child {
+    | [role='alert'] {
     |   background: #ffa;
     |   border: 1px dashed;
     |   margin-top: 0;
@@ -72,7 +72,7 @@ block style
     | }
 
 block content
-  p Do you like this project? Please support my #[a(href='https://github.com/mecha-cms') Mecha CMS] project too. Thank you!
+  p(role='alert') Do you like this project? Please support my #[a(href='https://github.com/mecha-cms') Mecha CMS] project too. Thank you!
   header
     h1= title
     p Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability.

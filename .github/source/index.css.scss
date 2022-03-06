@@ -1,105 +1,66 @@
-$color: #000;
-$size: 12px;
+$name: 'color-picker';
 
-.color-picker {
-  &,
-  &::before,
-  &::after,
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
+:root {
+  --color-#{$name}__controls: #000;
+  --fill-#{$name}__controls: 0 0;
+  --height-#{$name}__controls: 10em;
+  --shadow-#{$name}__dialog: 1px 3px 6px rgba(0, 0, 0, .5);
+  --size-#{$name}__controls: 12px;
+  --stroke-#{$name}__controls: #000;
+  --width-#{$name}__control--a: 1.5em;
+  --width-#{$name}__control--h: 1.5em;
+  --width-#{$name}__control--s\/v: 10em;
 }
 
-.color-picker {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  box-shadow: 1px 3px 6px rgba(0, 0, 0, .5);
-  > div {
-    display: flex;
-    height: 10em;
-    border: 1px solid $color;
-    color: $color;
-    * {
-      border-color: inherit;
-      color: inherit;
-    }
-  }
-  i {
-    font: inherit;
-    font-size: $size; /* Measure the color picker control size by measuring the text size */
-  }
-  &\:a,
-  &\:h,
-  &\:sv {
-    background-size: 100% 100%;
-    position: relative;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
+.#{$name}__control {
+  &--a,
+  &--h,
+  &--s\/v {
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    background-size: 100% 100%;
+    position: relative;
+    user-select: none;
     div {
-      position: absolute;
-      top: 0;
-      right: 0;
       bottom: 0;
       left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
     }
   }
-  &\:a,
-  &\:h {
-    width: 1.5em;
+  &--a,
+  &--h {
     border-left: 1px solid;
     cursor: ns-resize;
     overflow: hidden;
-    i {
-      display: block;
-      height: .5em;
-      position: absolute;
-      top: -.25em;
-      right: 0;
-      left: 0;
-      z-index: 2;
-      &::before {
-        display: block;
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        border:.25em solid;
-        border-top-color: transparent;
-        border-bottom-color: transparent;
-      }
-    }
   }
-  &\:a {
+  &--a {
+    width: var(--width-#{$name}__control--a);
     div {
       z-index: 2;
       + div {
         background-image: linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd 100%), linear-gradient(45deg, #ddd 25%, #fff 25%, #fff 75%, #ddd 75%, #ddd 100%);
-        background-size: .5em .5em;
         background-position: 0 0, .25em .25em;
+        background-size: .5em .5em;
         z-index: 1;
       }
     }
   }
-  &\:h {
+  &--h {
+    width: var(--width-#{$name}__control--a);
     div {
       background-image: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
     }
   }
-  &\:sv {
-    width: 10em;
+  &--s\/v {
     cursor: crosshair;
     overflow: hidden;
+    width: var(--width-#{$name}__control--s\/v);
     div {
       + div {
         background-image: linear-gradient(to right, #fff, rgba(255, 255, 255, 0));
@@ -108,26 +69,86 @@ $size: 12px;
         }
       }
     }
-    i {
+  }
+}
+
+.#{$name}__controls {
+  background: var(--fill-#{$name}__controls);
+  border-radius: var(--arc-#{$name}__controls);
+  border: 1px solid;
+  border-color: var(--stroke-#{$name}__controls);
+  color: var(--color-#{$name}__controls);
+  display: flex;
+  height: var(--height-#{$name}__controls);
+  overflow: hidden;
+}
+
+.#{$name}__dialog {
+  box-shadow: var(--shadow-#{$name}__dialog);
+  &,
+  &::before,
+  &::after,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    font: inherit;
+  }
+}
+
+.#{$name}__dialog {
+  left: 0;
+  position: absolute;
+  top: 0;
+  z-index: 9999;
+}
+
+.#{$name}__cursor {
+  border-color: inherit;
+  color: inherit;
+  font: inherit;
+  font-size: var(--size-#{$name}__controls); /* Measure the color picker control size by measuring the text size */
+  &--a,
+  &--h {
+    display: block;
+    height: .5em;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: -.25em;
+    z-index: 2;
+    &::before {
+      border:.25em solid;
+      border-bottom-color: transparent;
+      border-top-color: transparent;
+      bottom: 0;
+      content: "";
       display: block;
-      width: .75em;
-      height: .75em;
+      left: 0;
       position: absolute;
-      top: -.375em;
-      right: -.375em;
-      z-index: 2;
-      &::before {
-        display: block;
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        border: 1px solid #fff;
-        border-radius: 100%;
-        box-shadow: 0 0 2px #000;
-      }
+      right: 0;
+      top: 0;
+    }
+  }
+  &--s\/v {
+    display: block;
+    height: .75em;
+    position: absolute;
+    right: -.375em;
+    top: -.375em;
+    width: .75em;
+    z-index: 2;
+    &::before {
+      border-radius: 100%;
+      border: 1px solid #fff;
+      bottom: 0;
+      box-shadow: 0 0 2px #000;
+      content: "";
+      display: block;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
     }
   }
 }

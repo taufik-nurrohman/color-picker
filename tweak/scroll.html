@@ -67,7 +67,6 @@
               picker.self.style.marginLeft = (initScrollPosition.y - this.scrollLeft) + 'px';
           });
       }
-
       let sources = document.querySelectorAll('input'),
           picker_1 = new CP(sources[0]),
           picker_2 = new CP(sources[1]);
@@ -75,10 +74,8 @@
       function onChange(r, g, b, a) {
           this.source.value = this.color(r, g, b, a);
       }
-
       picker_1.on('change', onChange);
       picker_2.on('change', onChange);
-
       scrollFollowColorPicker(picker_2, document.querySelector('#pane-2'));
     </script>
   </body>

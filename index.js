@@ -2,7 +2,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright © 2021 Taufik Nurrohman <https://github.com/taufik-nurrohman>
+ * Copyright © 2022 Taufik Nurrohman <https://github.com/taufik-nurrohman>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the “Software”), to deal
@@ -159,18 +159,18 @@
         }
         return "" + x;
     };
-    var D = document;
-    var W = window;
-    var B = D.body;
-    var R = D.documentElement;
-    var getParent = function getParent(node) {
+    var D$1 = document;
+    var W$1 = window;
+    var B$1 = D$1.body;
+    var R$1 = D$1.documentElement;
+    var getParent = function getParent(node, query) {
+        if (query) {
+            return node.closest(query) || null;
+        }
         return node.parentNode || null;
     };
     var hasState = function hasState(node, state) {
         return state in node;
-    };
-    var isWindow = function isWindow(node) {
-        return node === W;
     };
     var letAttribute = function letAttribute(node, attribute) {
         return node.removeAttribute(attribute), node;
@@ -207,7 +207,7 @@
         return node.classList.add(value), node;
     };
     var setElement = function setElement(node, content, attributes) {
-        node = isString(node) ? D.createElement(node) : node;
+        node = isString(node) ? D$1.createElement(node) : node;
         if (isObject(content)) {
             attributes = content;
             content = false;
@@ -312,6 +312,13 @@
         $.on = on;
         return $;
     }
+    var D = document;
+    var W = window;
+    var B = D.body;
+    var R = D.documentElement;
+    var isWindow = function isWindow(node) {
+        return node === W;
+    };
     var getAxis = function getAxis(event, node) {
         var touches = event.touches,
             x = touches ? touches[0].clientX : event.clientX,
@@ -346,7 +353,7 @@
     const EVENTS_RESIZE = ['orientationchange', 'resize'];
     const EVENTS_UP = ['touchend', 'mouseup'];
     let name = 'CP',
-        delay = W.setTimeout;
+        delay = W$1.setTimeout;
 
     function getClosest(a, b) {
         if (a === b) {
@@ -452,7 +459,8 @@
             }
             return [0, 0, 0, 1]; // Default to black
         }
-        let className = state['class'],
+        let classNameB = state['class'],
+            classNameE = classNameB + '__',
             doEnter,
             doExit,
             doFit,
@@ -462,27 +470,38 @@
             theColor = getValue(),
             theData = RGB2HSV(theColor),
             self = setElement('div', {
-                'class': className
+                'class': classNameE + 'dialog',
+                'role': 'dialog'
             }),
-            C = setElement('div'),
+            C = setElement('div', {
+                'class': classNameE + 'controls'
+            }),
+            classNameControl = classNameE + 'control',
+            classNameCursor = classNameE + 'cursor',
             SV = setElement('div', {
-                'class': className + ':sv'
+                'class': classNameControl + ' ' + classNameControl + '--s/v'
             }),
             H = setElement('div', {
-                'class': className + ':h'
+                'class': classNameControl + ' ' + classNameControl + '--h'
             }),
             A = setElement('div', {
-                'class': className + ':a'
+                'class': classNameControl + ' ' + classNameControl + '--a'
             }),
             SVColor = setElement('div'),
             SVSaturation = setElement('div'),
             SVValue = setElement('div'),
-            SVCursor = setElement('i'),
+            SVCursor = setElement('i', {
+                'class': classNameCursor + ' ' + classNameCursor + '--s/v'
+            }),
             HColor = setElement('div'),
-            HCursor = setElement('i'),
+            HCursor = setElement('i', {
+                'class': classNameCursor + ' ' + classNameCursor + '--h'
+            }),
             AColor = setElement('div'),
             APattern = setElement('div'),
-            ACursor = setElement('i'),
+            ACursor = setElement('i', {
+                'class': classNameCursor + ' ' + classNameCursor + '--a'
+            }),
             SVStarting = 0,
             HStarting = 0,
             AStarting = 0,
@@ -507,7 +526,7 @@
             // Refresh data
             theData = RGB2HSV(theColor = getValue());
             if (!isFirst) {
-                setChildLast(toParent || B, self);
+                setChildLast(toParent || B$1, self);
                 $.visible = true;
             }
             doEnter = toParent => {
@@ -528,16 +547,16 @@
                 offEvents(EVENTS_DOWN, SV, doDownSV);
                 offEvents(EVENTS_DOWN, H, doDownH);
                 offEvents(EVENTS_DOWN, A, doDownA);
-                offEvents(EVENTS_MOVE, D, doMove);
-                offEvents(EVENTS_UP, D, doStop);
-                offEvents(EVENTS_RESIZE, W, doResize);
+                offEvents(EVENTS_MOVE, D$1, doMove);
+                offEvents(EVENTS_UP, D$1, doStop);
+                offEvents(EVENTS_RESIZE, W$1, doResize);
                 return fire('exit', theColor);
             };
             doFit = to => {
-                let rootRect = getRect(R),
+                let rootRect = getRect(R$1),
                     sourceRect = getRect(source),
-                    winRect = getRect(W),
-                    scrollBarHeight = winRect[3] - R.clientHeight,
+                    winRect = getRect(W$1),
+                    scrollBarHeight = winRect[3] - R$1.clientHeight,
                     // Horizontal scroll bar
                     scrollBarWidth = winRect[2] - rootRect[2],
                     // Vertical scroll bar
@@ -678,9 +697,9 @@
                 onEvents(EVENTS_DOWN, SV, doDownSV);
                 onEvents(EVENTS_DOWN, H, doDownH);
                 onEvents(EVENTS_DOWN, A, doDownA);
-                onEvents(EVENTS_MOVE, D, doMove);
-                onEvents(EVENTS_UP, D, doStop);
-                onEvents(EVENTS_RESIZE, W, doResize);
+                onEvents(EVENTS_MOVE, D$1, doMove);
+                onEvents(EVENTS_UP, D$1, doStop);
+                onEvents(EVENTS_RESIZE, W$1, doResize);
                 doFit();
             }
             doSetColor();
@@ -695,7 +714,7 @@
                     return $; // Already ejected
                 }
                 delete source[name];
-                letClass(source, className + '-source');
+                letClass(source, classNameE + 'source');
                 offEvents(EVENTS_DOWN, source, doClick);
                 return doExit(), fire('pop', theColor);
             };
@@ -707,7 +726,7 @@
                 theData = RGB2HSV([r, g, b, a]);
                 return doSetColor(), $;
             };
-            setClass(source, className + '-source');
+            setClass(source, classNameE + 'source');
         }
         doApply(1);
 
@@ -755,6 +774,6 @@
         'class': 'color-picker',
         'color': COLOR_TYPE
     };
-    CP.version = '2.3.2';
+    CP.version = '2.4.0';
     return CP;
 });

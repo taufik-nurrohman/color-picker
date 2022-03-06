@@ -33,13 +33,10 @@
               this.self.style[property] = change[0];
           });
       }
-
       const picker = new CP(document.querySelector('input'));
-
       picker.on('change', function(r, g, b, a) {
           this.source.value = this.color(r, g, b, a);
       });
-
       enableColorPickerEffect(picker, 'opacity', [0, 1], 250);
     </script>
   </body>

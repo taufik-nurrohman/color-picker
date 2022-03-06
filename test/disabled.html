@@ -15,7 +15,6 @@
     <script src="../index.min.js"></script>
     <script>
       let sources = document.querySelectorAll('input');
-
       // Set hooks for each source element
       for (let i = 0, j = sources.length; i < j; ++i) {
           (new CP(sources[i])).on('change', function(r, g, b, a) {

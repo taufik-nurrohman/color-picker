@@ -7,12 +7,13 @@ block state
 
 block style
   style
-    | .color-picker.is-static {
-    |   display: inline-block;
-    |   position: static;
-    |   left: 0 !important;
-    |   top: 0 !important;
+    | .color-picker__dialog--static {
     |   box-shadow: none;
+    |   display: inline-block;
+    |   left: 0 !important;
+    |   position: static;
+    |   top: 0 !important;
+    |   vertical-align: middle;
     | }
 
 block script
@@ -29,7 +30,7 @@ block script
     |         this.source.value = this.color(r, g, b, a);
     |     });
     |     // Add a `is-static` class to the color picker panel
-    |     picker.self.classList.add('is-static');
+    |     picker.self.classList.add(picker.state.class + '__dialog--static');
     |     // Put color picker panel to `container`
     |     picker.enter(container);
     | }

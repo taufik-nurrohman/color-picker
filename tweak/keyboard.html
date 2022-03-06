@@ -8,9 +8,9 @@
     <link href="../index.min.css" rel="stylesheet">
     <style>
       /* Fake focus state */
-      .color-picker.focus\:a .color-picker\:a div,
-      .color-picker.focus\:h .color-picker\:h div,
-      .color-picker.focus\:sv .color-picker\:sv div {
+      .color-picker--focus--a .color-picker__control--a div,
+      .color-picker--focus--h .color-picker__control--h div,
+      .color-picker--focus--s\/v .color-picker__control--s\/v div {
         outline: 2px solid rgba(0, 0, 255, .5);
         outline-offset: -2px;
       }
@@ -28,7 +28,6 @@
     <script src="../index.min.js"></script>
     <script>
       const picker = new CP(document.querySelector('input'));
-
       picker.on('change', function(r, g, b, a) {
           let value = this.color(r, g, b, a);
           this.source.value = value;
@@ -82,7 +81,8 @@
               // 1: h
               // 2: a
               tabIndex = 0;
-          let source = picker.source,
+          let classNameM = picker.state.class + '--',
+              source = picker.source,
               self = picker.self,
               controls = self.firstChild.children,
               a = controls[2],
@@ -97,9 +97,9 @@
                   tabIndex = 1;
                   hh = h.offsetHeight;
                   hy = parseFloat(hCursor.style.top) + (ch = hCursor.offsetHeight / 2);
-                  self.classList.add('focus:h');
-                  self.classList.remove('focus:a');
-                  self.classList.remove('focus:sv');
+                  self.classList.add(classNameM + 'focus--h');
+                  self.classList.remove(classNameM + 'focus--a');
+                  self.classList.remove(classNameM + 'focus--s/v');
               },
               svFocus = () => {
                   tabIndex = 0;
@@ -107,17 +107,17 @@
                   sx = parseFloat(svCursor.style.right) + (cw = svCursor.offsetWidth / 2);
                   vh = sv.offsetHeight;
                   vy = parseFloat(svCursor.style.top) + (ch = svCursor.offsetHeight / 2);
-                  self.classList.add('focus:sv');
-                  self.classList.remove('focus:a');
-                  self.classList.remove('focus:h');
+                  self.classList.add(classNameM + 'focus--s/v');
+                  self.classList.remove(classNameM + 'focus--a');
+                  self.classList.remove(classNameM + 'focus--h');
               },
               aFocus = () => {
                   tabIndex = 2;
                   ah = a.offsetHeight;
                   ay = parseFloat(aCursor.style.top) + (ch = aCursor.offsetHeight / 2);
-                  self.classList.add('focus:a');
-                  self.classList.remove('focus:h');
-                  self.classList.remove('focus:sv');
+                  self.classList.add(classNameM + 'focus--a');
+                  self.classList.remove(classNameM + 'focus--h');
+                  self.classList.remove(classNameM + 'focus--s/v');
               };
           picker.on('enter', () => {
               ['touchstart', 'mousedown'].forEach(e => {
@@ -244,7 +244,6 @@
               }
           }, false);
       }
-
       enableKeyboardControls(picker, 5);
     </script>
   </body>
