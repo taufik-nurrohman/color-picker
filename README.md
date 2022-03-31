@@ -6,7 +6,7 @@ Color Picker
 
 Has support for touch events. Touchy… touchy…
 
-![Color Picker](https://user-images.githubusercontent.com/1669261/77280787-e2710100-6cf7-11ea-912d-d7d89c67bf83.png)
+![Color Picker](https://user-images.githubusercontent.com/1669261/160975498-e7ec4e53-14ac-47ba-86cf-1857ec36dd1a.png)
 
 [Demo and Documentation](https://taufik-nurrohman.github.io/color-picker "View Demo")
 
@@ -17,7 +17,7 @@ Contribute
  - Install [Git](https://en.wikipedia.org/wiki/Git) and [Node.js](https://en.wikipedia.org/wiki/Node.js)
  - Run `git clone https://github.com/taufik-nurrohman/color-picker.git`
  - Run `cd color-picker && npm install --save-dev`
- - Edit the files in the `.github/source` folder.
+ - Edit the files in the `.github/factory` folder.
  - Run `npm run pack` to generate the production ready files.
 
 Contributors
@@ -57,7 +57,7 @@ This project exists thanks to all the people who contribute.
 Release Notes
 -------------
 
-### 2.4.0
+### 2.4.1
 
  - Added CSS variables for easy integration with third-party applications.
  - Changed CSS classes to follow the [BEM](http://getbem.com) approach.

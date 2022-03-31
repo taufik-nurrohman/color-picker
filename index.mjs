@@ -477,6 +477,6 @@ CP.state = {
     'color': COLOR_TYPE
 };
 
-CP.version = '2.4.0';
+CP.version = '2.4.1';
 
 export default CP;

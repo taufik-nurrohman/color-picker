@@ -159,10 +159,10 @@
         }
         return "" + x;
     };
-    var D$1 = document;
-    var W$1 = window;
-    var B$1 = D$1.body;
-    var R$1 = D$1.documentElement;
+    var D = document;
+    var W = window;
+    var B = D.body;
+    var R = D.documentElement;
     var getParent = function getParent(node, query) {
         if (query) {
             return node.closest(query) || null;
@@ -171,6 +171,9 @@
     };
     var hasState = function hasState(node, state) {
         return state in node;
+    };
+    var isWindow = function isWindow(node) {
+        return node === W;
     };
     var letAttribute = function letAttribute(node, attribute) {
         return node.removeAttribute(attribute), node;
@@ -207,7 +210,7 @@
         return node.classList.add(value), node;
     };
     var setElement = function setElement(node, content, attributes) {
-        node = isString(node) ? D$1.createElement(node) : node;
+        node = isString(node) ? D.createElement(node) : node;
         if (isObject(content)) {
             attributes = content;
             content = false;
@@ -312,13 +315,6 @@
         $.on = on;
         return $;
     }
-    var D = document;
-    var W = window;
-    var B = D.body;
-    var R = D.documentElement;
-    var isWindow = function isWindow(node) {
-        return node === W;
-    };
     var getAxis = function getAxis(event, node) {
         var touches = event.touches,
             x = touches ? touches[0].clientX : event.clientX,
@@ -353,7 +349,7 @@
     const EVENTS_RESIZE = ['orientationchange', 'resize'];
     const EVENTS_UP = ['touchend', 'mouseup'];
     let name = 'CP',
-        delay = W$1.setTimeout;
+        delay = W.setTimeout;
 
     function getClosest(a, b) {
         if (a === b) {
@@ -526,7 +522,7 @@
             // Refresh data
             theData = RGB2HSV(theColor = getValue());
             if (!isFirst) {
-                setChildLast(toParent || B$1, self);
+                setChildLast(toParent || B, self);
                 $.visible = true;
             }
             doEnter = toParent => {
@@ -547,16 +543,16 @@
                 offEvents(EVENTS_DOWN, SV, doDownSV);
                 offEvents(EVENTS_DOWN, H, doDownH);
                 offEvents(EVENTS_DOWN, A, doDownA);
-                offEvents(EVENTS_MOVE, D$1, doMove);
-                offEvents(EVENTS_UP, D$1, doStop);
-                offEvents(EVENTS_RESIZE, W$1, doResize);
+                offEvents(EVENTS_MOVE, D, doMove);
+                offEvents(EVENTS_UP, D, doStop);
+                offEvents(EVENTS_RESIZE, W, doResize);
                 return fire('exit', theColor);
             };
             doFit = to => {
-                let rootRect = getRect(R$1),
+                let rootRect = getRect(R),
                     sourceRect = getRect(source),
-                    winRect = getRect(W$1),
-                    scrollBarHeight = winRect[3] - R$1.clientHeight,
+                    winRect = getRect(W),
+                    scrollBarHeight = winRect[3] - R.clientHeight,
                     // Horizontal scroll bar
                     scrollBarWidth = winRect[2] - rootRect[2],
                     // Vertical scroll bar
@@ -697,9 +693,9 @@
                 onEvents(EVENTS_DOWN, SV, doDownSV);
                 onEvents(EVENTS_DOWN, H, doDownH);
                 onEvents(EVENTS_DOWN, A, doDownA);
-                onEvents(EVENTS_MOVE, D$1, doMove);
-                onEvents(EVENTS_UP, D$1, doStop);
-                onEvents(EVENTS_RESIZE, W$1, doResize);
+                onEvents(EVENTS_MOVE, D, doMove);
+                onEvents(EVENTS_UP, D, doStop);
+                onEvents(EVENTS_RESIZE, W, doResize);
                 doFit();
             }
             doSetColor();
@@ -774,6 +770,6 @@
         'class': 'color-picker',
         'color': COLOR_TYPE
     };
-    CP.version = '2.4.0';
+    CP.version = '2.4.1';
     return CP;
 });
