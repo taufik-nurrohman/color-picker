@@ -3,19 +3,19 @@
   "browser": "index.min.js",
   "bugs": "https://github.com/taufik-nurrohman/color-picker/issues",
   "dependencies": {
-    "@taufik-nurrohman/document": "^0.3.1",
-    "@taufik-nurrohman/event": "^0.3.1",
-    "@taufik-nurrohman/from": "^0.0.10",
-    "@taufik-nurrohman/has": "^0.0.3",
-    "@taufik-nurrohman/hook": "^0.1.2",
-    "@taufik-nurrohman/is": "^0.1.2",
-    "@taufik-nurrohman/pattern": "^0.1.7",
-    "@taufik-nurrohman/rect": "0.0.11",
-    "@taufik-nurrohman/to": "^0.0.18"
+    "@taufik-nurrohman/document": "*",
+    "@taufik-nurrohman/event": "*",
+    "@taufik-nurrohman/from": "*",
+    "@taufik-nurrohman/has": "*",
+    "@taufik-nurrohman/hook": "*",
+    "@taufik-nurrohman/is": "*",
+    "@taufik-nurrohman/pattern": "*",
+    "@taufik-nurrohman/rect": "*",
+    "@taufik-nurrohman/to": "*"
   },
   "description": "A simple color picker application written in pure JavaScript, for modern browsers.",
   "devDependencies": {
-    "@taufik-nurrohman/factory": "^1.0.8"
+    "@taufik-nurrohman/factory": "*"
   },
   "exports": {
     "import": "./index.mjs",
@@ -48,6 +48,5 @@
   "scripts": {
     "pack": "pack --clean=false --from=.github/factory --js-format=umd --js-name=CP --js-top='%(js.license)' --mjs=true --scss=true --to=."
   },
-  "type": "module",
-  "version": "2.4.1"
+  "version": "2.4.2"
 }

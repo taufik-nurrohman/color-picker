@@ -129,7 +129,7 @@ block content
     p Functions and methods in this application are mostly native JavaScript and are intended for use by the browser. Node.js doesn&rsquo;t know about the DOM, so this kind of practice will probably be used more often to build new browser packages than to be used directly in the Node.js server.
     h4 CommonJS
     pre: code
-      | const CP = require('@taufik-nurrohman/color-picker');
+      | const CP = require('@taufik-nurrohman/color-picker').default;
       |
       | const picker = new CP(document.querySelector('input'));
       |
