@@ -12,7 +12,7 @@ block script
     |         return;
     |     }
     |     picker.liveColorPickerValue = true;
-    |     picker.on('change', function(r, g, b, a) {
+    |     picker.on('change', function (r, g, b, a) {
     |         this.source.value = this.color(r, g, b, a);
     |     });
     |     function onChange() {

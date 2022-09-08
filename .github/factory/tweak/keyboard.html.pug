@@ -19,7 +19,7 @@ block script
   script
     | const picker = new CP(document.querySelector('input'));
     |
-    | picker.on('change', function(r, g, b, a) {
+    | picker.on('change', function (r, g, b, a) {
     |     let value = this.color(r, g, b, a);
     |     this.source.value = value;
     |     document.documentElement.style.background = value;
@@ -124,10 +124,10 @@ block script
     |             sv.removeEventListener(e, svFocus);
     |         });
     |     });
-    |     source.addEventListener('focus', function() {
+    |     source.addEventListener('focus', function () {
     |         picker.enter(); // Show!
     |     });
-    |     source.addEventListener('keydown', function(e) {
+    |     source.addEventListener('keydown', function (e) {
     |         let key = e.key,
     |             stop = false,
     |             tabs = controls.length - 1,

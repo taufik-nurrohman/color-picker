@@ -40,7 +40,7 @@ block script
   script
     | function scrollFollowColorPicker(picker, container) {
     |     picker._scrollPane = container;
-    |     picker.on('enter', function() {
+    |     picker.on('enter', function () {
     |         this._initScrollPosition = {
     |             x: this._scrollPane.scrollTop,
     |             y: this._scrollPane.scrollLeft
@@ -48,7 +48,7 @@ block script
     |         this.self.style.marginTop = 0;
     |         this.self.style.marginLeft = 0;
     |     });
-    |     container.addEventListener('scroll', function() {
+    |     container.addEventListener('scroll', function () {
     |         let initScrollPosition = picker._initScrollPosition;
     |         if (!initScrollPosition) {
     |             return;

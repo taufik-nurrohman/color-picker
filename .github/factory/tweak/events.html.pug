@@ -15,7 +15,7 @@ block script
     |     // Disable the default blur and focus behavior
     |     picker.on('blur', () => {});
     |     picker.on('focus', () => {});
-    |     picker.on('change', function(r, g, b, a) {
+    |     picker.on('change', function (r, g, b, a) {
     |         this.source.value = this.color(r, g, b, a);
     |     });
     |     document.documentElement.addEventListener('dblclick', () => {

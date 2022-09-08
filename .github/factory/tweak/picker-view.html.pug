@@ -43,13 +43,13 @@ block script
     |     boxReset.textContent = 'Reset';
     |     boxSubmit.textContent = 'Submit';
     |     picker.self.appendChild(box);
-    |     picker.on('change', function(r, g, b, a) {
+    |     picker.on('change', function (r, g, b, a) {
     |         let color = this.color(r, g, b, a);
     |         boxSubmit.title = color;
     |         boxSubmit.style.backgroundColor = color;
     |         boxSubmit.style.color = isDark(color) ? '#fff' : '#000';
     |     });
-    |     picker.on('enter', function(r, g, b, a) {
+    |     picker.on('enter', function (r, g, b, a) {
     |         let color = this.color(r, g, b, a);
     |         boxReset.title = color;
     |         boxReset.style.backgroundColor = color;
@@ -59,7 +59,7 @@ block script
     |         boxSubmit.style.color = isDark(color) ? '#fff' : '#000';
     |     });
     |     // Click to cancel
-    |     boxReset.addEventListener('click', function(e) {
+    |     boxReset.addEventListener('click', function (e) {
     |         let color = this.title;
     |         boxSubmit.title = color;
     |         boxSubmit.style.backgroundColor = color;
@@ -67,7 +67,7 @@ block script
     |         e.stopPropagation();
     |     });
     |     // Click to submit
-    |     boxSubmit.addEventListener('click', function(e) {
+    |     boxSubmit.addEventListener('click', function (e) {
     |         let color = this.title;
     |         picker.exit();
     |         picker.source.value = color;

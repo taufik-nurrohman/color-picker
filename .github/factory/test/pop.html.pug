@@ -17,7 +17,7 @@ block script
     |
     | picker.on('change', onChange);
     |
-    | buttons[0].addEventListener('click', function(e) {
+    | buttons[0].addEventListener('click', function (e) {
     |     picker = new CP(picker.source);
     |     picker.on('change', onChange);
     |     this.disabled = true;
@@ -25,7 +25,7 @@ block script
     |     e.stopPropagation();
     | });
     |
-    | buttons[1].addEventListener('click', function(e) {
+    | buttons[1].addEventListener('click', function (e) {
     |     picker.pop();
     |     this.disabled = true;
     |     this.previousElementSibling.disabled = false;

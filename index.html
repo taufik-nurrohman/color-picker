@@ -5,7 +5,7 @@
     <meta content="#000" name="theme-color">
     <meta content="width=device-width" name="viewport">
     <meta content="A simple color picker application written in pure JavaScript, for modern browsers." name="description">
-    <title>Color Picker 2.4.2</title>
+    <title>Color Picker 2.4.3</title>
     <link href="index.min.css" rel="stylesheet">
     <style>
       * {
@@ -70,7 +70,7 @@
   <body>
     <p role="alert">Do you like this project? Please support my <a href="https://github.com/mecha-cms">Mecha CMS</a> project too. Thank you!</p>
     <header>
-      <h1>Color Picker 2.4.2</h1>
+      <h1>Color Picker 2.4.3</h1>
       <p>Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability.</p>
       <hr>
     </header>
@@ -107,7 +107,7 @@
     &lt;script src="<a href="index.min.js" target="_blank">./index.min.js</a>"&gt;&lt;/script&gt;
     &lt;script&gt;
       const picker = new CP(document.querySelector('input'));
-      picker.on('change', function(r, g, b, a) {
+      picker.on('change', function (r, g, b, a) {
           if (1 === a) {
               this.source.value = 'rgb(' + r + ', ' + g + ', ' + b + ')';
           } else {
@@ -124,7 +124,7 @@
 
 const picker = new CP(document.querySelector('input'));
 
-picker.on('change', function(r, g, b, a) {
+picker.on('change', function (r, g, b, a) {
     this.source.value = this.color(r, g, b, a);
 });</code></pre>
       <h4>ECMAScript</h4>
@@ -132,7 +132,7 @@ picker.on('change', function(r, g, b, a) {
 
 const picker = new CP(document.querySelector('input'));
 
-picker.on('change', function(r, g, b, a) {
+picker.on('change', function (r, g, b, a) {
     this.source.value = this.color(r, g, b, a);
 });</code></pre>
       <h2>Examples</h2>
@@ -226,17 +226,17 @@ if (+major &lt; 2) {
       <h3>picker.color(r, g, b, a)</h3>
       <p>Call current color parser function with a name that is defined in the <code>state.color</code> value.</p>
       <pre><code>// Convert RGB to HEX in the output
-picker.on('change', function(r, g, b, a) {
+picker.on('change', function (r, g, b, a) {
     this.source.value = this.color(r, g, b, a);
 });
 
 // The code above is equal to this code
-picker.on('change', function(r, g, b, a) {
+picker.on('change', function (r, g, b, a) {
     this.source.value = CP.HEX([r, g, b, a]);
 });</code></pre>
       <h3>picker.current</h3>
       <p>Return the active color picker control panel element.</p>
-      <pre><code>picker.on('change', function(r, g, b, a) {
+      <pre><code>picker.on('change', function (r, g, b, a) {
     if (this.current.classList.contains('color-picker:h')) {
         // Is dragging the hue control
     }
@@ -266,7 +266,7 @@ picker.fit([30, 30]);</code></pre>
 picker.set(255, 255, 0, .5);</code></pre>
       <h3>picker.source</h3>
       <p>Return the color picker source element that holds the initial color value.</p>
-      <pre><code>picker.source.addEventListener('click', function() {
+      <pre><code>picker.source.addEventListener('click', function () {
     console.log(this.nodeName);
 }, false);</code></pre>
       <h3>picker.state</h3>
@@ -356,7 +356,7 @@ console.log(CP.RGB([255, 255, 0, 1]));</code></pre>
       <pre><code>picker.off('change', onChange); // With context</code></pre>
       <h3>picker.on(event, then)</h3>
       <p>Add a new hook.</p>
-      <pre><code>picker.on('change', function(r, g, b, a) {
+      <pre><code>picker.on('change', function (r, g, b, a) {
     console.log(this.color(r, g, b, a));
 });</code></pre>
       <pre><code>function onChange(r, g, b, a) {

@@ -9,7 +9,7 @@ block script
   script
     | const picker = new CP(document.querySelector('input'));
     |
-    | picker.on('change', function(r, g, b, a) {
+    | picker.on('change', function (r, g, b, a) {
     |     this.source.value = this.color(r, g, b, a);
     | });
 

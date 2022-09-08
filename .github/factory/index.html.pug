@@ -11,7 +11,7 @@ block script
     | let source = document.forms[0].color;
     | source.value = '#' + ('00000' + (Math.random() * (1 << 24) | 0).toString(16)).slice(-6); // Random hex color
     | const picker = new CP(source);
-    | picker.on('change', function(r, g, b, a) {
+    | picker.on('change', function (r, g, b, a) {
     |     this.source.value = this.color(r, g, b, a);
     |     this.source.parentNode.style.backgroundColor = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
     | });
@@ -115,7 +115,7 @@ block content
       |     &lt;script src="#[a(href='index.min.js' target='_blank') ./index.min.js]"&gt;&lt;/script&gt;
       |     &lt;script&gt;
       |       const picker = new CP(document.querySelector('input'));
-      |       picker.on('change', function(r, g, b, a) {
+      |       picker.on('change', function (r, g, b, a) {
       |           if (1 === a) {
       |               this.source.value = 'rgb(' + r + ', ' + g + ', ' + b + ')';
       |           } else {
@@ -133,7 +133,7 @@ block content
       |
       | const picker = new CP(document.querySelector('input'));
       |
-      | picker.on('change', function(r, g, b, a) {
+      | picker.on('change', function (r, g, b, a) {
       |     this.source.value = this.color(r, g, b, a);
       | });
     h4 ECMAScript
@@ -142,7 +142,7 @@ block content
       |
       | const picker = new CP(document.querySelector('input'));
       |
-      | picker.on('change', function(r, g, b, a) {
+      | picker.on('change', function (r, g, b, a) {
       |     this.source.value = this.color(r, g, b, a);
       | });
     h2 Examples
@@ -233,18 +233,18 @@ block content
     p Call current color parser function with a name that is defined in the #[code state.color] value.
     pre: code
       | // Convert RGB to HEX in the output
-      | picker.on('change', function(r, g, b, a) {
+      | picker.on('change', function (r, g, b, a) {
       |     this.source.value = this.color(r, g, b, a);
       | });
       |
       | // The code above is equal to this code
-      | picker.on('change', function(r, g, b, a) {
+      | picker.on('change', function (r, g, b, a) {
       |     this.source.value = CP.HEX([r, g, b, a]);
       | });
     h3 picker.current
     p Return the active color picker control panel element.
     pre: code
-      | picker.on('change', function(r, g, b, a) {
+      | picker.on('change', function (r, g, b, a) {
       |     if (this.current.classList.contains('color-picker:h')) {
       |         // Is dragging the hue control
       |     }
@@ -278,7 +278,7 @@ block content
     h3 picker.source
     p Return the color picker source element that holds the initial color value.
     pre: code
-      | picker.source.addEventListener('click', function() {
+      | picker.source.addEventListener('click', function () {
       |     console.log(this.nodeName);
       | }, false);
     h3 picker.state
@@ -357,7 +357,7 @@ block content
     h3 picker.on(event, then)
     p Add a new hook.
     pre: code
-      | picker.on('change', function(r, g, b, a) {
+      | picker.on('change', function (r, g, b, a) {
       |     console.log(this.color(r, g, b, a));
       | });
     pre: code

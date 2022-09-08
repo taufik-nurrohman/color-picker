@@ -770,6 +770,6 @@
         'class': 'color-picker',
         'color': COLOR_TYPE
     };
-    CP.version = '2.4.2';
+    CP.version = '2.4.3';
     return CP;
 });

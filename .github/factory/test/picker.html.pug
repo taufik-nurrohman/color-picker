@@ -11,7 +11,7 @@ block script
     |
     | // Set hooks for each source element
     | for (let i = 0, j = sources.length; i < j; ++i) {
-    |     (new CP(sources[i])).on('change', function(r, g, b, a) {
+    |     (new CP(sources[i])).on('change', function (r, g, b, a) {
     |         this.source.value = this.color(r, g, b, a);
     |     });
     | }
