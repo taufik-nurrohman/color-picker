@@ -23,9 +23,9 @@
  * SOFTWARE.
  *
  */
-(function(global, factory) {
+(function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() : typeof define === 'function' && define.amd ? define(factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.CP = factory());
-})(this, function() {
+})(this, function () {
     'use strict';
     var hasValue = function hasValue(x, data) {
         return -1 !== data.indexOf(x);
@@ -64,7 +64,7 @@
         return 'string' === typeof x;
     };
     var toCaseCamel = function toCaseCamel(x) {
-        return x.replace(/[-_.](\w)/g, function(m0, m1) {
+        return x.replace(/[-_.](\w)/g, function (m0, m1) {
             return toCaseUpper(m1);
         });
     };
@@ -138,7 +138,7 @@
     };
     var fromValue = function fromValue(x) {
         if (isArray(x)) {
-            return x.map(function(v) {
+            return x.map(function (v) {
                 return fromValue(x);
             });
         }
@@ -246,7 +246,7 @@
         return e && e.preventDefault();
     };
     var offEvents = function offEvents(names, node, then) {
-        names.forEach(function(name) {
+        names.forEach(function (name) {
             return offEvent(name, node, then);
         });
     };
@@ -260,7 +260,7 @@
         if (options === void 0) {
             options = false;
         }
-        names.forEach(function(name) {
+        names.forEach(function (name) {
             return onEvent(name, node, then, options);
         });
     };
@@ -272,7 +272,7 @@
             if (!isSet(hooks[name])) {
                 return $;
             }
-            hooks[name].forEach(function(then) {
+            hooks[name].forEach(function (then) {
                 return then.apply($, data);
             });
             return $;
@@ -770,6 +770,6 @@
         'class': 'color-picker',
         'color': COLOR_TYPE
     };
-    CP.version = '2.4.3';
+    CP.version = '2.4.4';
     return CP;
 });
