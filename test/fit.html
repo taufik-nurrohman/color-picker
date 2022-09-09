@@ -41,7 +41,7 @@
           input.type = 'text';
           input.value = '#' + color;
           input.style.backgroundColor = '#' + color;
-          (new CP(input)).on('change', function(r, g, b, a) {
+          (new CP(input)).on('change', function (r, g, b, a) {
               this.source.value = this.color(r, g, b, a);
               this.source.style.backgroundColor = this.color(r, g, b, a);
           });

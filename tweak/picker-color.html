@@ -41,7 +41,7 @@
               color.className = picker.state.class + '__color';
               color.style.backgroundColor = '#' + pickers[i];
               color.title = '#' + pickers[i];
-              color.addEventListener('click', function(e) {
+              color.addEventListener('click', function (e) {
                   picker.set.apply(picker, CP.HEX(this.title));
                   e.stopPropagation();
               });
@@ -51,7 +51,7 @@
           picker.self.appendChild(colors);
       }
       const picker = new CP(document.querySelector('input'));
-      picker.on('change', function(r, g, b, a) {
+      picker.on('change', function (r, g, b, a) {
           this.source.value = this.color(r, g, b, a);
           document.body.style.backgroundColor = this.color(r, g, b, a);
       });

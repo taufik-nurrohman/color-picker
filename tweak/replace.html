@@ -41,7 +41,7 @@
           source.type = 'hidden';
           const picker = new CP(box);
           box.className = picker.state.class;
-          picker.on('change', function(r, g, b, a) {
+          picker.on('change', function (r, g, b, a) {
               let color = this.color(r, g, b, a);
               source.value = color;
               this.source.value = color; // Hacky :(

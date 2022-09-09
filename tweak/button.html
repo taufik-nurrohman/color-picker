@@ -32,7 +32,7 @@
           });
           button.textContent = 'Pick a Color!';
           button.style.marginLeft = '.25em';
-          picker.on('change', function(r, g, b, a) {
+          picker.on('change', function (r, g, b, a) {
               this.source.value = this.color(r, g, b, a);
           });
           picker.on('enter', () => {

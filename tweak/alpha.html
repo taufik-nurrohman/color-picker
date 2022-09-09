@@ -25,7 +25,7 @@
           }
           picker.noAlpha = true;
           picker.self.classList.add(picker.state.class + '__dialog--no-alpha');
-          picker.on('change', function(r, g, b) {
+          picker.on('change', function (r, g, b) {
               this.source.value = this.color(r, g, b, 1);
           });
       }

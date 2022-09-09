@@ -175,7 +175,7 @@
           return hex2name[x = apply(x)] || x;
       };
       const picker = new CP(document.querySelector('input'));
-      picker.on('change', function(r, g, b, a) {
+      picker.on('change', function (r, g, b, a) {
           this.source.value = this.color(r, g, b, a);
       });
     </script>

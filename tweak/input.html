@@ -28,7 +28,7 @@
           const picker = new CP(source);
           // Prevent showing native color picker panel
           source.addEventListener('click', e => e.preventDefault());
-          picker.on('change', function(r, g, b) {
+          picker.on('change', function (r, g, b) {
               // HTML5 color input does not support alpha channel
               this.source.value = this.color(r, g, b, 1);
           });

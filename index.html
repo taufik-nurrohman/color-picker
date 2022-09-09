@@ -377,7 +377,7 @@ picker.on('change', onChange); // With context</code></pre>
       let source = document.forms[0].color;
       source.value = '#' + ('00000' + (Math.random() * (1 << 24) | 0).toString(16)).slice(-6); // Random hex color
       const picker = new CP(source);
-      picker.on('change', function(r, g, b, a) {
+      picker.on('change', function (r, g, b, a) {
           this.source.value = this.color(r, g, b, a);
           this.source.parentNode.style.backgroundColor = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
       });

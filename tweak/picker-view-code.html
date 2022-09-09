@@ -47,11 +47,11 @@
           code.type = 'text';
           picker.self.appendChild(code);
           picker.source.addEventListener('click', e => e.preventDefault());
-          picker.on('change', function(r, g, b) {
+          picker.on('change', function (r, g, b) {
               this.source.value = this.color(r, g, b, 1);
               code.value = this.color(r, g, b, 1);
           });
-          picker.on('enter', function(r, g, b) {
+          picker.on('enter', function (r, g, b) {
               code.value = this.color(r, g, b, 1);
           });
 
