@@ -48,5 +48,5 @@
   "scripts": {
     "pack": "pack --clean=false --from=.github/factory --js-format=umd --js-name=CP --js-top='%(js.license)' --mjs=true --scss=true --to=."
   },
-  "version": "2.4.4"
+  "version": "2.4.3"
 }

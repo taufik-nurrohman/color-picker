@@ -23,9 +23,9 @@
  * SOFTWARE.
  *
  */
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() : typeof define === 'function' && define.amd ? define(factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.CP = factory());
-})(this, function () {
+(function (g, f) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = f() : typeof define === 'function' && define.amd ? define(f) : (g = typeof globalThis !== 'undefined' ? globalThis : g || self, g.CP = f());
+})(this, (function () {
     'use strict';
     var hasValue = function hasValue(x, data) {
         return -1 !== data.indexOf(x);
@@ -39,8 +39,8 @@
     var isFunction = function isFunction(x) {
         return 'function' === typeof x;
     };
-    var isInstance = function isInstance(x, of ) {
-        return x && isSet( of ) && x instanceof of ;
+    var isInstance = function isInstance(x, of) {
+        return x && isSet(of) && x instanceof of ;
     };
     var isNull = function isNull(x) {
         return null === x;
@@ -343,23 +343,23 @@
         }
         return [x, y, w, h, X, Y];
     };
-    const COLOR_TYPE = 'HEX';
-    const EVENTS_DOWN = ['touchstart', 'mousedown'];
-    const EVENTS_MOVE = ['touchmove', 'mousemove'];
-    const EVENTS_RESIZE = ['orientationchange', 'resize'];
-    const EVENTS_UP = ['touchend', 'mouseup'];
-    let name = 'CP',
+    var COLOR_TYPE = 'HEX';
+    var EVENTS_DOWN = ['touchstart', 'mousedown'];
+    var EVENTS_MOVE = ['touchmove', 'mousemove'];
+    var EVENTS_RESIZE = ['orientationchange', 'resize'];
+    var EVENTS_UP = ['touchend', 'mouseup'];
+    var name = 'CP',
         delay = W.setTimeout;
 
     function getClosest(a, b) {
         if (a === b) {
             return a;
         }
-        while ((a = a.parentElement) && a !== b);
+        while ((a = a.parentElement) && a !== b) {}
         return a;
     } // Convert cursor position to RGBA
     function P2RGB(a) {
-        let h = +a[0],
+        var h = +a[0],
             s = +a[1],
             v = +a[2],
             r,
@@ -401,7 +401,7 @@
         return [toRound(r * 255), toRound(g * 255), toRound(b * 255), isSet(a[3]) ? +a[3] : 1];
     } // Convert RGBA to HSVA
     function RGB2HSV(a) {
-        let r = +a[0] / 255,
+        var r = +a[0] / 255,
             g = +a[1] / 255,
             b = +a[2] / 255,
             max = Math.max(r, g, b),
@@ -430,12 +430,15 @@
         return [h, s, v, isSet(a[3]) ? +a[3] : 1];
     }
 
-    function CP(source, state = {}) {
+    function CP(source, state) {
+        if (state === void 0) {
+            state = {};
+        }
         if (!source) return; // Already instantiated, skip!
         if (source[name]) {
             return source[name];
         }
-        const $ = this; // Return new instance if `CP` was called without the `new` operator
+        var $ = this; // Return new instance if `CP` was called without the `new` operator
         if (!isInstance($, CP)) {
             return new CP(source, state);
         }
@@ -444,10 +447,9 @@
         } : state || {}); // Store current instance to `CP.instances`
         CP.instances[source.id || source.name || toObjectCount(CP.instances)] = $; // Mark current DOM as active color picker to prevent duplicate instance
         source[name] = $;
-        let {
-            fire,
-            hooks
-        } = hook($);
+        var _hook = hook($),
+            fire = _hook.fire,
+            hooks = _hook.hooks;
 
         function getValue() {
             if (source.value) {
@@ -455,14 +457,18 @@
             }
             return [0, 0, 0, 1]; // Default to black
         }
-        let classNameB = state['class'],
+        var classNameB = state['class'],
             classNameE = classNameB + '__',
             doEnter,
             doExit,
             doFit,
             doResize,
-            isDisabled = () => source.disabled,
-            isReadOnly = () => source.readOnly,
+            isDisabled = function isDisabled() {
+                return source.disabled;
+            },
+            isReadOnly = function isReadOnly() {
+                return source.readOnly;
+            },
             theColor = getValue(),
             theData = RGB2HSV(theColor),
             self = setElement('div', {
@@ -525,13 +531,13 @@
                 setChildLast(toParent || B, self);
                 $.visible = true;
             }
-            doEnter = toParent => {
+            doEnter = function doEnter(toParent) {
                 if (isDisabled() || isReadOnly()) {
                     return $;
                 }
                 return doApply(0, toParent), fire('enter', theColor), $;
             };
-            doExit = () => {
+            doExit = function doExit() {
                 if (isDisabled() || isReadOnly()) {
                     return $;
                 }
@@ -548,8 +554,8 @@
                 offEvents(EVENTS_RESIZE, W, doResize);
                 return fire('exit', theColor);
             };
-            doFit = to => {
-                let rootRect = getRect(R),
+            doFit = function doFit(to) {
+                var rootRect = getRect(R),
                     sourceRect = getRect(source),
                     winRect = getRect(W),
                     scrollBarHeight = winRect[3] - R.clientHeight,
@@ -565,7 +571,7 @@
                     isSet(to[0]) && (selfLeft = to[0]);
                     isSet(to[1]) && (selfTop = to[1]);
                 } else {
-                    let minX = winRect[0],
+                    var minX = winRect[0],
                         minY = winRect[1],
                         maxX = winRect[0] + winRect[2] - selfWidth - scrollBarWidth,
                         maxY = winRect[1] + winRect[3] - selfHeight - scrollBarHeight;
@@ -576,7 +582,9 @@
                 setStyle(self, 'top', selfTop);
                 return fire('fit', theColor);
             };
-            doResize = () => doFit();
+            doResize = function doResize() {
+                return doFit();
+            };
 
             function doDownA(e) {
                 $.current = A;
@@ -613,7 +621,7 @@
 
             function doSetColor() {
                 doSetCursor(theData);
-                let a = P2RGB(theData),
+                var a = P2RGB(theData),
                     b = P2RGB([theData[0], 1, 1]);
                 setStyle(SVColor, 'background-color', 'rgb(' + b[0] + ',' + b[1] + ',' + b[2] + ')');
                 setStyle(AColor, 'background-image', 'linear-gradient(rgb(' + a[0] + ',' + a[1] + ',' + a[2] + '),transparent)');
@@ -637,7 +645,7 @@
             }
 
             function doSetSVCursor(e) {
-                let SVPoint = getAxis(e, SV),
+                var SVPoint = getAxis(e, SV),
                     x = toEdge(SVPoint[0], [0, SVWidth]),
                     y = toEdge(SVPoint[1], [0, SVHeight]);
                 theData[1] = 1 - (SVWidth - x) / SVWidth;
@@ -647,7 +655,7 @@
 
             function doStop(e) {
                 theColor = P2RGB(theData);
-                let t = e.target,
+                var t = e.target,
                     isSource = source === getClosest(t, source),
                     isSelf = self === getClosest(t, self);
                 $.current = null;
@@ -670,7 +678,7 @@
                 }
                 SVDragging = HDragging = ADragging = 0;
             }
-            let SVRect = getRect(SV),
+            var SVRect = getRect(SV),
                 SVRectCursor = getRect(SVCursor),
                 HRect = getRect(H),
                 HRectCursor = getRect(HCursor),
@@ -686,7 +694,7 @@
                 AHeightCursor = ARectCursor[3];
             if (isFirst) {
                 onEvents(EVENTS_DOWN, source, doClick);
-                delay(() => {
+                delay(function () {
                     fire('change', theColor);
                 }, 1);
             } else {
@@ -699,13 +707,17 @@
                 doFit();
             }
             doSetColor();
-            $.color = (r, g, b, a) => CP[isFunction(CP[state.color]) ? state.color : COLOR_TYPE]([r, g, b, a]);
+            $.color = function (r, g, b, a) {
+                return CP[isFunction(CP[state.color]) ? state.color : COLOR_TYPE]([r, g, b, a]);
+            };
             $.current = null;
             $.enter = doEnter;
             $.exit = doExit;
             $.fit = doFit;
-            $.get = () => getValue();
-            $.pop = () => {
+            $.get = function () {
+                return getValue();
+            };
+            $.pop = function () {
                 if (!source[name]) {
                     return $; // Already ejected
                 }
@@ -714,11 +726,11 @@
                 offEvents(EVENTS_DOWN, source, doClick);
                 return doExit(), fire('pop', theColor);
             };
-            $.set = (r, g, b, a) => {
+            $.set = function (r, g, b, a) {
                 return $._set(r, g, b, a), fire('change', [r, g, b, a]);
             };
             $.self = self;
-            $._set = (r, g, b, a) => {
+            $._set = function (r, g, b, a) {
                 theData = RGB2HSV([r, g, b, a]);
                 return doSetColor(), $;
             };
@@ -730,7 +742,7 @@
             if (hooks.focus) {
                 fire('focus', theColor);
             } else {
-                let t = e.target,
+                var t = e.target,
                     isSource = source === getClosest(t, source);
                 if (isSource) {
                     !getParent(self) && doEnter();
@@ -743,9 +755,9 @@
         $.visible = false;
         return $;
     }
-    CP[COLOR_TYPE] = x => {
+    CP[COLOR_TYPE] = function (x) {
         if (isString(x)) {
-            let count = toCount(x = x.trim());
+            var count = toCount(x = x.trim());
             if ((4 === count || 7 === count) && '#' === x[0]) {
                 if (/^#([a-f\d]{3}){1,2}$/i.test(x)) {
                     if (4 === count) {
@@ -770,6 +782,6 @@
         'class': 'color-picker',
         'color': COLOR_TYPE
     };
-    CP.version = '2.4.4';
+    CP.version = '2.4.3';
     return CP;
-});
+}));
